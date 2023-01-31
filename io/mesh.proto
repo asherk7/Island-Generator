@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option java_package = "ca.mcmaster.cas.se2aa4.a2.io";
+option java_outer_classname = "Structs";
+
+message Property {
+  string key = 1;
+  string value = 2;
+}
+
+message Vertex {
+  double x = 1;
+  double y = 2;
+  repeated Property properties = 3;
+}     
+
+message Segment {
+  int32 v1_idx = 1;
+  int32 v2_idx = 2;
+  repeated Property properties = 3;
+}
+
+message Polygon {
+  int32 centroid_idx = 1;
+  repeated int32 segment_idxs = 2;
+  repeated int32 neighbor_idxs = 3;
+  repeated Property properties = 4;
+}
+
+message Mesh {
+  repeated Property properties = 1;
+  repeated Polygon polygons = 2;
+  repeated Segment segments = 3;
+  repeated Vertex vertices = 4;
+}

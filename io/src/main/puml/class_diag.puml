@@ -1,0 +1,42 @@
+@startuml
+
+hide empty members
+skinparam linetype polyline
+
+title "Mesh Binary File Format"
+
+class Mesh {}
+
+note right of Mesh: In this data structure, attributes ending\nwith '_idx' are the index of the associated\nelement in the mesh container.
+
+class Property {
+    + key: String
+    + value: String
+}
+
+class Vertex {
+    + x: float
+    + y: float 
+}
+
+class Segment {
+    + v1_idx: int
+    + v2_index: int
+}
+
+class Polygon {
+    + centroid_idx: int
+    + segment_idxs: int[]
+    + neighbors_idxs: int[]
+}
+
+Vertex *--> "0..n\n{ordered}"  Property 
+Segment *--> "0..n\n{ordered}" Property 
+Polygon *--> "0..n\n{ordered}" Property 
+
+Mesh *--> "0..n\n{ordered}" Property 
+Mesh *--> "0..n\n{ordered}" Polygon
+Mesh *--> "0..n\n{ordered}" Segment
+Mesh *--> "0..n\n{ordered}" Vertex
+
+@enduml
