@@ -46,6 +46,11 @@ mosser@azrael visualizer % ls -lh sample.svg
 -rw-r--r--  1 mosser  staff    56K 29 Jan 10:53 sample.svg
 mosser@azrael visualizer %
 ```
+
+### Run with a single cmd:
+(from ../a2)
+cd generator && java -jar generator.jar sample.mesh && cd ../visualizer && java -jar visualizer.jar ../generator/sample.mesh sample.svg && cd ..
+
 To viualize the SVG file:
 
   - Open it with a web browser
