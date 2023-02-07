@@ -12,5 +12,4 @@ public class Main {
         MeshFactory factory = new MeshFactory();
         factory.write(myMesh, args[0]);
     }
-
 }
