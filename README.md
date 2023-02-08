@@ -70,6 +70,6 @@ When you develop features and enrich the product, remember that you have first t
 
 | Id | Feature title | Who? | Start | End | Status |
 |:--:|---------------|------|-------|-----|--------|
-|    |               |      |       |     |        |
+|  1  |  draw segments between vertices to visualize the squares  |   Asher/Mehdi   |    02/08/23   |     |  S  |
 
 
