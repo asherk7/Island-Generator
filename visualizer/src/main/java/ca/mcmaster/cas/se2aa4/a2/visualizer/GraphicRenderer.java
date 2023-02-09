@@ -29,7 +29,6 @@ public class GraphicRenderer {
             canvas.setColor(old);
         }
         //Draw Segment
-        for (Segment s: aMesh.getSegmentsList()){}
     }
 
     private Color extractColor(List<Property> properties) {
