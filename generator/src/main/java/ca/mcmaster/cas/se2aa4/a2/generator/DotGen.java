@@ -21,11 +21,19 @@ public class DotGen {
         for(int x = 0; x < width; x += square_size) {
             for(int y = 0; y < height; y += square_size) {
                 vertices.add(Vertex.newBuilder().setX((double) x).setY((double) y).build());
-                vertices.add(Vertex.newBuilder().setX((double) x+square_size).setY((double) y).build());
-                vertices.add(Vertex.newBuilder().setX((double) x).setY((double) y+square_size).build());
-                vertices.add(Vertex.newBuilder().setX((double) x+square_size).setY((double) y+square_size).build());
             }
         }
+
+        List<Segment> segments = new ArrayList<>();
+        for (int i=0; i < vertices.size(); i++) {
+            if((i+1)%25 != 0 && i<600) {
+                Segment s1 = Segment.newBuilder().setV1Idx(i).setV2Idx(i+1).build();
+                Segment s2 = Segment.newBuilder().setV1Idx(i).setV2Idx(i+25).build();
+                segments.add(s1);
+                segments.add(s2);
+            }
+        }
+
         // Distribute colors randomly. Vertices are immutable, need to enrich them
         List<Vertex> verticesWithColors = new ArrayList<>();
         Random bag = new Random();
@@ -39,13 +47,15 @@ public class DotGen {
             verticesWithColors.add(colored);
         }
 
-        List<Segment> segments = new ArrayList<>();
-        for (int i=0; i<verticesWithColors.size(); i++) {
-            Segment s = Segment.newBuilder().setV1Idx(i).setV2Idx(i+1).build();
-            segments.add(s);
+        List<Segment> segmentsWithColors = new ArrayList<>();
+        for (Segment s: segments){
+            Vertex vertex1 = verticesWithColors.get(s.getV1Idx());
+            Vertex vertex2 = verticesWithColors.get(s.getV2Idx());
+
         }
 
-        return Mesh.newBuilder().addAllVertices(verticesWithColors).addAllSegments(segments).build();
+
+        return Mesh.newBuilder().addAllVertices(verticesWithColors).addAllSegments(segmentsWithColors).build();
     }
 
 }
