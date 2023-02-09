@@ -1,13 +1,13 @@
 package ca.mcmaster.cas.se2aa4.a2.generator;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Random;
+import java.util.*;
 
+import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Property;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
+import ca.mcmaster.cas.se2aa4.a2.io.Structs.Segment;
 
 public class DotGen {
 
@@ -16,7 +16,7 @@ public class DotGen {
     private final int square_size = 20;
 
     public Mesh generate() {
-        Set<Vertex> vertices = new HashSet<>();
+        List<Vertex> vertices = new ArrayList<>();
         // Create all the vertices
         for(int x = 0; x < width; x += square_size) {
             for(int y = 0; y < height; y += square_size) {
@@ -27,7 +27,7 @@ public class DotGen {
             }
         }
         // Distribute colors randomly. Vertices are immutable, need to enrich them
-        Set<Vertex> verticesWithColors = new HashSet<>();
+        List<Vertex> verticesWithColors = new ArrayList<>();
         Random bag = new Random();
         for(Vertex v: vertices){
             int red = bag.nextInt(255);
@@ -39,7 +39,15 @@ public class DotGen {
             verticesWithColors.add(colored);
         }
 
-        return Mesh.newBuilder().addAllVertices(verticesWithColors).build();
+        List<Segment> segments = new ArrayList<>();
+        for (Vertex v: verticesWithColors) {
+            int v1_idx = bag.nextInt(vertices.size());
+            int v2_idx = bag.nextInt(vertices.size());
+            Segment s = Segment.newBuilder().setV1Idx(v1_idx).setV2Idx(v2_idx).build();
+            segments.add(s);
+        }
+
+        return Mesh.newBuilder().addAllVertices(verticesWithColors).addAllSegments(segments).build();
     }
 
 }
