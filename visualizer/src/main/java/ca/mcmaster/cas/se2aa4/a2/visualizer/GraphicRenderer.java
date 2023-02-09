@@ -28,6 +28,8 @@ public class GraphicRenderer {
             canvas.fill(point);
             canvas.setColor(old);
         }
+        //Draw Segment
+        for (Segment s: aMesh.getSegmentsList()){}
     }
 
     private Color extractColor(List<Property> properties) {
