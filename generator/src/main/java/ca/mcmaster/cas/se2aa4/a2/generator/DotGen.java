@@ -1,7 +1,9 @@
 package ca.mcmaster.cas.se2aa4.a2.generator;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
@@ -52,10 +54,40 @@ public class DotGen {
             Vertex vertex1 = verticesWithColors.get(s.getV1Idx());
             Vertex vertex2 = verticesWithColors.get(s.getV2Idx());
 
+            String[] split1 = getColor(vertex1.getPropertiesList());
+            String[] split2 = getColor(vertex1.getPropertiesList());
+            int red1 = Integer.parseInt(split1[0]);
+            int green1 = Integer.parseInt(split1[1]);
+            int blue1 = Integer.parseInt(split1[2]);
+            int red2 = Integer.parseInt(split2[0]);
+            int green2 = Integer.parseInt(split2[1]);
+            int blue2 = Integer.parseInt(split2[2]);
+
+            int red3 = (red1+red2)/2;
+            int green3 = (green1+green2)/2;
+            int blue3 = (blue1+blue2)/2;
+
+            String colorCode1 = red3+","+green3+","+blue3;
+            Property color1 = Property.newBuilder().setKey("rgb_color").setValue(colorCode1).build();
+            Segment coloredSegment = Segment.newBuilder(s).addProperties(color1).build();
+            segmentsWithColors.add(coloredSegment);
         }
 
 
         return Mesh.newBuilder().addAllVertices(verticesWithColors).addAllSegments(segmentsWithColors).build();
+    }
+
+    public static String[] getColor(List<Property> properties){
+        String color = null;
+        for (Property p: properties){
+            if (p.getKey().equals("rgb_color")){
+                color = p.getValue();
+            }
+        }
+        if (color == null){
+            color = "0,0,0";
+        }
+        return color.split(",");
     }
 
 }
