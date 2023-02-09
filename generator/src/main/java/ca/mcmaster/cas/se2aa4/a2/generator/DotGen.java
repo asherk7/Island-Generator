@@ -40,10 +40,8 @@ public class DotGen {
         }
 
         List<Segment> segments = new ArrayList<>();
-        for (Vertex v: verticesWithColors) {
-            int v1_idx = bag.nextInt(vertices.size());
-            int v2_idx = bag.nextInt(vertices.size());
-            Segment s = Segment.newBuilder().setV1Idx(v1_idx).setV2Idx(v2_idx).build();
+        for (int i=0; i<verticesWithColors.size(); i++) {
+            Segment s = Segment.newBuilder().setV1Idx(i).setV2Idx(i+1).build();
             segments.add(s);
         }
 
