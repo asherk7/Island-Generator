@@ -25,7 +25,7 @@ public class DotGen {
                 vertices.add(Vertex.newBuilder().setX((double) x).setY((double) y).build());
             }
         }
-
+        //created segments
         List<Segment> segments = new ArrayList<>();
         for (int i=0; i < vertices.size(); i++) {
             if((i+1)%25 != 0 && i<600) {
@@ -48,7 +48,7 @@ public class DotGen {
             Vertex colored = Vertex.newBuilder(v).addProperties(color).build();
             verticesWithColors.add(colored);
         }
-
+        // distributing colours to the segments
         List<Segment> segmentsWithColors = new ArrayList<>();
         for (Segment s: segments){
             Vertex vertex1 = verticesWithColors.get(s.getV1Idx());
