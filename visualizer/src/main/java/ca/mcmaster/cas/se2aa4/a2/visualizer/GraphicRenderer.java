@@ -29,6 +29,15 @@ public class GraphicRenderer {
             canvas.setColor(old);
         }
         //Draw Segment
+        for (Segment s: aMesh.getSegmentsList()){
+            int index_v1 = s.getV1Idx();
+            int index_v2 = s.getV2Idx();
+
+            Vertex v1 = aMesh.getVertices(index_v1);
+            Vertex v2 = aMesh.getVertices(index_v2);
+
+            canvas.drawLine((int)v1.getX(), (int)v1.getY(), (int)v2.getX(), (int)v2.getY());
+        }
     }
 
     private Color extractColor(List<Property> properties) {
