@@ -54,8 +54,8 @@ public class DotGen {
             Vertex vertex1 = verticesWithColors.get(s.getV1Idx());
             Vertex vertex2 = verticesWithColors.get(s.getV2Idx());
 
-            String[] split1 = getColor(vertex1.getPropertiesList());
-            String[] split2 = getColor(vertex2.getPropertiesList());
+            String[] split1 = getColorVal(vertex1.getPropertiesList());
+            String[] split2 = getColorVal(vertex2.getPropertiesList());
             int red1 = Integer.parseInt(split1[0]);
             int green1 = Integer.parseInt(split1[1]);
             int blue1 = Integer.parseInt(split1[2]);
@@ -77,7 +77,7 @@ public class DotGen {
         return Mesh.newBuilder().addAllVertices(verticesWithColors).addAllSegments(segmentsWithColors).build();
     }
 
-    public static String[] getColor(List<Property> properties){
+    private String[] getColorVal(List<Property> properties){
         String color = null;
         for (Property p: properties){
             if (p.getKey().equals("rgb_color")){
