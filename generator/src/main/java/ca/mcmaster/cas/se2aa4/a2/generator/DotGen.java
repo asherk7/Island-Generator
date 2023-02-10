@@ -55,7 +55,7 @@ public class DotGen {
             Vertex vertex2 = verticesWithColors.get(s.getV2Idx());
 
             String[] split1 = getColor(vertex1.getPropertiesList());
-            String[] split2 = getColor(vertex1.getPropertiesList());
+            String[] split2 = getColor(vertex2.getPropertiesList());
             int red1 = Integer.parseInt(split1[0]);
             int green1 = Integer.parseInt(split1[1]);
             int blue1 = Integer.parseInt(split1[2]);

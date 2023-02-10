@@ -36,7 +36,10 @@ public class GraphicRenderer {
             Vertex v1 = aMesh.getVertices(index_v1);
             Vertex v2 = aMesh.getVertices(index_v2);
 
+            Color old = canvas.getColor();
+            canvas.setColor(extractColor(s.getPropertiesList()));
             canvas.drawLine((int)v1.getX(), (int)v1.getY(), (int)v2.getX(), (int)v2.getY());
+            canvas.setColor(old);
         }
     }
 
