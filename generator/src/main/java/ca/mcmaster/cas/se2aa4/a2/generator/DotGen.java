@@ -28,14 +28,15 @@ public class DotGen {
         //created segments
         List<Segment> segments = new ArrayList<>();
         for (int i=0; i < vertices.size(); i++) {
-            if((i+1)%25 != 0 && i<600) {
+            if((i+1)%25 != 0 && i<625) {
                 Segment s1 = Segment.newBuilder().setV1Idx(i).setV2Idx(i+1).build();
-                Segment s2 = Segment.newBuilder().setV1Idx(i).setV2Idx(i+25).build();
                 segments.add(s1);
+            }
+            if(i<600){
+                Segment s2 = Segment.newBuilder().setV1Idx(i).setV2Idx(i+25).build();
                 segments.add(s2);
             }
         }
-
         // Distribute colors randomly. Vertices are immutable, need to enrich them
         List<Vertex> verticesWithColors = new ArrayList<>();
         Random bag = new Random();
