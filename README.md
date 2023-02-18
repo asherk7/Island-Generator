@@ -71,5 +71,8 @@ When you develop features and enrich the product, remember that you have first t
 | Id | Feature title | Who? | Start | End | Status |
 |:--:|---------------|------|-------|-----|--------|
 |  1  |  draw segments between vertices to visualize the squares  |   Asher/Mehdi   |    02/08/23   |  02/09/23    |  D  |
+|  2  |  polygon data type | Asher |  |  | | |
+|  3  | mesh ADT | Spencer | | | | |
+|  4  | command line features | Mehdi | | | | |
 
 
