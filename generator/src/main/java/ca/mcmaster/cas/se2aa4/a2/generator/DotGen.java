@@ -10,6 +10,7 @@ import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Property;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Segment;
+import ca.mcmaster.cas.se2aa4.a2.io.Structs.Polygon;
 
 public class DotGen {
 
@@ -18,6 +19,12 @@ public class DotGen {
     private final int square_size = 20;
 
     public Mesh generate() {
+        //step 2: polygon references the index's of neighbour(sides and diagonal)
+        //step 3: reference centroid vertex index (create it)
+        //step 4: give each polygon a colour(average of segments?)
+        //step 5: add thickness and transparency? can maybe ignore thickness
+        //step 6: each polygon should list its segments consecutively(probably for spencer)
+
         List<Vertex> vertices = new ArrayList<>();
         // Create all the vertices
         for(int x = 0; x < width; x += square_size) {
@@ -25,16 +32,29 @@ public class DotGen {
                 vertices.add(Vertex.newBuilder().setX((double) x).setY((double) y).build());
             }
         }
-        //created segments
+        //creating segments
         List<Segment> segments = new ArrayList<>();
         for (int i=0; i < vertices.size(); i++) {
-            if((i+1)%25 != 0 && i<625) {
-                Segment s1 = Segment.newBuilder().setV1Idx(i).setV2Idx(i+1).build();
+            if ((i + 1) % 25 != 0) {
+                Segment s1 = Segment.newBuilder().setV1Idx(i).setV2Idx(i + 1).build();
                 segments.add(s1);
             }
+        }
+        for (int i=0; i<vertices.size(); i++) {
             if(i<600){
                 Segment s2 = Segment.newBuilder().setV1Idx(i).setV2Idx(i+25).build();
                 segments.add(s2);
+            }
+        }
+        //creating polygons
+        List<Polygon> polygons = new ArrayList<>();
+        for(int i=0, j=0; i < segments.size(); i++, j++){
+            if (i<576) {
+                if(i%24==0) j += 1;
+                //using the loop to go through the first set of segments which go down
+                //created a new variable j to track the segments that go from left to right, since there's one more per column
+                Polygon p1 = Polygon.newBuilder().addSegmentIdxs(i).addSegmentIdxs(i + 24).addSegmentIdxs(j + 600).addSegmentIdxs(j + 601).build();
+                polygons.add(p1);
             }
         }
         // Distribute colors randomly. Vertices are immutable, need to enrich them
@@ -73,7 +93,6 @@ public class DotGen {
             Segment coloredSegment = Segment.newBuilder(s).addProperties(color1).build();
             segmentsWithColors.add(coloredSegment);
         }
-
 
         return Mesh.newBuilder().addAllVertices(verticesWithColors).addAllSegments(segmentsWithColors).build();
     }
