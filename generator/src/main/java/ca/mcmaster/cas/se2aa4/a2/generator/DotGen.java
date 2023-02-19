@@ -19,11 +19,10 @@ public class DotGen {
     private final int square_size = 20;
 
     public Mesh generate() {
-        //step 2: polygon references the index's of neighbour(sides and diagonal)
         //step 3: reference centroid vertex index (create it)
         //step 4: give each polygon a colour(average of segments?)
         //step 5: add thickness and transparency? can maybe ignore thickness
-        //step 6: each polygon should list its segments consecutively(probably for spencer)
+        //step 6: each polygon should list its segments consecutively(part of mesh adt)
 
         List<Vertex> vertices = new ArrayList<>();
         // Create all the vertices
@@ -56,6 +55,37 @@ public class DotGen {
                 Polygon p1 = Polygon.newBuilder().addSegmentIdxs(i).addSegmentIdxs(i + 24).addSegmentIdxs(j + 600).addSegmentIdxs(j + 601).build();
                 polygons.add(p1);
             }
+        }
+        //referencing neighbours
+        for(int i=0; i < polygons.size(); i++){
+            //sides: i-1, i+1, i+24, i-24
+            //diagonals: i-25, i-23, i+23, i+25
+            Polygon p1;
+            //corners
+            if(i==0) {p1 = Polygon.newBuilder(polygons.get(i)).addNeighborIdxs(i+1).addNeighborIdxs(i+24).addNeighborIdxs(i+25).build();}
+            else if (i==23) {p1 = Polygon.newBuilder(polygons.get(i)).addNeighborIdxs(i-1).addNeighborIdxs(i+24).addNeighborIdxs(i+23).build();}
+            else if (i==552) {p1 = Polygon.newBuilder(polygons.get(i)).addNeighborIdxs(i+1).addNeighborIdxs(i-24).addNeighborIdxs(i-23).build();}
+            else if (i==575) {p1 = Polygon.newBuilder(polygons.get(i)).addNeighborIdxs(i-1).addNeighborIdxs(i-24).addNeighborIdxs(i-25).build();}
+            else if(i % 24 == 0){
+                //top row
+                p1 = Polygon.newBuilder(polygons.get(i)).addNeighborIdxs(i-24).addNeighborIdxs(i-23).addNeighborIdxs(i+1).addNeighborIdxs(i+24).addNeighborIdxs(i+25).build();
+            }
+            else if(i<23){
+                //left column
+                p1 = Polygon.newBuilder(polygons.get(i)).addNeighborIdxs(i-1).addNeighborIdxs(i+23).addNeighborIdxs(i+24).addNeighborIdxs(i+25).addNeighborIdxs(i+1).build();
+            }
+            else if(i % 24 == 23){
+                //bottom row
+                p1 = Polygon.newBuilder(polygons.get(i)).addNeighborIdxs(i-24).addNeighborIdxs(i-25).addNeighborIdxs(i-1).addNeighborIdxs(i+23).addNeighborIdxs(i+24).build();
+            }
+            else if(i<575 && i > 552){
+                //right column
+                p1 = Polygon.newBuilder(polygons.get(i)).addNeighborIdxs(i-1).addNeighborIdxs(i-23).addNeighborIdxs(i-24).addNeighborIdxs(i-25).addNeighborIdxs(i+1).build();
+            }
+            else{
+                p1 = Polygon.newBuilder(polygons.get(i)).addNeighborIdxs(i-1).addNeighborIdxs(i+1).addNeighborIdxs(i-24).addNeighborIdxs(i+24).addNeighborIdxs(i-23).addNeighborIdxs(i-25).addNeighborIdxs(i+23).addNeighborIdxs(i+25).build();
+            }
+            polygons.set(i, p1);
         }
         // Distribute colors randomly. Vertices are immutable, need to enrich them
         List<Vertex> verticesWithColors = new ArrayList<>();
