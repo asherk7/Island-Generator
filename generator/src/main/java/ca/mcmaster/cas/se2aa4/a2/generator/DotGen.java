@@ -19,8 +19,7 @@ public class DotGen {
     private final int square_size = 20;
 
     public Mesh generate() {
-        //step 3: reference centroid vertex index (create it)
-        //step 4: give each polygon a colour(average of segments?)
+        //step 4: reference centroid vertex index (create it)
         //step 5: add thickness and transparency? can maybe ignore thickness
 
         List<Vertex> vertices = new ArrayList<>();
@@ -48,7 +47,7 @@ public class DotGen {
         List<Polygon> polygons = new ArrayList<>();
         for(int i=0, j=0; i < segments.size(); i++, j++){
             if (i<576) {
-                if(i%24==0) j += 1;
+                if(i%24==0 && i!= 0) j += 1;
                 //using the loop to go through the first set of segments which go down
                 //created a new variable j to track the segments that go from left to right, since there's one more per column
                 Polygon p1 = Polygon.newBuilder().addSegmentIdxs(i).addSegmentIdxs(j + 600).addSegmentIdxs(i + 24).addSegmentIdxs(j + 601).build();
@@ -83,6 +82,7 @@ public class DotGen {
                 p1 = Polygon.newBuilder(polygons.get(i)).addNeighborIdxs(i-1).addNeighborIdxs(i-23).addNeighborIdxs(i-24).addNeighborIdxs(i-25).addNeighborIdxs(i+1).build();
             }
             else{
+                //every other square not on the border
                 p1 = Polygon.newBuilder(polygons.get(i)).addNeighborIdxs(i-1).addNeighborIdxs(i+1).addNeighborIdxs(i-24).addNeighborIdxs(i+24).addNeighborIdxs(i-23).addNeighborIdxs(i-25).addNeighborIdxs(i+23).addNeighborIdxs(i+25).build();
             }
             polygons.set(i, p1);
@@ -107,24 +107,32 @@ public class DotGen {
 
             String[] split1 = getColorVal(vertex1.getPropertiesList());
             String[] split2 = getColorVal(vertex2.getPropertiesList());
-            int red1 = Integer.parseInt(split1[0]);
-            int green1 = Integer.parseInt(split1[1]);
-            int blue1 = Integer.parseInt(split1[2]);
-            int red2 = Integer.parseInt(split2[0]);
-            int green2 = Integer.parseInt(split2[1]);
-            int blue2 = Integer.parseInt(split2[2]);
 
-            int red3 = (red1+red2)/2;
-            int green3 = (green1+green2)/2;
-            int blue3 = (blue1+blue2)/2;
-
-            String colorCode1 = red3+","+green3+","+blue3;
-            Property color1 = Property.newBuilder().setKey("rgb_color").setValue(colorCode1).build();
-            Segment coloredSegment = Segment.newBuilder(s).addProperties(color1).build();
+            String colorCode = segmentColorCode(split1, split2);
+            Property color = Property.newBuilder().setKey("rgb_color").setValue(colorCode).build();
+            Segment coloredSegment = Segment.newBuilder(s).addProperties(color).build();
             segmentsWithColors.add(coloredSegment);
         }
+        //distributing colours to polygons
+        List<Polygon> polygonsWithColors = new ArrayList<>();
+        for (Polygon p: polygons){
+            Segment s1 = segmentsWithColors.get(p.getSegmentIdxs(0));
+            Segment s2 = segmentsWithColors.get(p.getSegmentIdxs(1));
+            Segment s3 = segmentsWithColors.get(p.getSegmentIdxs(2));
+            Segment s4 = segmentsWithColors.get(p.getSegmentIdxs(3));
 
-        return Mesh.newBuilder().addAllVertices(verticesWithColors).addAllSegments(segmentsWithColors).build();
+            String[] split1 = getColorVal(s1.getPropertiesList());
+            String[] split2 = getColorVal(s2.getPropertiesList());
+            String[] split3 = getColorVal(s3.getPropertiesList());
+            String[] split4 = getColorVal(s4.getPropertiesList());
+
+            String colorCode = polygonColorCode(split1, split2, split3, split4);
+            Property color = Property.newBuilder().setKey("rgb_color").setValue(colorCode).build();
+            Polygon coloredPolygon = Polygon.newBuilder(p).addProperties(color).build();
+            polygonsWithColors.add(coloredPolygon);
+        }
+
+        return Mesh.newBuilder().addAllVertices(verticesWithColors).addAllSegments(segmentsWithColors).addAllPolygons(polygonsWithColors).build();
     }
 
     private String[] getColorVal(List<Property> properties){
@@ -138,6 +146,46 @@ public class DotGen {
             color = "0,0,0";
         }
         return color.split(",");
+    }
+
+    private String segmentColorCode(String[] split1, String[] split2){
+        int red1 = Integer.parseInt(split1[0]);
+        int green1 = Integer.parseInt(split1[1]);
+        int blue1 = Integer.parseInt(split1[2]);
+
+        int red2 = Integer.parseInt(split2[0]);
+        int green2 = Integer.parseInt(split2[1]);
+        int blue2 = Integer.parseInt(split2[2]);
+
+        int red3 = (red1+red2)/2;
+        int green3 = (green1+green2)/2;
+        int blue3 = (blue1+blue2)/2;
+
+        return red3+","+green3+","+blue3;
+    }
+
+    private String polygonColorCode(String[] split1, String[] split2, String[] split3, String[] split4){
+        int red1 = Integer.parseInt(split1[0]);
+        int green1 = Integer.parseInt(split1[1]);
+        int blue1 = Integer.parseInt(split1[2]);
+
+        int red2 = Integer.parseInt(split2[0]);
+        int green2 = Integer.parseInt(split2[1]);
+        int blue2 = Integer.parseInt(split2[2]);
+
+        int red3 = Integer.parseInt(split3[0]);
+        int green3 = Integer.parseInt(split3[1]);
+        int blue3 = Integer.parseInt(split3[2]);
+
+        int red4 = Integer.parseInt(split4[0]);
+        int green4 = Integer.parseInt(split4[1]);
+        int blue4 = Integer.parseInt(split4[2]);
+
+        int red_f = (red1+red2+red3+red4)/4;
+        int green_f = (green1+green2+green3+green4)/4;
+        int blue_f = (blue1+blue2+blue3+blue4)/4;
+
+        return red_f+","+green_f+","+blue_f;
     }
 
 }
