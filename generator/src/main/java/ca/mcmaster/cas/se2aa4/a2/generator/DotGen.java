@@ -22,7 +22,6 @@ public class DotGen {
         //step 3: reference centroid vertex index (create it)
         //step 4: give each polygon a colour(average of segments?)
         //step 5: add thickness and transparency? can maybe ignore thickness
-        //step 6: each polygon should list its segments consecutively(part of mesh adt)
 
         List<Vertex> vertices = new ArrayList<>();
         // Create all the vertices
@@ -52,7 +51,8 @@ public class DotGen {
                 if(i%24==0) j += 1;
                 //using the loop to go through the first set of segments which go down
                 //created a new variable j to track the segments that go from left to right, since there's one more per column
-                Polygon p1 = Polygon.newBuilder().addSegmentIdxs(i).addSegmentIdxs(i + 24).addSegmentIdxs(j + 600).addSegmentIdxs(j + 601).build();
+                Polygon p1 = Polygon.newBuilder().addSegmentIdxs(i).addSegmentIdxs(j + 600).addSegmentIdxs(i + 24).addSegmentIdxs(j + 601).build();
+                //segments are added consecutively
                 polygons.add(p1);
             }
         }
