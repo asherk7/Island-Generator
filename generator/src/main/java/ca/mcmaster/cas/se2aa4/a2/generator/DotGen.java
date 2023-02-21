@@ -19,7 +19,6 @@ public class DotGen {
     private final int square_size = 20;
 
     public Mesh generate() {
-        //step 4: reference centroid vertex index (create it)
         //step 5: add thickness and transparency? can maybe ignore thickness
 
         List<Vertex> vertices = new ArrayList<>();
@@ -54,6 +53,33 @@ public class DotGen {
                 //segments are added consecutively
                 polygons.add(p1);
             }
+        }
+        //creating centroids with color red and adding to polygons
+        List<Vertex> centroids = new ArrayList<>();
+        for(Polygon p: polygons){
+            //add both x, divide by 2, add both y, divide by 2, that's the centroid
+            Segment s1 = Segment.newBuilder(segments.get(p.getSegmentIdxs(0))).build(); //left segment
+            Segment s2 = Segment.newBuilder(segments.get(p.getSegmentIdxs(2))).build(); //right segment
+
+            Vertex v1 = Vertex.newBuilder(vertices.get(s1.getV1Idx())).build(); //top left
+            Vertex v2 = Vertex.newBuilder(vertices.get(s2.getV1Idx())).build(); //top right
+            Vertex v3 = Vertex.newBuilder(vertices.get(s1.getV2Idx())).build(); //bottom left
+
+            double x1 = v1.getX();
+            double x2 = v2.getX();
+            double y1 = v1.getY();
+            double y2 = v3.getY();
+            double x3 = x1+x2/2;
+            double y3 = y1+y2/2;
+
+            Vertex centroid = Vertex.newBuilder().setX(x3).setY(y3).build();
+            String colorCode = 255 + "," + 0 + "," + 0;
+            Property color = Property.newBuilder().setKey("rgb_color").setValue(colorCode).build();
+            Vertex centroid_red = Vertex.newBuilder(centroid).addProperties(color).build();
+            centroids.add(centroid_red);
+            //add the centroid created to the polygon in loop
+            Polygon p1 = Polygon.newBuilder(p).setCentroidIdx(centroids.indexOf(centroid_red)).build();
+            polygons.set(polygons.indexOf(p), p1);
         }
         //referencing neighbours
         for(int i=0; i < polygons.size(); i++){
