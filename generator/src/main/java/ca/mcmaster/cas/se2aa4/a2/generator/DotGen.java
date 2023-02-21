@@ -69,8 +69,9 @@ public class DotGen {
             double x2 = v2.getX();
             double y1 = v1.getY();
             double y2 = v3.getY();
-            double x3 = x1+x2/2;
-            double y3 = y1+y2/2;
+
+            double x3 = (x1+x2)/2.0;
+            double y3 = (y1+y2)/2.0;
 
             Vertex centroid = Vertex.newBuilder().setX(x3).setY(y3).build();
             String colorCode = 255 + "," + 0 + "," + 0;
@@ -157,7 +158,7 @@ public class DotGen {
             Polygon coloredPolygon = Polygon.newBuilder(p).addProperties(color).build();
             polygonsWithColors.add(coloredPolygon);
         }
-
+        //once command lines are implemented, add if statement here to add centroids if debug mode is on
         return Mesh.newBuilder().addAllVertices(verticesWithColors).addAllSegments(segmentsWithColors).addAllPolygons(polygonsWithColors).build();
     }
 
