@@ -28,9 +28,12 @@ public class Mesh {
         for (Structs.Polygon p: this.mesh.getPolygonsList()) {
             setColor(p.getPropertiesList(), "255,255,255");
         }
-
-        ///////////////////////////////////////////////add loop here for vertices
-
+        for (int i=0; i < this.mesh.getVerticesList().size(); i++){
+            if (i<625) {
+                List<Structs.Property> property = this.mesh.getVerticesList().get(i).getPropertiesList();
+                setColor(property, "255,255,255");
+            }
+        }
         //update the mesh file, in same fashion as the meshfactory
         update("sample.mesh");
     }
