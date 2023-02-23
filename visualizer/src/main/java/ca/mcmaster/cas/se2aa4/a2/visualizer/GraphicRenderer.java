@@ -11,12 +11,16 @@ import java.awt.Stroke;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.geom.Ellipse2D;
+import java.net.SocketTimeoutException;
 import java.util.List;
+
+import org.apache.batik.ext.awt.geom.Polygon2D;
+import java.util.ArrayList;
 
 public class GraphicRenderer {
 
     private static final int THICKNESS = 3;
-    public void render(Mesh aMesh, Graphics2D canvas) {
+    public void render(Mesh aMesh, Graphics2D canvas, Boolean debug_mode) {
         canvas.setColor(Color.BLACK);
         Stroke stroke = new BasicStroke(0.5f);
         canvas.setStroke(stroke);
@@ -25,7 +29,12 @@ public class GraphicRenderer {
             double centre_x = v.getX() - (THICKNESS/2.0d);
             double centre_y = v.getY() - (THICKNESS/2.0d);
             Color old = canvas.getColor();
-            canvas.setColor(extractColor(v.getPropertiesList()));
+            if (debug_mode){
+                Color c = new Color(0, 0, 0);
+                canvas.setColor(c);
+            } else {
+                canvas.setColor(extractColor(v.getPropertiesList()));
+            }
             Ellipse2D point = new Ellipse2D.Double(centre_x, centre_y, THICKNESS, THICKNESS);
             canvas.fill(point);
             canvas.setColor(old);
@@ -57,14 +66,17 @@ public class GraphicRenderer {
 
                 Vertex v1_p = aMesh.getVertices(index_v1_p);
                 Vertex v2_p = aMesh.getVertices(index_v2_p);
-
+                
                 Color old = canvas.getColor();
-                canvas.setColor(extractColor(p.getPropertiesList()));
+                if (debug_mode){
+                    Color c = new Color(0, 0, 0);
+                    canvas.setColor(c);
+                } else {
+                    canvas.setColor(extractColor(p.getPropertiesList()));
+                }
                 canvas.drawLine((int)v1_p.getX(), (int)v1_p.getY(), (int)v2_p.getX(), (int)v2_p.getY());
                 canvas.setColor(old);
-
             }
-            
         }
         System.out.println("Polygon construction completed");
     }
