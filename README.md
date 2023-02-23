@@ -47,9 +47,16 @@ mosser@azrael visualizer % ls -lh sample.svg
 mosser@azrael visualizer %
 ```
 
+To start debug mode, use '-X' at the end of the java command;
+`java -jar visualizer.jar ../generator/sample.mesh sample.svg -X`
+
 ### Run with a single cmd:
 (from ../a2)
 cd generator && java -jar generator.jar sample.mesh && cd ../visualizer && java -jar visualizer.jar ../generator/sample.mesh sample.svg && cd ..
+
+### Run with a single cmd - Debug mode:
+(from ../a2)
+cd generator && java -jar generator.jar sample.mesh && cd ../visualizer && java -jar visualizer.jar ../generator/sample.mesh sample.svg -X && cd ..
 
 To viualize the SVG file:
 
