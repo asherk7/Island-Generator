@@ -158,8 +158,8 @@ public class DotGen {
             Polygon coloredPolygon = Polygon.newBuilder(p).addProperties(color).build();
             polygonsWithColors.add(coloredPolygon);
         }
-        //once command lines are implemented, add if statement here to add centroids if debug mode is on
-        return Mesh.newBuilder().addAllVertices(verticesWithColors).addAllSegments(segmentsWithColors).addAllPolygons(polygonsWithColors).build();
+        
+        return Mesh.newBuilder().addAllVertices(verticesWithColors).addAllVertices(centroids).addAllSegments(segmentsWithColors).addAllPolygons(polygonsWithColors).build();
     }
 
     private String[] getColorVal(List<Property> properties){
