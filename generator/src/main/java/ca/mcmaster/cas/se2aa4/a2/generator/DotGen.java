@@ -92,24 +92,19 @@ public class DotGen {
             else if (i==23) {p1 = Polygon.newBuilder(polygons.get(i)).addNeighborIdxs(i-1).addNeighborIdxs(i+24).addNeighborIdxs(i+23).build();}
             else if (i==552) {p1 = Polygon.newBuilder(polygons.get(i)).addNeighborIdxs(i+1).addNeighborIdxs(i-24).addNeighborIdxs(i-23).build();}
             else if (i==575) {p1 = Polygon.newBuilder(polygons.get(i)).addNeighborIdxs(i-1).addNeighborIdxs(i-24).addNeighborIdxs(i-25).build();}
-            else if(i % 24 == 0){
-                //top row
+            else if(i % 24 == 0){ //top row
                 p1 = Polygon.newBuilder(polygons.get(i)).addNeighborIdxs(i-24).addNeighborIdxs(i-23).addNeighborIdxs(i+1).addNeighborIdxs(i+24).addNeighborIdxs(i+25).build();
             }
-            else if(i<23){
-                //left column
+            else if(i<23){ //left column
                 p1 = Polygon.newBuilder(polygons.get(i)).addNeighborIdxs(i-1).addNeighborIdxs(i+23).addNeighborIdxs(i+24).addNeighborIdxs(i+25).addNeighborIdxs(i+1).build();
             }
-            else if(i % 24 == 23){
-                //bottom row
+            else if(i % 24 == 23){ //bottom row
                 p1 = Polygon.newBuilder(polygons.get(i)).addNeighborIdxs(i-24).addNeighborIdxs(i-25).addNeighborIdxs(i-1).addNeighborIdxs(i+23).addNeighborIdxs(i+24).build();
             }
-            else if(i<575 && i > 552){
-                //right column
+            else if(i<575 && i > 552){ //right column
                 p1 = Polygon.newBuilder(polygons.get(i)).addNeighborIdxs(i-1).addNeighborIdxs(i-23).addNeighborIdxs(i-24).addNeighborIdxs(i-25).addNeighborIdxs(i+1).build();
             }
-            else{
-                //every other square not on the border
+            else{ //every square not on the border
                 p1 = Polygon.newBuilder(polygons.get(i)).addNeighborIdxs(i-1).addNeighborIdxs(i+1).addNeighborIdxs(i-24).addNeighborIdxs(i+24).addNeighborIdxs(i-23).addNeighborIdxs(i-25).addNeighborIdxs(i+23).addNeighborIdxs(i+25).build();
             }
             polygons.set(i, p1);
