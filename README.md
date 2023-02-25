@@ -47,9 +47,16 @@ mosser@azrael visualizer % ls -lh sample.svg
 mosser@azrael visualizer %
 ```
 
+To start debug mode, use '-X' at the end of the java command;
+`java -jar visualizer.jar ../generator/sample.mesh sample.svg -X`
+
 ### Run with a single cmd:
 (from ../a2)
 cd generator && java -jar generator.jar sample.mesh && cd ../visualizer && java -jar visualizer.jar ../generator/sample.mesh sample.svg && cd ..
+
+### Run with a single cmd - Debug mode:
+(from ../a2)
+cd generator && java -jar generator.jar sample.mesh && cd ../visualizer && java -jar visualizer.jar ../generator/sample.mesh sample.svg -X && cd ..
 
 To viualize the SVG file:
 
@@ -64,16 +71,20 @@ When you develop features and enrich the product, remember that you have first t
 
 ### Definition of Done
 
--- Insert here your definition of done for your features --
+A feature is done when it meets all conditions that is required of it, satisfies the user, and runs without any errors. 
 
 ### Product Backlog
 
-| Id  | Feature title | Who? | Start | End | Status |
-|:---:|---------------|------|-------|-----|--------|
-|  1  |  draw segments between vertices to visualize the squares  |   Asher/Mehdi   |    02/08/23   |  02/09/23    |  D  |
-|  2  |  polygon data type | Asher |---|  ---| ---|
-|  3  | mesh ADT | Spencer | ---| ---| ---|
-|  4  | command line features | Mehdi | ---| ---| --- |
-|     | | | | | |
+| Id  | Feature title                                                                     | Who? | Start    | End | Status |
+|:---:|-----------------------------------------------------------------------------------|------|----------|--|--------|
+| F1  | draw segments between vertices to visualize the squares                           |   Asher/Mehdi   | 02/08/23 |  02/09/23 | D      |
+| F2  | Creating the Polygon data type, referencing the neighbours and creating centroids | Asher | 02/18/23 |  02/20/23| D      |
+| F3  | Creating the Mesh ADT, and implementing precision model                           | Spencer | 02/18/23      | --- | S      |
+| F4  | Implementing debug mode and command line features to activate debug mode          | Mehdi | 02/18/23      | 02/24/23 | D      |
+| F5  | Implementing command line arguments for controlling mesh generation               | Mehdi | 02/24/23   | --- |   P     |
+| F6  | Computing Voronoi Diagram                                                         | --- | 02/24/23   | --- |   P     |
+| F7  | Implementing Lloyd Relaxtion                                                      | --- | 02/24/23   | --- |   P     |
+| F8  | Computing neighbourhood relations using Delaunays Triangulation                   | Asher | 02/24/23   | --- |   P     |
+
 
 

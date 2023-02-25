@@ -1,11 +1,14 @@
 package ca.mcmaster.cas.se2aa4.a2.generator;
 
+import java.awt.*;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Property;
+import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Segment;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Polygon;
 
@@ -15,7 +18,7 @@ public class DotGen {
     private final int height = 500;
     private final int square_size = 20;
 
-    public Structs.Mesh generate() {
+    public Mesh generate() {
         //step 5: add thickness and transparency? can maybe ignore thickness
 
         List<Vertex> vertices = new ArrayList<>();
@@ -66,8 +69,9 @@ public class DotGen {
             double x2 = v2.getX();
             double y1 = v1.getY();
             double y2 = v3.getY();
-            double x3 = x1+x2/2;
-            double y3 = y1+y2/2;
+
+            double x3 = (x1+x2)/2.0;
+            double y3 = (y1+y2)/2.0;
 
             Vertex centroid = Vertex.newBuilder().setX(x3).setY(y3).build();
             String colorCode = 255 + "," + 0 + "," + 0;
@@ -111,7 +115,7 @@ public class DotGen {
             polygons.set(i, p1);
         }
         // Distribute colors randomly. Vertices are immutable, need to enrich them
-        List<Structs.Vertex> verticesWithColors = new ArrayList<>();
+        List<Vertex> verticesWithColors = new ArrayList<>();
         Random bag = new Random();
         for(Vertex v: vertices){
             int red = bag.nextInt(255);
@@ -123,7 +127,7 @@ public class DotGen {
             verticesWithColors.add(colored);
         }
         // distributing colours to the segments
-        List<Structs.Segment> segmentsWithColors = new ArrayList<>();
+        List<Segment> segmentsWithColors = new ArrayList<>();
         for (Segment s: segments){
             Vertex vertex1 = verticesWithColors.get(s.getV1Idx());
             Vertex vertex2 = verticesWithColors.get(s.getV2Idx());
@@ -137,7 +141,7 @@ public class DotGen {
             segmentsWithColors.add(coloredSegment);
         }
         //distributing colours to polygons
-        List<Structs.Polygon> polygonsWithColors = new ArrayList<>();
+        List<Polygon> polygonsWithColors = new ArrayList<>();
         for (Polygon p: polygons){
             Segment s1 = segmentsWithColors.get(p.getSegmentIdxs(0));
             Segment s2 = segmentsWithColors.get(p.getSegmentIdxs(1));
