@@ -15,11 +15,14 @@ public class MeshADT {
     private List<Polygon> polygonList;
     private List<Segment> segmentList;
     private List<Vertex> vertexList;
+    private List<Vertex> centroidList;
     //constructor accepting all necessary lists to create a new mesh.
-    public MeshADT(List<Vertex> vertices, List<Segment> segments, List<Polygon> polygons) {
+    public MeshADT(List<Vertex> vertices, List<Vertex> centroids, List<Segment> segments, List<Polygon> polygons) {
         this.polygonList = polygons;
         this.segmentList = segments;
+        this.centroidList = centroids;
         this.vertexList = precisionCheck(vertices, 2);
+        this.vertexList.addAll(precisionCheck(this.centroidList, 2));
         this.mesh = Mesh.newBuilder()
                 .addAllVertices(this.vertexList)
                 .addAllSegments(this.segmentList)
@@ -81,7 +84,7 @@ public class MeshADT {
             i++;
         }
         //Create new instance of mesh class with these properties.
-        MeshADT debugMesh = new MeshADT(debugVertices, debugSegments, debugPolygons);
+        MeshADT debugMesh = new MeshADT(debugVertices, this.centroidList, debugSegments, debugPolygons);
         return debugMesh.getMesh();
     }
 }

@@ -19,7 +19,6 @@ public class DotGen {
     private final int square_size = 20;
 
     public Mesh generate() {
-        //step 5: add thickness and transparency? can maybe ignore thickness
 
         List<Vertex> vertices = new ArrayList<>();
         // Create all the vertices
@@ -158,7 +157,7 @@ public class DotGen {
             Polygon coloredPolygon = Polygon.newBuilder(p).addProperties(color).build();
             polygonsWithColors.add(coloredPolygon);
         }
-        return new MeshADT(verticesWithColors,segmentsWithColors,polygonsWithColors).getMesh();
+        return new MeshADT(verticesWithColors, centroids, segmentsWithColors,polygonsWithColors).getMesh();
     }
 
     private String[] getColorVal(List<Property> properties){
