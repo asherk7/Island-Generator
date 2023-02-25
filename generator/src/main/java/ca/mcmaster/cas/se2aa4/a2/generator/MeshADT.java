@@ -1,6 +1,11 @@
 package ca.mcmaster.cas.se2aa4.a2.generator;
 
-import ca.mcmaster.cas.se2aa4.a2.io.Structs.*;
+import ca.mcmaster.cas.se2aa4.a2.io.Structs;
+import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
+import ca.mcmaster.cas.se2aa4.a2.io.Structs.Property;
+import ca.mcmaster.cas.se2aa4.a2.io.Structs.Segment;
+import ca.mcmaster.cas.se2aa4.a2.io.Structs.Polygon;
+import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,35 +16,28 @@ public class MeshADT {
     private List<Segment> segmentList;
     private List<Vertex> vertexList;
     //constructor accepting all necessary lists to create a new mesh.
-    public MeshADT(Mesh aMesh) {
-        this.polygonList = aMesh.getPolygonsList();
-        this.segmentList = aMesh.getSegmentsList();
-        this.vertexList = aMesh.getVerticesList();
-        //precisionCheck();
-        this.mesh = aMesh;
-    }
     public MeshADT(List<Vertex> vertices, List<Segment> segments, List<Polygon> polygons) {
         this.polygonList = polygons;
         this.segmentList = segments;
-        this.vertexList = vertices;
-        //precisionCheck();
-        this.mesh = Mesh.newBuilder().addAllVertices(this.vertexList).addAllSegments(this.segmentList).addAllPolygons(this.polygonList).build();
+        this.vertexList = precisionCheck(vertices, 2);
+        this.mesh = Mesh.newBuilder()
+                .addAllVertices(this.vertexList)
+                .addAllSegments(this.segmentList)
+                .addAllPolygons(this.polygonList).build();
     }
-
-    //precision is ensured at the generator level, using all int values (for now)
-    /*
-    private void precisionCheck() {
-        List<Polygon> precisePolygons = new ArrayList<>();
-        for (Polygon g: this.polygonList) {
-            Polygon n = Polygon.newBuilder().build();
-
+    //round all values assoc. with vertices to 2 decimal places
+    private List<Vertex> precisionCheck(List<Vertex> vertices, int precision) {
+        List<Vertex> preciseVertexList = new ArrayList<>();
+        for (Vertex v: vertices) {
+            preciseVertexList.add(Vertex.newBuilder()
+                    .setX(Double.parseDouble(String.format("%." + precision + "f", v.getX())))
+                    .setY(Double.parseDouble(String.format("%." + precision + "f", v.getY())))
+                    .addAllProperties(v.getPropertiesList()).build());
         }
+        //polygons + segments store only integer values, no need to round.
+        return preciseVertexList;
     }
-
-     */
     public Mesh getMesh() {return this.mesh;}
-
-    //need method to check precision
 
     //Enter debug mode, segments + polygons change to black, vertices to red
     public Mesh debug() {
@@ -55,7 +53,7 @@ public class MeshADT {
                     d.newBuilderForType().addProperties(p).build();
                 }
             }
-            d.newBuilderForType().addProperties(blackColorProperty);
+            d.newBuilderForType().addProperties(blackColorProperty).build();
             debugSegments.add(d);
         }
 
@@ -66,7 +64,7 @@ public class MeshADT {
                     d.newBuilderForType().addProperties(p).build();
                 }
             }
-            d.newBuilderForType().addProperties(blackColorProperty);
+            d.newBuilderForType().addProperties(blackColorProperty).build();
             debugPolygons.add(d);
         }
 
@@ -78,7 +76,7 @@ public class MeshADT {
                     d.newBuilderForType().addProperties(p).build();
                 }
             }
-            d.newBuilderForType().addProperties(blackColorProperty);
+            d.newBuilderForType().addProperties(blackColorProperty).build();
             debugVertices.add(d);
             i++;
         }
