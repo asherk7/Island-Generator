@@ -80,7 +80,7 @@ A feature is done when it meets all conditions that is required of it, satisfies
 | F1  | draw segments between vertices to visualize the squares                           |   Asher/Mehdi   | 02/08/23 |  02/09/23 | D      |
 | F2  | Creating the Polygon data type, referencing the neighbours and creating centroids | Asher | 02/18/23 |  02/20/23| D      |
 | F3  | Creating the Mesh ADT, and implementing precision model                           | Spencer | 02/85/23      | --- | S      |
-| F4  | Implementing debug mode and command line features to activate debug mode          | Mehdi | 02/18/23      | ---| S      |
+| F4  | Implementing debug mode and command line features to activate debug mode          | Mehdi | 02/18/23      | 02/24/23 | D      |
 | F5  |                                                                                   | |          | |        |
 
 
