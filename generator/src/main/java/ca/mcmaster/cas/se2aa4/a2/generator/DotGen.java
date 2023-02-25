@@ -1,22 +1,76 @@
 package ca.mcmaster.cas.se2aa4.a2.generator;
 
-import java.awt.*;
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
+import java.util.Random;
 
-import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Property;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Segment;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Polygon;
+import org.locationtech.jts.geom.*;
+import org.locationtech.jts.triangulate.VoronoiDiagramBuilder;
 
 public class DotGen {
 
     private final int width = 500;
     private final int height = 500;
     private final int square_size = 20;
+    public Mesh generateVoronoi(int polyCount) {
+        //generate voronoi diagram mesh, currently uncoloured.
+        Random rand = new Random();
+        List<Vertex> centroids = new ArrayList<>();
+        List<Coordinate> vertexCoords = new ArrayList<>();
+        //generate random vertex coords
+        for (int i = 0; i < polyCount; i++) {
+            double x = rand.nextDouble() * width;
+            double y = rand.nextDouble() * height;
+            vertexCoords.add(new Coordinate(x,y));
+            centroids.add(Vertex.newBuilder().setX((double) x).setY((double) y).build());
+        }
+        //generate voronoi diagram using jts voronoi diagram builder
+        VoronoiDiagramBuilder voronoiBuilder = new VoronoiDiagramBuilder();
+        voronoiBuilder.setTolerance(0.01);
+        voronoiBuilder.setClipEnvelope(new Envelope(0,width,0,height));
+        GeometryFactory geometryFactory = new GeometryFactory();
+        voronoiBuilder.setSites(geometryFactory.createMultiPointFromCoords(vertexCoords.toArray(new Coordinate[0])));
+        GeometryCollection polygons = (GeometryCollection) voronoiBuilder.getDiagram(geometryFactory);
+        //parse a list of Structs.Polygon from GeometryCollection of geom.Polygons
+        List<Vertex> vertexList = new ArrayList<>(); //list containing vertices of previously parsed polygons
+        List<Segment> segmentList = new ArrayList<>();
+        List<Vertex> polyVertices = new ArrayList<>();
+        List<Segment> polySegments = new ArrayList<>();
+        List<Polygon> polygonList = new ArrayList<>();
+
+        //foreach polygon in the generated collection
+        for (int i = 0; i < polygons.getNumGeometries(); i++) {
+            Geometry p = polygons.getGeometryN(i);
+            //get all points of polygon, make vertices with same coords.
+            for (int j = 0; j < p.getNumPoints()-1; j++) {
+                polyVertices.add(Vertex.newBuilder().setX(p.getCoordinates()[j].getX()).setY(p.getCoordinates()[j].getY()).build());
+            }
+            int k = vertexList.size()-1;
+            //point segment ends to appropriate vertices
+            while (k < vertexList.size()-1 + polyVertices.size()-1) { //-3 for 2 end of list, and grabbing up
+                polySegments.add(Segment.newBuilder().setV1Idx(k).setV2Idx(k+1).build());
+                k++;
+            }
+            polySegments.add(Segment.newBuilder().setV1Idx(k).setV2Idx(vertexList.size()-1).build());
+            //point a new polygon to all the associated segments
+            Polygon.Builder builder = Polygon.newBuilder();
+            for (int l = segmentList.size()-1; l < segmentList.size()-1+polySegments.size()-1; l++) {
+                builder.addSegmentIdxs(l);
+            }
+            polygonList.add(builder.build());
+            //concat the lists of vertices
+            vertexList.addAll(polyVertices);
+            segmentList.addAll(polySegments);
+            polyVertices.clear();
+            polySegments.clear();
+        }
+        return new MeshADT(vertexList,segmentList,polygonList).getMesh();
+    }
 
     public Mesh generate() {
 
