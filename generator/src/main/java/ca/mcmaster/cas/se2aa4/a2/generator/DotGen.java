@@ -69,7 +69,7 @@ public class DotGen {
             polyVertices.clear();
             polySegments.clear();
         }
-        return new MeshADT(vertexList,segmentList,polygonList).getMesh();
+        return new MeshADT(vertexList,centroids,segmentList,polygonList).getMesh();
     }
 
     public Mesh generate() {
