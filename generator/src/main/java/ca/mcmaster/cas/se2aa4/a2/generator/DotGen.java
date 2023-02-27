@@ -15,9 +15,8 @@ import org.locationtech.jts.noding.SegmentSetMutualIntersector;
 import org.locationtech.jts.triangulate.VoronoiDiagramBuilder;
 
 public class DotGen {
-
-    private final int width = 50;
-    private final int height = 50;
+    private final int width = 500;
+    private final int height = 500;
     private final int square_size = 20;
     public Mesh generateVoronoi(/*int polyCount*/) {
         int polyCount = 20;
