@@ -17,7 +17,8 @@ public class DotGen {
     private final int width = 500;
     private final int height = 500;
     private final int square_size = 20;
-    public Mesh generateVoronoi(int polyCount) {
+    public Mesh generate(/*int polyCount*/) {
+        int polyCount = 50;
         //generate voronoi diagram mesh, currently uncoloured.
         Random rand = new Random();
         List<Vertex> centroids = new ArrayList<>();
@@ -27,7 +28,7 @@ public class DotGen {
             double x = rand.nextDouble() * width;
             double y = rand.nextDouble() * height;
             vertexCoords.add(new Coordinate(x,y));
-            centroids.add(Vertex.newBuilder().setX((double) x).setY((double) y).build());
+            centroids.add(Vertex.newBuilder().setX(x).setY(y).build());
         }
         //generate voronoi diagram using jts voronoi diagram builder
         VoronoiDiagramBuilder voronoiBuilder = new VoronoiDiagramBuilder();
@@ -50,28 +51,30 @@ public class DotGen {
             for (int j = 0; j < p.getNumPoints()-1; j++) {
                 polyVertices.add(Vertex.newBuilder().setX(p.getCoordinates()[j].getX()).setY(p.getCoordinates()[j].getY()).build());
             }
-            int k = vertexList.size()-1;
-            //point segment ends to appropriate vertices
-            while (k < vertexList.size()-1 + polyVertices.size()-1) { //-3 for 2 end of list, and grabbing up
-                polySegments.add(Segment.newBuilder().setV1Idx(k).setV2Idx(k+1).build());
-                k++;
-            }
-            polySegments.add(Segment.newBuilder().setV1Idx(k).setV2Idx(vertexList.size()-1).build());
-            //point a new polygon to all the associated segments
-            Polygon.Builder builder = Polygon.newBuilder();
-            for (int l = segmentList.size()-1; l < segmentList.size()-1+polySegments.size()-1; l++) {
-                builder.addSegmentIdxs(l);
-            }
-            polygonList.add(builder.build());
-            //concat the lists of vertices
+
             vertexList.addAll(polyVertices);
+            int startIndex = vertexList.size()-polyVertices.size()-1;
+
+            //int k = 0 + vertexList.size();
+            //point segment ends to appropriate vertices
+            for (int k = startIndex; k < vertexList.size()-1; k++) {
+                polySegments.add(Segment.newBuilder().setV1Idx(k-1).setV2Idx(k).build());
+            }
+            polySegments.add(Segment.newBuilder().setV1Idx(vertexList.size()-1).setV2Idx(startIndex).build());
             segmentList.addAll(polySegments);
+            //point a new polygon to all the associated segments
+            Polygon.Builder p_b = Polygon.newBuilder();
+            for (int l = 0; l < polySegments.size()-1; l++) {
+                p_b.addSegmentIdxs(l+(segmentList.size()-polySegments.size()-1));
+            }
+            polygonList.add(p_b.build());
+            //clear the temp lists
             polyVertices.clear();
             polySegments.clear();
         }
         return new MeshADT(vertexList,centroids,segmentList,polygonList).getMesh();
     }
-
+/*
     public Mesh generate() {
 
         List<Vertex> vertices = new ArrayList<>();
@@ -213,6 +216,8 @@ public class DotGen {
         }
         return new MeshADT(verticesWithColors, centroids, segmentsWithColors,polygonsWithColors).getMesh();
     }
+
+ */
 
     private String[] getColorVal(List<Property> properties){
         String color = null;

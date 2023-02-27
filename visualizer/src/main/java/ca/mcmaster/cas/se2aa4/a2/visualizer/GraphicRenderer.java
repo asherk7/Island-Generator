@@ -24,7 +24,7 @@ public class GraphicRenderer {
 
         //Draw Vertices, EXCLUDING centroids
         List<Vertex> vertices = aMesh.getVerticesList();
-        for (int i = 0; i < 625; i++) {
+        for (int i = 0; i < vertices.size()-1; i++) { //changed to vertices.size() to test
             Vertex v = vertices.get(i);
             
             double centre_x = v.getX() - (THICKNESS/2.0d);
