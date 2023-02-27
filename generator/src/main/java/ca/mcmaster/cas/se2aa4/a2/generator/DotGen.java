@@ -4,21 +4,23 @@ import java.util.*;
 import java.util.List;
 import java.util.Random;
 
+import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Property;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Segment;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Polygon;
 import org.locationtech.jts.geom.*;
+import org.locationtech.jts.noding.SegmentSetMutualIntersector;
 import org.locationtech.jts.triangulate.VoronoiDiagramBuilder;
 
 public class DotGen {
 
-    private final int width = 500;
-    private final int height = 500;
+    private final int width = 50;
+    private final int height = 50;
     private final int square_size = 20;
-    public Mesh generate(/*int polyCount*/) {
-        int polyCount = 50;
+    public Mesh generateVoronoi(/*int polyCount*/) {
+        int polyCount = 20;
         //generate voronoi diagram mesh, currently uncoloured.
         Random rand = new Random();
         List<Vertex> centroids = new ArrayList<>();
@@ -28,53 +30,48 @@ public class DotGen {
             double x = rand.nextDouble() * width;
             double y = rand.nextDouble() * height;
             vertexCoords.add(new Coordinate(x,y));
-            centroids.add(Vertex.newBuilder().setX(x).setY(y).build());
         }
+
         //generate voronoi diagram using jts voronoi diagram builder
         VoronoiDiagramBuilder voronoiBuilder = new VoronoiDiagramBuilder();
-        voronoiBuilder.setTolerance(0.01);
+        voronoiBuilder.setTolerance(0.0001);
         voronoiBuilder.setClipEnvelope(new Envelope(0,width,0,height));
         GeometryFactory geometryFactory = new GeometryFactory();
         voronoiBuilder.setSites(geometryFactory.createMultiPointFromCoords(vertexCoords.toArray(new Coordinate[0])));
         GeometryCollection polygons = (GeometryCollection) voronoiBuilder.getDiagram(geometryFactory);
-        //parse a list of Structs.Polygon from GeometryCollection of geom.Polygons
-        List<Vertex> vertexList = new ArrayList<>(); //list containing vertices of previously parsed polygons
-        List<Segment> segmentList = new ArrayList<>();
-        List<Vertex> polyVertices = new ArrayList<>();
-        List<Segment> polySegments = new ArrayList<>();
+
+        List<Vertex> polyVertexList = new ArrayList<>();
+        List<Segment> polySegmentList = new ArrayList<>();
         List<Polygon> polygonList = new ArrayList<>();
+        List<Integer> polySegmentIdxList = new ArrayList<>();
+        List<Vertex> vertices = new ArrayList<>();
+        List<Segment> segments = new ArrayList<>();
 
-        //foreach polygon in the generated collection
-        for (int i = 0; i < polygons.getNumGeometries(); i++) {
-            Geometry p = polygons.getGeometryN(i);
-            //get all points of polygon, make vertices with same coords.
-            for (int j = 0; j < p.getNumPoints()-1; j++) {
-                polyVertices.add(Vertex.newBuilder().setX(p.getCoordinates()[j].getX()).setY(p.getCoordinates()[j].getY()).build());
+        for (int i = 0; i < polygons.getNumGeometries()-1; i++) {
+            //get coordinates of current polygon, parse to vertices
+            Coordinate[] polyCoords = polygons.getGeometryN(i).getCoordinates();
+            for (Coordinate c: polyCoords) {
+                polyVertexList.add(Vertex.newBuilder().setX(c.getX()).setY(c.getY()).build());
             }
-
-            vertexList.addAll(polyVertices);
-            int startIndex = vertexList.size()-polyVertices.size()-1;
-
-            //int k = 0 + vertexList.size();
-            //point segment ends to appropriate vertices
-            for (int k = startIndex; k < vertexList.size()-1; k++) {
-                polySegments.add(Segment.newBuilder().setV1Idx(k-1).setV2Idx(k).build());
+            for (int k = 1; k < polyVertexList.size()-1; k++) {
+                polySegmentList.add(Segment.newBuilder().setV1Idx(k-1+vertices.size()).setV2Idx(k+vertices.size()).build());
             }
-            polySegments.add(Segment.newBuilder().setV1Idx(vertexList.size()-1).setV2Idx(startIndex).build());
-            segmentList.addAll(polySegments);
-            //point a new polygon to all the associated segments
-            Polygon.Builder p_b = Polygon.newBuilder();
-            for (int l = 0; l < polySegments.size()-1; l++) {
-                p_b.addSegmentIdxs(l+(segmentList.size()-polySegments.size()-1));
+            polySegmentList.add(Segment.newBuilder().setV1Idx(polyVertexList.size()+vertices.size()-1).setV2Idx(vertices.size()).build());
+            vertices.addAll(polyVertexList);//vertices list has all vertices, indexes should be correct.
+            polyVertexList.clear();
+            for (int j = 0; j < polySegmentList.size()-1; j++) {
+                polySegmentIdxList.add(j+segments.size());
             }
-            polygonList.add(p_b.build());
-            //clear the temp lists
-            polyVertices.clear();
-            polySegments.clear();
+            segments.addAll(polySegmentList);
+            polySegmentList.clear();
+            centroids.add(Vertex.newBuilder()
+                    .setX(polygons.getGeometryN(i).getCentroid().getX())
+                    .setY(polygons.getGeometryN(i).getCentroid().getY())
+                    .build());
+            polygonList.add(Polygon.newBuilder().setCentroidIdx(i).addAllSegmentIdxs(polySegmentIdxList).build());
         }
-        return new MeshADT(vertexList,centroids,segmentList,polygonList).getMesh();
+        return new MeshADT(vertices,centroids,segments,polygonList).getMesh();
     }
-/*
     public Mesh generate() {
 
         List<Vertex> vertices = new ArrayList<>();
@@ -216,8 +213,6 @@ public class DotGen {
         }
         return new MeshADT(verticesWithColors, centroids, segmentsWithColors,polygonsWithColors).getMesh();
     }
-
- */
 
     private String[] getColorVal(List<Property> properties){
         String color = null;
