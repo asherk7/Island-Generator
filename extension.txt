@@ -1,0 +1,6 @@
+|TASK|Student responsible for TASK|
+| Apply Lloyd Relaxation | Mehdi Syed |
+| Command Line Arguments | Mehdi Syed |
+| Neighborhood relations using Delaunays Triangulation | Asher Khan |
+| Reorder segments with convex hull | Asher Khan |
+| Reoport | Asher Khan & Mehdi Syed |
