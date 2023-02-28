@@ -119,10 +119,11 @@ public class DotGen {
         System.out.println(vertices.size());
         System.out.println(centroids.size());
 
-        return new MeshADT(vertices,centroids,segments,polygonList).getMesh();
+        Mesh aMesh = new MeshADT(vertices,centroids,segments,polygonList).getMesh();
+        return DelauneyTriangulation(aMesh);
     }
 
-    public void  DelauneyTriangulation(Mesh aMesh){
+    public Mesh DelauneyTriangulation(Mesh aMesh){
         GeometryFactory geometryFactory = new GeometryFactory();
         List<Coordinate> coords = new ArrayList<>();
         for(int i =0; i <= aMesh.getPolygonsList().size(); i++) {
@@ -150,9 +151,12 @@ public class DotGen {
                         for(Polygon p1: polygons){
                             Vertex centroid1 = aMesh.getVerticesList().get(p1.getCentroidIdx()+625);
                             if(p1 != p){
-                                if (coord[j].getX() == centroid1.getX() && coord[j].getY() == centroid1.getY()){
-                                    if (!p.getNeighborIdxsList().contains(polygons.indexOf(p1))) {
-                                        Polygon p2 = Polygon.newBuilder(p).addNeighborIdxs(polygons.indexOf(p1)).build();
+                                for (int k=0; k<coord.length; k++) {
+                                    if (coord[k].getX() == centroid1.getX() && coord[k].getY() == centroid1.getY()) {
+                                        if (!p.getNeighborIdxsList().contains(polygons.indexOf(p1))) {
+                                            Polygon p2 = Polygon.newBuilder(p).addNeighborIdxs(polygons.indexOf(p1)).build();
+                                            polygons.set(polygons.indexOf(p), p2);
+                                        }
                                     }
                                 }
                             }
@@ -160,11 +164,8 @@ public class DotGen {
                     }
                 }
             }
-            //check every triangle
-            //check every point in the triangle
-            //if its the centroid, add every other point in the triangle to the neighbour
-            //make sure to check that the neighbour point doesn't already exist
         }
+        return new MeshADT(aMesh.getVerticesList().subList(0, 625), aMesh.getVerticesList().subList(625, aMesh.getVerticesCount()), aMesh.getSegmentsList(), polygons).getMesh();
     }
 
     public Mesh generate() {
