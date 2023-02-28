@@ -16,11 +16,10 @@ import org.locationtech.jts.triangulate.VoronoiDiagramBuilder;
 import org.locationtech.jts.triangulate.DelaunayTriangulationBuilder;
 
 public class DotGen {
-    private final int width = 1000;
-    private final int height = 1000;
+    private final int width = 500;
+    private final int height = 500;
     private final int square_size = 20;
-    public Mesh generateVoronoi(/*int polyCount*/) {
-        int polyCount = 50;
+    public Mesh generateVoronoi(int polyCount, int relaxation_level) {
         //generate voronoi diagram mesh, currently uncoloured.
         Random rand = new Random();
         List<Vertex> centroids = new ArrayList<>();
@@ -54,8 +53,7 @@ public class DotGen {
         List<Segment> segments = new ArrayList<>();
 
         //Relaxation
-        int relaxation_loop = 500;
-        for (int loop = 0; loop < relaxation_loop; loop++){
+        for (int loop = 0; loop < relaxation_level; loop++){
             //Reset arraylist
             polyVertexList = new ArrayList<>();
             polySegmentList = new ArrayList<>();
