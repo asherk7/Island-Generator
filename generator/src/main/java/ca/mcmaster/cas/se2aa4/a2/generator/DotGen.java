@@ -13,6 +13,7 @@ import ca.mcmaster.cas.se2aa4.a2.io.Structs.Polygon;
 import org.locationtech.jts.geom.*;
 import org.locationtech.jts.noding.SegmentSetMutualIntersector;
 import org.locationtech.jts.triangulate.VoronoiDiagramBuilder;
+import org.locationtech.jts.triangulate.DelaunayTriangulationBuilder;
 
 public class DotGen {
     private final int width = 500;
@@ -71,6 +72,52 @@ public class DotGen {
         }
         return new MeshADT(vertices,centroids,segments,polygonList).getMesh();
     }
+
+    public void  DelauneyTriangulation(Mesh aMesh){
+        GeometryFactory geometryFactory = new GeometryFactory();
+        List<Coordinate> coords = new ArrayList<>();
+        for(int i =0; i <= aMesh.getPolygonsList().size(); i++) {
+            Polygon p = aMesh.getPolygonsList().get(i);
+            Vertex centroid = aMesh.getVerticesList().get(p.getCentroidIdx()+625);
+            coords.add(new Coordinate(centroid.getX(), centroid.getY()));
+        }
+        DelaunayTriangulationBuilder triangleBuilder = new DelaunayTriangulationBuilder();
+        triangleBuilder.setSites(coords);
+        Geometry triangles = triangleBuilder.getTriangles(geometryFactory);
+        List<Geometry> trianglesProduced = new ArrayList<>();
+        if(triangles instanceof GeometryCollection geometryCollection) {
+            for (int i = 0; i < geometryCollection.getNumGeometries(); i++) {
+                Geometry triangle = geometryCollection.getGeometryN(i);
+                trianglesProduced.add(triangle);
+            }
+        }
+        List<Polygon> polygons = aMesh.getPolygonsList();
+        for(Polygon p: polygons){
+            for(int i=0; i<trianglesProduced.size(); i++){
+                Coordinate[] coord = trianglesProduced.get(i).getCoordinates();
+                for(int j=0; j<coord.length; j++){
+                    Vertex centroid = aMesh.getVerticesList().get(p.getCentroidIdx()+625);
+                    if (coord[j].getX() == centroid.getX() && coord[j].getY() == centroid.getY()){
+                        for(Polygon p1: polygons){
+                            Vertex centroid1 = aMesh.getVerticesList().get(p1.getCentroidIdx()+625);
+                            if(p1 != p){
+                                if (coord[j].getX() == centroid1.getX() && coord[j].getY() == centroid1.getY()){
+                                    if (!p.getNeighborIdxsList().contains(polygons.indexOf(p1))) {
+                                        Polygon p2 = Polygon.newBuilder(p).addNeighborIdxs(polygons.indexOf(p1)).build();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            //check every triangle
+            //check every point in the triangle
+            //if its the centroid, add every other point in the triangle to the neighbour
+            //make sure to check that the neighbour point doesn't already exist
+        }
+    }
+
     public Mesh generate() {
 
         List<Vertex> vertices = new ArrayList<>();
