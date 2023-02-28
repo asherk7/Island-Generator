@@ -8,8 +8,18 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         DotGen generator = new DotGen();
-        Mesh myMesh = generator.generate();
+        /*  Mesh myMesh = generator.generate(); */
+        Mesh myMesh =  generator.generateVoronoi();
         MeshFactory factory = new MeshFactory();
         factory.write(myMesh, args[0]);
     }
 }
+
+/*
+ CLI Args:
+    - Kind of mesh: grid or irregular
+    - Number of polygons
+    - Relaxation level
+    - Help command
+ 
+ */

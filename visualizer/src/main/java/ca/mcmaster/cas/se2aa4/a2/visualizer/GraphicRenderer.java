@@ -24,7 +24,7 @@ public class GraphicRenderer {
 
         //Draw Vertices, EXCLUDING centroids
         List<Vertex> vertices = aMesh.getVerticesList();
-        for (int i = 0; i < vertices.size()-1; i++) { //changed to vertices.size() to test
+        for (int i = 0; i < vertices.size(); i++) { //changed to vertices.size() for part 3
             Vertex v = vertices.get(i);
             
             double centre_x = v.getX() - (THICKNESS/2.0d);
@@ -63,6 +63,9 @@ public class GraphicRenderer {
                 canvas.setColor(old);
             }
         }
+    
+        //test
+        
         
         //Draw centroid and neighbors, only in debug mode
         if (debug_mode){
