@@ -3,4 +3,3 @@
 | Command Line Arguments | Mehdi Syed |
 | Neighborhood relations using Delaunays Triangulation | Asher Khan |
 | Reorder segments with convex hull | Asher Khan |
-| Report | Asher Khan & Mehdi Syed |
