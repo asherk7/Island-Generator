@@ -15,11 +15,27 @@ public class Main {
         String output = args[1];
         //Debug mode
         Boolean debug_mode = false;
-        try{
-            if (args[2].equals("-X")){
-                debug_mode = true;
-            }
-        } catch (Exception e){}
+        Boolean regular_grid = true;
+     
+        if (contains("-X", args)){
+            debug_mode = true;
+        }
+
+        if (contains("-IR", args)){
+            regular_grid = false;
+        }
+
+        System.out.println("Enter command -H for help with other commands");
+        if (contains("-H", args)){
+            System.out.println("""
+            Commands
+            --------
+            -IR, irregular mesh
+            By default, the regular mesh will be selected. To switch, type said command
+
+            """);
+        }
+
         // Getting width and height for the canvas
         Structs.Mesh aMesh = new MeshFactory().read(input);
         double max_x = Double.MIN_VALUE;
@@ -32,11 +48,20 @@ public class Main {
         Graphics2D canvas = SVGCanvas.build((int) Math.ceil(max_x), (int) Math.ceil(max_y));
         GraphicRenderer renderer = new GraphicRenderer();
         // Painting the mesh on the canvas
-        renderer.render(aMesh, canvas, debug_mode);
+        renderer.render(aMesh, canvas, debug_mode, regular_grid);
         // Storing the result in an SVG file
         SVGCanvas.write(canvas, output);
         // Dump the mesh to stdout
         MeshDump dumper = new MeshDump();
         dumper.dump(aMesh);
+    }
+
+    public static boolean contains(String compare, String[] args){
+        for (int i = 0; i < args.length; i++){
+            if (compare.equals(args[i])){
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -17,14 +17,20 @@ import java.util.List;
 public class GraphicRenderer {
 
     private static final int THICKNESS = 3;
-    public void render(Mesh aMesh, Graphics2D canvas, Boolean debug_mode) {
+    public void render(Mesh aMesh, Graphics2D canvas, Boolean debug_mode, Boolean regular_grid) {
         canvas.setColor(Color.BLACK);
         Stroke stroke = new BasicStroke(0.5f);
         canvas.setStroke(stroke);
 
         //Draw Vertices, EXCLUDING centroids
         List<Vertex> vertices = aMesh.getVerticesList();
-        for (int i = 0; i < vertices.size(); i++) { //changed to vertices.size() for part 3
+        //Set initial for loop's limit (this is different for the 2 types of grids)
+        int verticesLoopLimit = vertices.size();
+        if (regular_grid){
+            verticesLoopLimit = 625;
+        }
+
+        for (int i = 0; i < verticesLoopLimit; i++) { //changed to vertices.size() for part 3
             Vertex v = vertices.get(i);
             
             double centre_x = v.getX() - (THICKNESS/2.0d);
@@ -83,7 +89,6 @@ public class GraphicRenderer {
                     canvas.setColor(c);
                     canvas.drawLine((int)centroid.getX(), (int)centroid.getY(), (int)neighbor_centroid.getX(), (int)neighbor_centroid.getY());
                     canvas.setColor(old);
-
 
                 }
             }

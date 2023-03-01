@@ -24,7 +24,7 @@ public class Main {
             Users will be able to determine the number of levels the voronoi diagram will pass through
 
             -IR, irregular mesh
-            By default, the regular mesh will be selected. To switch, type the said command
+            By default, the regular mesh will be selected. To switch, type said command
 
             """);
         }
