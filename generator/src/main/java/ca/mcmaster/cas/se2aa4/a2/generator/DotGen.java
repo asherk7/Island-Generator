@@ -110,23 +110,16 @@ public class DotGen {
             polygons = (GeometryCollection) voronoiBuilder.getDiagram(geometryFactory);
         }
 
-        System.out.println(centroids.size());
-        System.out.println(vertexCoords.size());
-        System.out.println(polygonList.size());
-
-        System.out.println(vertices.size());
-        System.out.println(centroids.size());
-
         Mesh aMesh = new MeshADT(vertices,centroids,segments,polygonList).getMesh();
-        return DelauneyTriangulation(aMesh);
+        return DelauneyTriangulation(aMesh, vertices, centroids, polygonList);
     }
 
-    public Mesh DelauneyTriangulation(Mesh aMesh){
+    public Mesh DelauneyTriangulation(Mesh aMesh, List<Vertex> vertices, List<Vertex> centroids, List<Polygon> polygons){
         GeometryFactory geometryFactory = new GeometryFactory();
         List<Coordinate> coords = new ArrayList<>();
-        for(int i =0; i <= aMesh.getPolygonsList().size(); i++) {
+        for(int i =0; i < aMesh.getPolygonsList().size(); i++) {
             Polygon p = aMesh.getPolygonsList().get(i);
-            Vertex centroid = aMesh.getVerticesList().get(p.getCentroidIdx()+625);
+            Vertex centroid = centroids.get(p.getCentroidIdx());
             coords.add(new Coordinate(centroid.getX(), centroid.getY()));
         }
         DelaunayTriangulationBuilder triangleBuilder = new DelaunayTriangulationBuilder();
@@ -139,21 +132,20 @@ public class DotGen {
                 trianglesProduced.add(triangle);
             }
         }
-        List<Polygon> polygons = aMesh.getPolygonsList();
         for(Polygon p: polygons){
             for(int i=0; i<trianglesProduced.size(); i++){
                 Coordinate[] coord = trianglesProduced.get(i).getCoordinates();
                 for(int j=0; j<coord.length; j++){
-                    Vertex centroid = aMesh.getVerticesList().get(p.getCentroidIdx()+625);
+                    Vertex centroid = centroids.get(p.getCentroidIdx());
                     if (coord[j].getX() == centroid.getX() && coord[j].getY() == centroid.getY()){
                         for(Polygon p1: polygons){
-                            Vertex centroid1 = aMesh.getVerticesList().get(p1.getCentroidIdx()+625);
+                            Vertex centroid1 = centroids.get(p.getCentroidIdx());
                             if(p1 != p){
                                 for (int k=0; k<coord.length; k++) {
                                     if (coord[k].getX() == centroid1.getX() && coord[k].getY() == centroid1.getY()) {
                                         if (!p.getNeighborIdxsList().contains(polygons.indexOf(p1))) {
-                                            Polygon p2 = Polygon.newBuilder(p).addNeighborIdxs(polygons.indexOf(p1)).build();
-                                            polygons.set(polygons.indexOf(p), p2);
+                                            p = Polygon.newBuilder(p).addNeighborIdxs(polygons.indexOf(p1)).build();
+                                            //polygons.set(polygons.indexOf(p), p);
                                         }
                                     }
                                 }
@@ -163,7 +155,7 @@ public class DotGen {
                 }
             }
         }
-        return new MeshADT(aMesh.getVerticesList().subList(0, 625), aMesh.getVerticesList().subList(625, aMesh.getVerticesCount()), aMesh.getSegmentsList(), polygons).getMesh();
+        return new MeshADT(vertices, centroids, aMesh.getSegmentsList(), polygons).getMesh();
     }
 
     public Mesh generate() {
