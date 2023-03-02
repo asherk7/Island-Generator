@@ -78,14 +78,13 @@ public class GraphicRenderer {
             if (!regular_grid){
                 centroidLoopLimit = 0;
             }
-
             List<Polygon> polygons = aMesh.getPolygonsList();
             //Draw neighbor segments
             for (Polygon p: aMesh.getPolygonsList()){
                 Vertex centroid = vertices.get(p.getCentroidIdx()+centroidLoopLimit);
                 for (int i: p.getNeighborIdxsList()){
                     Polygon neighbor = polygons.get(i);
-                    Vertex neighbor_centroid = vertices.get(neighbor.getCentroidIdx()+625);
+                    Vertex neighbor_centroid = vertices.get(neighbor.getCentroidIdx()+centroidLoopLimit);
 
                     //Draw a line between both points
                     Color old = canvas.getColor();
