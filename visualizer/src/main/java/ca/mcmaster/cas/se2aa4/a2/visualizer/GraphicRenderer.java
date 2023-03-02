@@ -14,6 +14,8 @@ import java.awt.geom.Ellipse2D;
 import java.net.SocketTimeoutException;
 import java.util.List;
 
+
+
 public class GraphicRenderer {
 
     private static final int THICKNESS = 3;
@@ -69,16 +71,18 @@ public class GraphicRenderer {
                 canvas.setColor(old);
             }
         }
-    
-        //test
-        
-        
+
         //Draw centroid and neighbors, only in debug mode
         if (debug_mode){
+            int centroidLoopLimit = 625;
+            if (!regular_grid){
+                centroidLoopLimit = 0;
+            }
+
             List<Polygon> polygons = aMesh.getPolygonsList();
             //Draw neighbor segments
             for (Polygon p: aMesh.getPolygonsList()){
-                Vertex centroid = vertices.get(p.getCentroidIdx()+625);
+                Vertex centroid = vertices.get(p.getCentroidIdx()+centroidLoopLimit);
                 for (int i: p.getNeighborIdxsList()){
                     Polygon neighbor = polygons.get(i);
                     Vertex neighbor_centroid = vertices.get(neighbor.getCentroidIdx()+625);
@@ -93,7 +97,7 @@ public class GraphicRenderer {
                 }
             }
             //Draw centroids
-            for (int i = 625; i < aMesh.getVerticesCount(); i++){
+            for (int i = centroidLoopLimit; i < aMesh.getVerticesCount(); i++){
                 Vertex v_cent = vertices.get(i);
                 double centre_x_cent = v_cent.getX() - (THICKNESS/2.0d);
                 double centre_y_cent = v_cent.getY() - (THICKNESS/2.0d);
