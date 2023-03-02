@@ -132,21 +132,21 @@ public class DotGen {
                 trianglesProduced.add(triangle);
             }
         }
-        List<Polygon> polygons = aMesh.getPolygonsList();
+        List<Polygon> polygons = new ArrayList<>(Collections.unmodifiableList(new ArrayList<>(aMesh.getPolygonsList())));
         for(Polygon p: polygons){
-            for(int i=0; i<trianglesProduced.size(); i++){
-                Coordinate[] coord = trianglesProduced.get(i).getCoordinates();
-                for(int j=0; j<coord.length; j++){
+            Polygon.Builder p2 = Polygon.newBuilder(p);
+            for (Geometry geometry : trianglesProduced) {
+                Coordinate[] coord = geometry.getCoordinates();
+                for (Coordinate coordinate : coord) {
                     Vertex centroid = centroids.get(p.getCentroidIdx());
-                    if (coord[j].getX() == centroid.getX() && coord[j].getY() == centroid.getY()){
-                        for(Polygon p1: polygons){
+                    if (coordinate.getX() == centroid.getX() && coordinate.getY() == centroid.getY()) {
+                        for (int w = 0; w < polygons.size(); w++) {
                             Vertex centroid1 = centroids.get(p.getCentroidIdx());
-                            if(p1 != p){
-                                for (int k=0; k<coord.length; k++) {
-                                    if (coord[k].getX() == centroid1.getX() && coord[k].getY() == centroid1.getY()) {
-                                        if (!p.getNeighborIdxsList().contains(polygons.indexOf(p1))) {
-                                            Polygon p2 = Polygon.newBuilder(p).addNeighborIdxs(polygons.indexOf(p1)).build();
-                                            polygons.set(polygons.indexOf(p), p2);
+                            if (!polygons.get(w).equals(p)) {
+                                for (Coordinate value : coord) {
+                                    if (value.getX() == centroid1.getX() && value.getY() == centroid1.getY()) {
+                                        if (!p.getNeighborIdxsList().contains(polygons.indexOf(polygons.get(w)))) {
+                                            p2.addNeighborIdxs(polygons.indexOf(polygons.get(w)));
                                         }
                                     }
                                 }
@@ -155,6 +155,7 @@ public class DotGen {
                     }
                 }
             }
+            polygons.set(polygons.indexOf(p), p2.build());
         }
         return new MeshADT(vertices, centroids, aMesh.getSegmentsList(), polygons).getMesh();
     }
