@@ -81,10 +81,10 @@ A feature is done when it meets all conditions that is required of it, satisfies
 | F2 | Creating the Polygon data type, referencing the neighbours and creating centroids | Asher | 02/18/23 | 02/20/23  | D      |
 | F3 | Creating the Mesh ADT, and implementing precision model                           | Spencer | 02/18/23      | 02/25/23  | D      |
 | F4 | Implementing debug mode and command line features to activate debug mode          | Mehdi | 02/18/23      | 02/24/23  | D      |
-| F5 | Implementing command line arguments for controlling mesh generation               | Mehdi | 02/24/23   | ---       |   P     |
-| F6 | Computing Voronoi Diagram                                                         | Spencer | 02/24/23   | ---       |   P     |
-| F7 | Implementing Lloyd Relaxtion                                                      | Mehdi | 02/24/23   | ---       |   P     |
-| F8 | Computing neighbourhood relations using Delaunays Triangulation                   | Asher | 02/24/23   | ---       |   P     |
+| F5 | Implementing command line arguments for controlling mesh generation               | Mehdi | 02/24/23   | 03/02/23       |   D     |
+| F6 | Computing Voronoi Diagram                                                         | Spencer | 02/24/23   | 03/02/23       |   D     |
+| F7 | Implementing Lloyd Relaxtion                                                      | Mehdi | 02/24/23   | 03/02/23       |   D     |
+| F8 | Computing neighbourhood relations using Delaunays Triangulation                   | Asher | 02/24/23   | 03/02/23       |   D     |
 | F9 | Reorder segments using Convex Hull                                                | Asher | 02/24/23   | ---       |   P     |
 
 
