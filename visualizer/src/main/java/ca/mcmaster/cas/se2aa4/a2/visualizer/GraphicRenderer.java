@@ -60,6 +60,26 @@ public class GraphicRenderer {
                 }
             }
 
+            if (debug_mode){
+                List<Polygon> polygons = aMesh.getPolygonsList();
+                //Draw neighbor segments
+                for (Polygon p: aMesh.getPolygonsList()){
+                    Vertex centroid = vertices.get(p.getCentroidIdx());
+                    for (int i: p.getNeighborIdxsList()){
+                        Polygon neighbor = polygons.get(i);
+                        Vertex neighbor_centroid = vertices.get(neighbor.getCentroidIdx());
+
+                        //Draw a line between both points
+                        Color old = canvas.getColor();
+                        Color c = new Color(211, 211, 211);
+                        canvas.setColor(c);
+                        canvas.drawLine((int)centroid.getX(), (int)centroid.getY(), (int)neighbor_centroid.getX(), (int)neighbor_centroid.getY());
+                        canvas.setColor(old);
+
+                    }
+                }
+            }
+
         } else {
             canvas.setColor(Color.BLACK);
             Stroke stroke = new BasicStroke(0.5f);
