@@ -141,13 +141,13 @@ public class DotGen {
             for (Geometry triangle: trianglesProduced) {
                 Coordinate[] coord = triangle.getCoordinates();
                 for (Coordinate coordinate : coord) {
-                    //Vertex centroid = centroids.get(p.getCentroidIdx());
-                    Vertex centroid = aMesh.getVertices(p.getCentroidIdx());
+                    Vertex centroid = centroids.get(p.getCentroidIdx());
+                    //Vertex centroid = aMesh.getVertices(p.getCentroidIdx());
                     if (coordinate.getX() == centroid.getX() && coordinate.getY() == centroid.getY()) {
                         for (int w = 0; w < polygons.size(); w++) {
                             if (!polygons.get(w).equals(p)) {
-                                //Vertex centroid1 = centroids.get(polygons.get(w).getCentroidIdx());
-                                Vertex centroid1 = aMesh.getVertices(polygons.get(w).getCentroidIdx());
+                                Vertex centroid1 = centroids.get(polygons.get(w).getCentroidIdx());
+                                //Vertex centroid1 = aMesh.getVertices(polygons.get(w).getCentroidIdx());
                                 for (int k = 0; k < coord.length ; k++) {
                                     if ((!coordinate.equals(coord[k])) && coord[k].getX() == centroid1.getX() && coord[k].getY() == centroid1.getY()) {
                                         if (!p.getNeighborIdxsList().contains(polygons.indexOf(polygons.get(w)))) {
