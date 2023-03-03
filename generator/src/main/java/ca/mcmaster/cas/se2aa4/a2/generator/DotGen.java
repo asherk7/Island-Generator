@@ -31,10 +31,10 @@ public class DotGen {
             vertexCoords.add(new Coordinate(x,y));
         }
 
-        //test coords
-        for (Coordinate c: vertexCoords){
-            System.out.print("(" + c.x + ", " + c.y + ")" + ", " );
-        } System.out.println("\n\n\n");
+        // //test coords
+        // for (Coordinate c: vertexCoords){
+        //     System.out.print("(" + c.x + ", " + c.y + ")" + ", " );
+        // } System.out.println("\n\n\n");
         
         //generate voronoi diagram using jts voronoi diagram builder
         VoronoiDiagramBuilder voronoiBuilder = new VoronoiDiagramBuilder();
@@ -63,14 +63,6 @@ public class DotGen {
         List<Integer> polySegmentIdxList = new ArrayList<>();
         List<Vertex> vertices = new ArrayList<>();
         List<Segment> segments = new ArrayList<>();
-            
-        polyVertexList = new ArrayList<>();
-        polySegmentList = new ArrayList<>();
-        polygonList = new ArrayList<>();
-        polySegmentIdxList = new ArrayList<>();
-        vertices = new ArrayList<>();
-        segments = new ArrayList<>();
-        centroids = new ArrayList<>();
 
         //Store all necessary values for each polygon
         for (int i = 0; i < polygons.getNumGeometries(); i++) {
@@ -83,6 +75,7 @@ public class DotGen {
             for (int k = 1; k < polyVertexList.size(); k++) {
                 polySegmentList.add(Segment.newBuilder().setV1Idx(k-1+vertices.size()).setV2Idx(k+vertices.size()).build());
             }
+            //polySegmentList.add(Segment.newBuilder().setV1Idx(polyVertexList.size()+vertices.size()-1).setV2Idx(vertices.size()).build());
             vertices.addAll(polyVertexList);//vertices list has all vertices, indexes should be correct.
             polyVertexList.clear();
             for (int j = 0; j < polySegmentList.size(); j++) {
@@ -90,17 +83,18 @@ public class DotGen {
             }
             segments.addAll(polySegmentList);
             polySegmentList.clear();
+            centroids.add(Vertex.newBuilder()
+                        .setX(currentPolygon.getCentroid().getX())
+                        .setY(currentPolygon.getCentroid().getY())
+                        .build());
             polygonList.add(Polygon.newBuilder().setCentroidIdx(i).addAllSegmentIdxs(polySegmentIdxList).build());
         }
+        for (Vertex v: centroids){
+            System.out.print("(" + v.getX() + ", " + v.getY() + ")" + ", ");
+        }System.out.println("\n\n");
         //this var stores the first indice of the centroid portion of the vertices list
         int numberOfPolyVertices = vertices.size();
-        //This for-loop adds the centroid's vertex at the end of the list
-        for (int i = 0; i < polygons.getNumGeometries(); i++) {
-            centroids.add(Vertex.newBuilder()
-                        .setX(polygons.getGeometryN(i).getCentroid().getX())
-                        .setY(polygons.getGeometryN(i).getCentroid().getY())
-                        .build());
-        }
+        
         // //Move inital point to centroid
         // for (int i = 0; i < vertexCoords.size(); i++){
         //     Vertex current_centroid = centroids.get(i);
@@ -155,6 +149,7 @@ public class DotGen {
                 Coordinate[] coord = triangle.getCoordinates();
                 for (Coordinate coordinate : coord) {
                     Vertex centroid = centroids.get(p.getCentroidIdx());
+                    System.out.print("(" + centroid.getX() + ", " + centroid.getY() + ")" + ", ");
                     //Vertex centroid = aMesh.getVertices(p.getCentroidIdx());
                     if (coordinate.getX() == centroid.getX() && coordinate.getY() == centroid.getY()) {
                         for (int w = 0; w < polygons.size(); w++) {
