@@ -85,7 +85,6 @@ A feature is done when it meets all conditions that is required of it, satisfies
 | F6 | Computing Voronoi Diagram                                                         | Spencer | 02/24/23   | 03/02/23       |   D     |
 | F7 | Implementing Lloyd Relaxtion                                                      | Mehdi | 02/24/23   | 03/02/23       |   D     |
 | F8 | Computing neighbourhood relations using Delaunays Triangulation                   | Asher | 02/24/23   | 03/02/23       |   D     |
-| F9 | Reorder segments using Convex Hull                                                | Asher | 02/24/23   | ---       |   P     |
 
 
 
