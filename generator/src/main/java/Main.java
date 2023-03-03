@@ -11,7 +11,7 @@ public class Main {
         Scanner my_Scanner = new Scanner(System.in);
         Mesh myMesh;
         int num_of_polygons = 50;
-        int relaxation_level = 20;
+        int relaxation_level = 1000;
         System.out.println("Enter command -H for help with other commands");
         if (contains("-H", args)){
             System.out.println("""

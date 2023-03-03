@@ -20,91 +20,132 @@ public class GraphicRenderer {
 
     private static final int THICKNESS = 3;
     public void render(Mesh aMesh, Graphics2D canvas, Boolean debug_mode, Boolean regular_grid) {
-        canvas.setColor(Color.BLACK);
-        Stroke stroke = new BasicStroke(0.5f);
-        canvas.setStroke(stroke);
+        if (!regular_grid){
+            canvas.setColor(Color.BLACK);
+            Stroke stroke = new BasicStroke(0.5f);
+            canvas.setStroke(stroke);
 
-        //Draw Vertices, EXCLUDING centroids
-        List<Vertex> vertices = aMesh.getVerticesList();
-        //Set initial for loop's limit (this is different for the 2 types of grids)
-        int verticesLoopLimit = vertices.size();
-        if (regular_grid){
-            verticesLoopLimit = 625;
-        }
-
-        for (int i = 0; i < verticesLoopLimit; i++) { //changed to vertices.size() for part 3
-            Vertex v = vertices.get(i);
-            
-            double centre_x = v.getX() - (THICKNESS/2.0d);
-            double centre_y = v.getY() - (THICKNESS/2.0d);
-            Color old = canvas.getColor();
-            if (debug_mode){
+            //Draw Vertices, EXCLUDING centroids
+            List<Vertex> vertices = aMesh.getVerticesList();
+            for (int i = 0; i < vertices.size(); i++){
+                Vertex v = vertices.get(i);
+                
+                double centre_x = v.getX() - (THICKNESS/2.0d);
+                double centre_y = v.getY() - (THICKNESS/2.0d);
+                Color old = canvas.getColor();
                 Color c = new Color(0, 0, 0);
                 canvas.setColor(c);
-            } else {
-                canvas.setColor(extractColor(v.getPropertiesList()));
+                Ellipse2D point = new Ellipse2D.Double(centre_x, centre_y, THICKNESS, THICKNESS);
+                canvas.fill(point);
+                canvas.setColor(old);
             }
-            Ellipse2D point = new Ellipse2D.Double(centre_x, centre_y, THICKNESS, THICKNESS);
-            canvas.fill(point);
-            canvas.setColor(old);
-        }
-        //Draw polygons
-        for (Polygon p: aMesh.getPolygonsList()){
-            //Draw each segment for Polygon, p
-            for (int i: p.getSegmentIdxsList()){
-                Segment s_p = aMesh.getSegments(i);
 
-                int index_v1_p = s_p.getV1Idx();
-                int index_v2_p = s_p.getV2Idx();
+            //Draw Polygons
+            for (Polygon p: aMesh.getPolygonsList()){
+                //Draw each segment for Polygon, p
+                for (int i: p.getSegmentIdxsList()){
+                    Segment s_p = aMesh.getSegments(i);
 
-                Vertex v1_p = aMesh.getVertices(index_v1_p);
-                Vertex v2_p = aMesh.getVertices(index_v2_p);
+                    int index_v1_p = s_p.getV1Idx();
+                    int index_v2_p = s_p.getV2Idx();
+
+                    Vertex v1_p = aMesh.getVertices(index_v1_p);
+                    Vertex v2_p = aMesh.getVertices(index_v2_p);
+                    
+                    Color old = canvas.getColor();
+                    Color c = new Color(0, 0, 0);
+                    canvas.setColor(c);
+                    canvas.drawLine((int)v1_p.getX(), (int)v1_p.getY(), (int)v2_p.getX(), (int)v2_p.getY());
+                    canvas.setColor(old);
+                }
+            }
+
+        } else {
+            canvas.setColor(Color.BLACK);
+            Stroke stroke = new BasicStroke(0.5f);
+            canvas.setStroke(stroke);
+
+            //Draw Vertices, EXCLUDING centroids
+            List<Vertex> vertices = aMesh.getVerticesList();
+            //Set initial for loop's limit (this is different for the 2 types of grids)
+            int verticesLoopLimit = vertices.size();
+            if (regular_grid){
+                verticesLoopLimit = 625;
+            }
+
+            for (int i = 0; i < verticesLoopLimit; i++) { //changed to vertices.size() for part 3
+                Vertex v = vertices.get(i);
                 
+                double centre_x = v.getX() - (THICKNESS/2.0d);
+                double centre_y = v.getY() - (THICKNESS/2.0d);
                 Color old = canvas.getColor();
                 if (debug_mode){
                     Color c = new Color(0, 0, 0);
                     canvas.setColor(c);
                 } else {
-                    canvas.setColor(extractColor(p.getPropertiesList()));
+                    canvas.setColor(extractColor(v.getPropertiesList()));
                 }
-                canvas.drawLine((int)v1_p.getX(), (int)v1_p.getY(), (int)v2_p.getX(), (int)v2_p.getY());
-                canvas.setColor(old);
-            }
-        }
-
-        //Draw centroid and neighbors, only in debug mode
-        if (debug_mode){
-            int centroidLoopLimit = 625;
-            if (!regular_grid){
-                centroidLoopLimit = 0;
-            }
-            List<Polygon> polygons = aMesh.getPolygonsList();
-            //Draw neighbor segments
-            for (Polygon p: aMesh.getPolygonsList()){
-                Vertex centroid = vertices.get(p.getCentroidIdx()+centroidLoopLimit);
-                for (int i: p.getNeighborIdxsList()){
-                    Polygon neighbor = polygons.get(i);
-                    Vertex neighbor_centroid = vertices.get(neighbor.getCentroidIdx()+centroidLoopLimit);
-
-                    //Draw a line between both points
-                    Color old = canvas.getColor();
-                    Color c = new Color(211, 211, 211);
-                    canvas.setColor(c);
-                    canvas.drawLine((int)centroid.getX(), (int)centroid.getY(), (int)neighbor_centroid.getX(), (int)neighbor_centroid.getY());
-                    canvas.setColor(old);
-
-                }
-            }
-            //Draw centroids
-            for (int i = centroidLoopLimit; i < aMesh.getVerticesCount(); i++){
-                Vertex v_cent = vertices.get(i);
-                double centre_x_cent = v_cent.getX() - (THICKNESS/2.0d);
-                double centre_y_cent = v_cent.getY() - (THICKNESS/2.0d);
-                Color old = canvas.getColor();
-                canvas.setColor(extractColor(v_cent.getPropertiesList()));
-                Ellipse2D point = new Ellipse2D.Double(centre_x_cent, centre_y_cent, THICKNESS, THICKNESS);
+                Ellipse2D point = new Ellipse2D.Double(centre_x, centre_y, THICKNESS, THICKNESS);
                 canvas.fill(point);
                 canvas.setColor(old);
+            }
+            //Draw polygons
+            for (Polygon p: aMesh.getPolygonsList()){
+                //Draw each segment for Polygon, p
+                for (int i: p.getSegmentIdxsList()){
+                    Segment s_p = aMesh.getSegments(i);
+
+                    int index_v1_p = s_p.getV1Idx();
+                    int index_v2_p = s_p.getV2Idx();
+
+                    Vertex v1_p = aMesh.getVertices(index_v1_p);
+                    Vertex v2_p = aMesh.getVertices(index_v2_p);
+                    
+                    Color old = canvas.getColor();
+                    if (debug_mode){
+                        Color c = new Color(0, 0, 0);
+                        canvas.setColor(c);
+                    } else {
+                        canvas.setColor(extractColor(p.getPropertiesList()));
+                    }
+                    canvas.drawLine((int)v1_p.getX(), (int)v1_p.getY(), (int)v2_p.getX(), (int)v2_p.getY());
+                    canvas.setColor(old);
+                }
+            }
+            //Draw centroid and neighbors, only in debug mode
+            if (debug_mode){
+                int centroidLoopLimit = 625;
+                if (!regular_grid){
+                    centroidLoopLimit = 0;
+                }
+                List<Polygon> polygons = aMesh.getPolygonsList();
+                //Draw neighbor segments
+                for (Polygon p: aMesh.getPolygonsList()){
+                    Vertex centroid = vertices.get(p.getCentroidIdx()+centroidLoopLimit);
+                    for (int i: p.getNeighborIdxsList()){
+                        Polygon neighbor = polygons.get(i);
+                        Vertex neighbor_centroid = vertices.get(neighbor.getCentroidIdx()+centroidLoopLimit);
+
+                        //Draw a line between both points
+                        Color old = canvas.getColor();
+                        Color c = new Color(211, 211, 211);
+                        canvas.setColor(c);
+                        canvas.drawLine((int)centroid.getX(), (int)centroid.getY(), (int)neighbor_centroid.getX(), (int)neighbor_centroid.getY());
+                        canvas.setColor(old);
+
+                    }
+                }
+                //Draw centroids
+                for (int i = centroidLoopLimit; i < aMesh.getVerticesCount(); i++){
+                    Vertex v_cent = vertices.get(i);
+                    double centre_x_cent = v_cent.getX() - (THICKNESS/2.0d);
+                    double centre_y_cent = v_cent.getY() - (THICKNESS/2.0d);
+                    Color old = canvas.getColor();
+                    canvas.setColor(extractColor(v_cent.getPropertiesList()));
+                    Ellipse2D point = new Ellipse2D.Double(centre_x_cent, centre_y_cent, THICKNESS, THICKNESS);
+                    canvas.fill(point);
+                    canvas.setColor(old);
+                }
             }
         }
     }

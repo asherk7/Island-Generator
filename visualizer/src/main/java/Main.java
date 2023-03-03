@@ -41,8 +41,10 @@ public class Main {
         double max_x = Double.MIN_VALUE;
         double max_y = Double.MIN_VALUE;
         for (Structs.Vertex v: aMesh.getVerticesList()) {
-            max_x = (Double.compare(max_x, v.getX()) < 0? v.getX(): max_x);
-            max_y = (Double.compare(max_y, v.getY()) < 0? v.getY(): max_y);
+            // max_x = (Double.compare(max_x, v.getX()) < 0? v.getX(): max_x);
+            // max_y = (Double.compare(max_y, v.getY()) < 0? v.getY(): max_y);
+            max_x = 1000.0;
+            max_y = 1000.0;
         }
         // Creating the Canvas to draw the mesh
         Graphics2D canvas = SVGCanvas.build((int) Math.ceil(max_x), (int) Math.ceil(max_y));

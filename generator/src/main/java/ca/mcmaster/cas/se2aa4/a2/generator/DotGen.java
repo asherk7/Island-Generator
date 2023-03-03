@@ -16,8 +16,8 @@ import org.locationtech.jts.triangulate.VoronoiDiagramBuilder;
 import org.locationtech.jts.triangulate.DelaunayTriangulationBuilder;
 
 public class DotGen {
-    private final int width = 500;
-    private final int height = 500;
+    private final int width1 = 1000;
+    private final int height1 = 1000;
     private final int square_size = 20;
     public Mesh generateVoronoi(int polyCount, int relaxation_level) {
         //generate voronoi diagram mesh, currently uncoloured.
@@ -26,8 +26,8 @@ public class DotGen {
         List<Coordinate> vertexCoords = new ArrayList<>();
         //generate random vertex coords
         for (int i = 0; i < polyCount; i++) {
-            double x = rand.nextDouble() * width;
-            double y = rand.nextDouble() * height;
+            double x = rand.nextDouble() * width1;
+            double y = rand.nextDouble() * height1;
             vertexCoords.add(new Coordinate(x,y));
         }
 
@@ -38,11 +38,23 @@ public class DotGen {
         
         //generate voronoi diagram using jts voronoi diagram builder
         VoronoiDiagramBuilder voronoiBuilder = new VoronoiDiagramBuilder();
-        voronoiBuilder.setTolerance(0.0001);
-        voronoiBuilder.setClipEnvelope(new Envelope(0,width,0,height));
-        GeometryFactory geometryFactory = new GeometryFactory();
-        voronoiBuilder.setSites(geometryFactory.createMultiPointFromCoords(vertexCoords.toArray(new Coordinate[0])));
+        PrecisionModel precisionModel = new PrecisionModel(100);
+        GeometryFactory geometryFactory = new GeometryFactory(precisionModel);
+        voronoiBuilder.setClipEnvelope(new Envelope(0,width1,0,height1));
+        voronoiBuilder.setSites(vertexCoords);
         GeometryCollection polygons = (GeometryCollection) voronoiBuilder.getDiagram(geometryFactory);
+        
+        //Apply relaxation
+        for (int loop = 0; loop < relaxation_level; loop++){
+            for (int i = 0; i < polygons.getNumGeometries(); i++) {
+                double new_x = polygons.getGeometryN(i).getCentroid().getX();
+                double new_y = polygons.getGeometryN(i).getCentroid().getY();
+
+                vertexCoords.set(i, new Coordinate(new_x, new_y));
+            }
+            voronoiBuilder.setSites(vertexCoords);
+            polygons = (GeometryCollection) voronoiBuilder.getDiagram(geometryFactory);
+        }
 
         //Initalize arraylists
         List<Vertex> polyVertexList = new ArrayList<>();
@@ -51,64 +63,65 @@ public class DotGen {
         List<Integer> polySegmentIdxList = new ArrayList<>();
         List<Vertex> vertices = new ArrayList<>();
         List<Segment> segments = new ArrayList<>();
+            
+        polyVertexList = new ArrayList<>();
+        polySegmentList = new ArrayList<>();
+        polygonList = new ArrayList<>();
+        polySegmentIdxList = new ArrayList<>();
+        vertices = new ArrayList<>();
+        segments = new ArrayList<>();
+        centroids = new ArrayList<>();
 
-        //Relaxation
-        for (int loop = 0; loop < relaxation_level; loop++){
-            //Reset arraylist
-            polyVertexList = new ArrayList<>();
-            polySegmentList = new ArrayList<>();
-            polygonList = new ArrayList<>();
-            polySegmentIdxList = new ArrayList<>();
-            vertices = new ArrayList<>();
-            segments = new ArrayList<>();
-            centroids = new ArrayList<>();
-
-            //Store all necessary values for each polygon
-            for (int i = 0; i < polygons.getNumGeometries(); i++) {
-                //get coordinates of current polygon, parse to vertices
-                Coordinate[] polyCoords = polygons.getGeometryN(i).getCoordinates();
-                for (Coordinate c: polyCoords) {
-                    polyVertexList.add(Vertex.newBuilder().setX(c.getX()).setY(c.getY()).build());
-                }
-                for (int k = 1; k < polyVertexList.size()-1; k++) {
-                    polySegmentList.add(Segment.newBuilder().setV1Idx(k-1+vertices.size()).setV2Idx(k+vertices.size()).build());
-                }
-                polySegmentList.add(Segment.newBuilder().setV1Idx(polyVertexList.size()+vertices.size()-1).setV2Idx(vertices.size()).build());
-                vertices.addAll(polyVertexList);//vertices list has all vertices, indexes should be correct.
-                polyVertexList.clear();
-                for (int j = 0; j < polySegmentList.size()-1; j++) {
-                    polySegmentIdxList.add(j+segments.size());
-                }
-                segments.addAll(polySegmentList);
-                polySegmentList.clear();
-                centroids.add(Vertex.newBuilder()
+        //Store all necessary values for each polygon
+        for (int i = 0; i < polygons.getNumGeometries(); i++) {
+            //get coordinates of current polygon, parse to vertices
+            Geometry currentPolygon = polygons.getGeometryN(i);
+            Coordinate[] polyCoords = currentPolygon.getCoordinates();
+            for (Coordinate c: polyCoords) {
+                polyVertexList.add(Vertex.newBuilder().setX(c.getX()).setY(c.getY()).build());
+            }
+            for (int k = 1; k < polyVertexList.size(); k++) {
+                polySegmentList.add(Segment.newBuilder().setV1Idx(k-1+vertices.size()).setV2Idx(k+vertices.size()).build());
+            }
+            vertices.addAll(polyVertexList);//vertices list has all vertices, indexes should be correct.
+            polyVertexList.clear();
+            for (int j = 0; j < polySegmentList.size(); j++) {
+                polySegmentIdxList.add(j+segments.size());
+            }
+            segments.addAll(polySegmentList);
+            polySegmentList.clear();
+            polygonList.add(Polygon.newBuilder().setCentroidIdx(i).addAllSegmentIdxs(polySegmentIdxList).build());
+        }
+        //this var stores the first indice of the centroid portion of the vertices list
+        int numberOfPolyVertices = vertices.size();
+        //This for-loop adds the centroid's vertex at the end of the list
+        for (int i = 0; i < polygons.getNumGeometries(); i++) {
+            centroids.add(Vertex.newBuilder()
                         .setX(polygons.getGeometryN(i).getCentroid().getX())
                         .setY(polygons.getGeometryN(i).getCentroid().getY())
                         .build());
-                polygonList.add(Polygon.newBuilder().setCentroidIdx(i).addAllSegmentIdxs(polySegmentIdxList).build());
-            }
-
-            //Move inital point to centroid
-            for (int i = 0; i < vertexCoords.size(); i++){
-                Vertex current_centroid = centroids.get(i);
-                double x_val = current_centroid.getX();
-                double y_val = current_centroid.getY();
-                //test centroid coords
-                System.out.print("(" + x_val + "," + y_val + ")" + ", ");
-                vertexCoords.set(i, new Coordinate(x_val,y_val));
-            }System.out.println("\n\n\n");
-
-            //test new coordinates
-            for (Coordinate c: vertexCoords){
-                System.out.print("(" + c.x + ", " + c.y + ")" + ", " );
-            } System.out.println("\n\n\n");
-
-            //Apply relaxation again
-            voronoiBuilder.setTolerance(0.0001);
-            voronoiBuilder.setClipEnvelope(new Envelope(0,width,0,height));
-            voronoiBuilder.setSites(geometryFactory.createMultiPointFromCoords(vertexCoords.toArray(new Coordinate[0])));
-            polygons = (GeometryCollection) voronoiBuilder.getDiagram(geometryFactory);
         }
+        // //Move inital point to centroid
+        // for (int i = 0; i < vertexCoords.size(); i++){
+        //     Vertex current_centroid = centroids.get(i);
+        //     double x_val = current_centroid.getX();
+        //     double y_val = current_centroid.getY();
+        //     //test centroid coords
+        //     System.out.print("(" + x_val + "," + y_val + ")" + ", ");
+        //     vertexCoords.set(i, new Coordinate(x_val,y_val));
+        // }System.out.println("\n\n\n");
+
+        // //test new coordinates
+        // for (Coordinate c: vertexCoords){
+        //     System.out.print("(" + c.x + ", " + c.y + ")" + ", " );
+        // } System.out.println("\n\n\n");
+
+        // //Apply relaxation again
+        // voronoiBuilder.setTolerance(0.0001);
+        // voronoiBuilder.setClipEnvelope(new Envelope(0,width,0,height));
+        // voronoiBuilder.setSites(geometryFactory.createMultiPointFromCoords(vertexCoords.toArray(new Coordinate[0])));
+        // polygons = (GeometryCollection) voronoiBuilder.getDiagram(geometryFactory);
+        
 
         Mesh aMesh = new MeshADT(vertices,centroids,segments,polygonList).getMesh();
         return DelauneyTriangulation(aMesh, vertices, centroids);
@@ -166,7 +179,8 @@ public class DotGen {
     }
 
     public Mesh generate() {
-
+        int width = 500;
+        int height = 500;
         List<Vertex> vertices = new ArrayList<>();
         // Create all the vertices
         for(int x = 0; x < width; x += square_size) {
