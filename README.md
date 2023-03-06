@@ -50,21 +50,18 @@ mosser@azrael visualizer %
 To start debug mode, use '-X' at the end of the java command;
 `java -jar visualizer.jar ../generator/sample.mesh sample.svg -X`
 
-### Run with a single cmd:
-(from ../a2)
-java -jar generator/generator.jar -k grid -h 1080 -w 1920 -p 1000 -s 20 -o img/grid.mesh
-java -jar generator/generator.jar -k grid -h 1080 -w 1920 -p 1000 -s 20 -o img/irregular.mesh
+### Master Commands:
+# Regular Grid:
+cd generator && java -jar generator/generator.jar -k grid -h 1080 -w 1920 -p 1000 -s 20 -o img/grid.mesh && cd ../visualizer && java -jar visualizer/visualizer.jar -i img/grid.mesh -o img/grid.svg && cd ..
 
-java -jar visualizer/visualizer.jar -i img/grid.mesh -o img/grid.svg          
-java -jar visualizer/visualizer.jar -i img/grid.mesh -o img/grid_debug.svg -x
-java -jar visualizer/visualizer.jar -i img/irregular.mesh -o img/irregular.svg   
-java -jar visualizer/visualizer.jar -i img/irregular.mesh -o img/irregular_debug.svg -x
+# Regular Grid - Debug Mode:
+cd generator && java -jar generator/generator.jar -k grid -h 1080 -w 1920 -p 1000 -s 20 -o img/grid.mesh && cd ../visualizer && java -jar visualizer/visualizer.jar -i img/grid.mesh -o img/grid_debug.svg -x && cd ..
 
-cd generator && java -jar generator.jar sample.mesh && cd ../visualizer && java -jar visualizer.jar ../generator/sample.mesh sample.svg && cd ..
+# Irregular Grid:
+cd generator && java -jar generator/generator.jar -k grid -h 1080 -w 1920 -p 1000 -s 20 -o img/irregular.mesh && cd ../visualizer && java -jar visualizer/visualizer.jar -i img/irregular.mesh -o img/irregular.svg && cd ..
 
-### Run with a single cmd - Debug mode:
-(from ../a2)
-cd generator && java -jar generator.jar sample.mesh && cd ../visualizer && java -jar visualizer.jar ../generator/sample.mesh sample.svg -X && cd ..
+# Irregular Grid - Debug Mode:
+cd generator && java -jar generator/generator.jar -k grid -h 1080 -w 1920 -p 1000 -s 20 -o img/irregular.mesh && cd ../visualizer && java -jar visualizer/visualizer.jar -i img/irregular.mesh -o img/irregular_debug.svg -x && cd ..
 
 To viualize the SVG file:
 
