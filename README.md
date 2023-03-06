@@ -52,16 +52,16 @@ To start debug mode, use '-X' at the end of the java command;
  
 ### Master Commands:
 # Regular Grid:
-java -jar generator/generator.jar -k grid -h 1080 -w 1920 -p 1000 -s 20 -o img/grid.mesh && java -jar visualizer/visualizer.jar -i img/grid.mesh -o img/grid.svg
+java -jar generator/generator.jar -k grid -h 1080 -w 1920 -s 20 -o img/grid.mesh && java -jar visualizer/visualizer.jar -i img/grid.mesh -o img/grid.svg
 
 # Regular Grid - Debug Mode:
-java -jar generator/generator.jar -k grid -h 1080 -w 1920 -p 1000 -s 20 -o img/grid.mesh && java -jar visualizer/visualizer.jar -i img/grid.mesh -o img/grid_debug.svg -x 
+java -jar generator/generator.jar -k grid -h 1080 -w 1920 -s 20 -o img/grid.mesh && java -jar visualizer/visualizer.jar -i img/grid.mesh -o img/grid_debug.svg -x 
 
 # Irregular Grid:
-java -jar generator/generator.jar -k grid -h 1080 -w 1920 -p 1000 -s 20 -o img/irregular.mesh && java -jar visualizer/visualizer.jar -i img/irregular.mesh -o img/irregular.svg
+java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar visualizer/visualizer.jar -i img/irregular.mesh -o img/irregular.svg
 
 # Irregular Grid - Debug Mode:
-java -jar generator/generator.jar -k grid -h 1080 -w 1920 -p 1000 -s 20 -o img/irregular.mesh && java -jar visualizer/visualizer.jar -i img/irregular.mesh -o img/irregular_debug.svg -x
+java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar visualizer/visualizer.jar -i img/irregular.mesh -o img/irregular_debug.svg -x
 
 To viualize the SVG file:
 
