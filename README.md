@@ -90,8 +90,8 @@ A feature is done when it meets all conditions that is required of it, satisfies
 | F6 | Computing Voronoi Diagram                                                         | Spencer | 02/24/23   | 03/02/23       |   D     |
 | F7 | Implementing Lloyd Relaxtion                                                      | Mehdi | 02/24/23   | 03/02/23       |   D     |
 | F8 | Computing neighbourhood relations using Delaunays Triangulation                   | Asher | 02/24/23   | 03/02/23       |   D     |
-| F9 | add colour attribute to polygon                                                   | Asher/Mehdi | 03/06/23   |   end     |    S    |
-| F10 | Visualize island, lagoon, and ocean                                              | Asher/Mehdi | 03/06/23   |   end     |    S    |
+| F9 | colour in polygons using biome attributes                                         | Asher/Mehdi | 03/06/23   |   03/07/23     |    D   |
+| F10 | Visualize island, lagoon, and ocean                                              | Asher/Mehdi | 03/06/23   |   03/07/23     |    D    |
 | F11 | Create beaches by adding property to polygons                                    | Asher/Mehdi | 03/06/23   |   end     |    S    |
 | F12 | Create option for different shaped islands                                       | name | start   |    end    |    P    |
 | F13 | Add elevation to each polygon                                                    | name | start   |    end    |    P    |
