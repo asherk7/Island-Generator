@@ -43,15 +43,24 @@ public class Polygon implements Cropable<Polygon>, Iterable<Vertex> {
         Vertex centroid = p.centroid();
         float x = centroid.x();
         float y = centroid.y();
+
+        int width = aMesh.width;
+        int height = aMesh.height;
+
+        int r1 = (2*width)/5;
+        int r2 = (width)/4;
+
         //put formula and check stuff
-        if (inside inner circle){
+        if (Math.pow((x-(width/2)),2) + Math.pow((y-(width/2)),2) <= Math.pow(r2, 2)){
             return Structs.Property.newBuilder().setKey("Biome").setValue("Lagoon").build();
         }
-        else if (outside inner && inside outter){
+        else if ((Math.pow((x-(width/2)),2) + Math.pow((y-(width/2)),2) <= Math.pow(r1,2)) && (Math.pow((x-(width/2)),2) + Math.pow((y-(width/2)),2) > Math.pow(r2,2))){
             return Structs.Property.newBuilder().setKey("Biome").setValue("Land").build();
         }
-        else if (outside outter){
+        else if (Math.pow((x-(width/2)),2) + Math.pow((y-(width/2)),2) > Math.pow(r1,2)){
             return Structs.Property.newBuilder().setKey("Biome").setValue("Ocean").build();
+        } else {
+            return null;
         }
     }
 

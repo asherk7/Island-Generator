@@ -10,7 +10,7 @@ import java.util.Set;
 public class Mesh implements Iterable<Polygon> {
 
     private Set<Polygon> polygons;
-    private int width, height;
+    public int width, height;
 
     public Mesh(int width, int height) {
         this.width = width;
