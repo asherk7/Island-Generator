@@ -48,28 +48,35 @@ public class GraphicRenderer implements Renderer {
 
         List<Structs.Property> property_list = p.getPropertiesList();
         for (Structs.Property property: property_list){
+
+            //not efficient code, change it up
+
             if (property.getKey().equals("Biome")){
                 if (property.getValue().equals("Lagoon")){
-
+                    Color old = canvas.getColor();
+                    Color c = new Color(173, 216, 230);
+                    canvas.setColor(c);
+                    canvas.fill(path);
+                    canvas.setColor(old);
                 }
                 else if (property.getValue().equals("Land")){
-
+                    Color old = canvas.getColor();
+                    Color c = new Color(0, 255, 0);
+                    canvas.setColor(c);
+                    canvas.fill(path);
+                    canvas.setColor(old);
                 }
-                else if (property.getValue().equals("Beach")){
-
-                }
+                //else if (property.getValue().equals("Beach")){
+                //
+                //}
                 else if (property.getValue().equals("Ocean")){
-
+                    Color old = canvas.getColor();
+                    Color c = new Color(0, 0, 255);
+                    canvas.setColor(c);
+                    canvas.fill(path);
+                    canvas.setColor(old);
                 }
             }
-        }
-
-        Optional<Color> fill = new ColorProperty().extract(p.getPropertiesList());
-        if(fill.isPresent()) {
-            Color old = canvas.getColor();
-            canvas.setColor(fill.get());
-            canvas.fill(path);
-            canvas.setColor(old);
         }
     }
 
