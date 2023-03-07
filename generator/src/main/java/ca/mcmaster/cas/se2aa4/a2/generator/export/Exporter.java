@@ -2,6 +2,7 @@ package ca.mcmaster.cas.se2aa4.a2.generator.export;
 
 import ca.mcmaster.cas.se2aa4.a2.generator.adt.*;
 import ca.mcmaster.cas.se2aa4.a2.io.*;
+import org.locationtech.jts.geomgraph.PlanarGraph;
 
 import java.util.*;
 
@@ -30,10 +31,12 @@ public class Exporter {
             for(Polygon n: p.neighbours()){
                 neigbhoursIdx.add(polygons.get(n));
             }
+            Structs.Property property = p.assignBiome(p, mesh);
             Structs.Polygon exported = Structs.Polygon.newBuilder()
                     .setCentroidIdx(centroidIdx)
                     .addAllSegmentIdxs(segmentIdxs)
-                    .addAllNeighborIdxs(neigbhoursIdx).build();
+                    .addAllNeighborIdxs(neigbhoursIdx)
+                    .addProperties(property).build();
             result.addPolygons(exported);
         }
     }

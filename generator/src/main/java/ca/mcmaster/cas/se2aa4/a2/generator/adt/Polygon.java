@@ -1,5 +1,7 @@
 package ca.mcmaster.cas.se2aa4.a2.generator.adt;
 
+import ca.mcmaster.cas.se2aa4.a2.io.Structs;
+
 import java.util.*;
 import java.util.Objects;
 
@@ -35,6 +37,22 @@ public class Polygon implements Cropable<Polygon>, Iterable<Vertex> {
             cropped.add(v.crop(maxX, maxY));
         }
         return new Polygon(cropped);
+    }
+
+    public Structs.Property assignBiome(Polygon p, Mesh aMesh){
+        Vertex centroid = p.centroid();
+        float x = centroid.x();
+        float y = centroid.y();
+        //put formula and check stuff
+        if (inside inner circle){
+            return Structs.Property.newBuilder().setKey("Biome").setValue("Lagoon").build();
+        }
+        else if (outside inner && inside outter){
+            return Structs.Property.newBuilder().setKey("Biome").setValue("Land").build();
+        }
+        else if (outside outter){
+            return Structs.Property.newBuilder().setKey("Biome").setValue("Ocean").build();
+        }
     }
 
     public Vertex centroid() {

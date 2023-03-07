@@ -11,6 +11,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.geom.Path2D;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 public class GraphicRenderer implements Renderer {
@@ -44,6 +45,25 @@ public class GraphicRenderer implements Renderer {
         }
         path.closePath();
         canvas.draw(path);
+
+        List<Structs.Property> property_list = p.getPropertiesList();
+        for (Structs.Property property: property_list){
+            if (property.getKey().equals("Biome")){
+                if (property.getValue().equals("Lagoon")){
+
+                }
+                else if (property.getValue().equals("Land")){
+
+                }
+                else if (property.getValue().equals("Beach")){
+
+                }
+                else if (property.getValue().equals("Ocean")){
+
+                }
+            }
+        }
+
         Optional<Color> fill = new ColorProperty().extract(p.getPropertiesList());
         if(fill.isPresent()) {
             Color old = canvas.getColor();
