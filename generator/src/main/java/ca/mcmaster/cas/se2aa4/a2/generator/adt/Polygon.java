@@ -47,8 +47,9 @@ public class Polygon implements Cropable<Polygon>, Iterable<Vertex> {
         int width = aMesh.width;
         int height = aMesh.height;
 
-        int r1 = (2*width)/5;
-        int r2 = (width)/4;
+        int r1 = (2*height)/5;
+        int r2 = (height)/4;
+        //fix radius for all widths and heights, current radius is ideal for 1080x1920
 
         //put formula and check stuff
         double circle = Math.pow((x - (width / 2.0)), 2) + Math.pow((y - (height / 2.0)), 2);
