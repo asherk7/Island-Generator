@@ -51,15 +51,17 @@ public class Polygon implements Cropable<Polygon>, Iterable<Vertex> {
         int r2 = (width)/4;
 
         //put formula and check stuff
-        if (Math.pow((x-(width/2)),2) + Math.pow((y-(width/2)),2) <= Math.pow(r2, 2)){
+        double circle = Math.pow((x - (width / 2.0)), 2) + Math.pow((y - (height / 2.0)), 2);
+        if (circle <= Math.pow(r2, 2)){
             return Structs.Property.newBuilder().setKey("Biome").setValue("Lagoon").build();
         }
-        else if ((Math.pow((x-(width/2)),2) + Math.pow((y-(width/2)),2) <= Math.pow(r1,2)) && (Math.pow((x-(width/2)),2) + Math.pow((y-(width/2)),2) > Math.pow(r2,2))){
+        else if ((circle <= Math.pow(r1,2)) && (circle > Math.pow(r2,2))){
             return Structs.Property.newBuilder().setKey("Biome").setValue("Land").build();
         }
-        else if (Math.pow((x-(width/2)),2) + Math.pow((y-(width/2)),2) > Math.pow(r1,2)){
+        else if (circle > Math.pow(r1,2)){
             return Structs.Property.newBuilder().setKey("Biome").setValue("Ocean").build();
-        } else {
+        }
+        else {
             return null;
         }
     }
