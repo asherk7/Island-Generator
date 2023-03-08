@@ -1,10 +1,13 @@
 package ca.mcmaster.cas.se2aa4.a2.generator.export;
 
 import ca.mcmaster.cas.se2aa4.a2.generator.adt.*;
+import ca.mcmaster.cas.se2aa4.a2.generator.adt.Polygon;
 import ca.mcmaster.cas.se2aa4.a2.io.*;
 import org.locationtech.jts.geomgraph.PlanarGraph;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class Exporter {
 
@@ -28,10 +31,18 @@ public class Exporter {
                 segmentIdxs.add(segments.get(pov));
             }
             List<Integer> neigbhoursIdx = new ArrayList<>();
+            Structs.Property property = p.assignBiome(p, mesh);
             for(Polygon n: p.neighbours()){
                 neigbhoursIdx.add(polygons.get(n));
+                Structs.Property prop = n.assignBiome(n, mesh);
+                if (prop.getKey().equals("Biome")) {
+                    if (prop.getValue().equals("Lagoon") || prop.getValue().equals("Ocean")) {
+                        if (property.getValue().equals("Land")) {
+                            property = Structs.Property.newBuilder().setKey("Biome").setValue("Beach").build();
+                        }
+                    }
+                }
             }
-            Structs.Property property = p.assignBiome(p, mesh);
             Structs.Polygon exported = Structs.Polygon.newBuilder()
                     .setCentroidIdx(centroidIdx)
                     .addAllSegmentIdxs(segmentIdxs)

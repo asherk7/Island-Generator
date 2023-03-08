@@ -56,9 +56,9 @@ public class GraphicRenderer implements Renderer {
                 else if (property.getValue().equals("Land")){
                     c = new Color(0, 255, 0);
                 }
-                //else if (property.getValue().equals("Beach")){
-                //
-                //}
+                else if (property.getValue().equals("Beach")){
+                    c = new Color(194, 178, 128);
+                }
                 else if (property.getValue().equals("Ocean")){
                     c = new Color(0, 0, 255);
                 }
