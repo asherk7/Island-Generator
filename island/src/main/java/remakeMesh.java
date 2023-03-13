@@ -24,8 +24,16 @@ public class remakeMesh {
         List<Polygon> polygonList = aMesh.getPolygonsList();
         for (Polygon p: polygonList){
             Polygon.Builder polygon = Polygon.newBuilder();
-            //neighbour, centroid, segments
-            
+
+            polygon.addAllNeighborIdxs(p.getNeighborIdxsList());
+            polygon.setCentroidIdx(p.getCentroidIdx());
+            polygon.addAllSegmentIdxs(p.getSegmentIdxsList());
+
+            islandGen assign = new islandGen();
+            polygon.addProperties(assign.assignBiome(aMesh, p, aMesh.getVerticesList()));
+            polygon.addProperties(assign.assignColour(polygon));
+
+            newPolygons.add(polygon.build());
         }
 
         newMesh.addAllPolygons(newPolygons);

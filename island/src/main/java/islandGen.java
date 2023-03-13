@@ -28,6 +28,18 @@ public class islandGen {
         int r1 = (2*height)/5;
         int r2 = (height)/4;
 
+        List<Integer> neighbours = p.getNeighborIdxsList();
+        for (int i=0; i<neighbours.size(); i++){
+            Polygon p1 = aMesh.getPolygons(neighbours.get(i)); //double check where to find the neighbours, might need to take buildpolygonregistry from exporter
+            Vertex centroid1 = vertices.get(p1.getCentroidIdx());
+            double x1 = centroid1.getX();
+            double y1 = centroid1.getY();
+            double circle = Math.pow((x1 - (width / 2.0)), 2) + Math.pow((y1 - (height / 2.0)), 2);
+            if (circle <= Math.pow(r2, 2) || circle > Math.pow(r1,2)){
+                return Structs.Property.newBuilder().setKey("Biome").setValue("Beach").build();
+            }
+        }
+
         double circle = Math.pow((x - (width / 2.0)), 2) + Math.pow((y - (height / 2.0)), 2);
         if (circle <= Math.pow(r2, 2)){
             return Structs.Property.newBuilder().setKey("Biome").setValue("Lagoon").build();
@@ -38,11 +50,10 @@ public class islandGen {
         else if (circle > Math.pow(r1,2)){
             return Structs.Property.newBuilder().setKey("Biome").setValue("Ocean").build();
         }
-        //MAKE SURE TO CHECK FOR BEACH(NEIGHBOUR IS WATER)
         return null;
     }
 
-    public Structs.Property assignColour(Polygon p){
+    public Structs.Property assignColour(Polygon.Builder p){
         List<Structs.Property> property_list = p.getPropertiesList();
         for (Structs.Property property: property_list) {
             if (property.getKey().equals("Biome")) {
