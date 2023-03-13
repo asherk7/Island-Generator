@@ -18,7 +18,11 @@ public class Exporter {
         Map<Vertex, Integer> vertices = registerVertices(mesh, result);
         Map<PairOfVertex, Integer> segments = registerSegments(mesh, result, vertices);
         registerPolygons(mesh, result, segments, vertices);
-        return result.build();
+
+        Structs.Property width_property =  Structs.Property.newBuilder().setKey("Width").setValue(String.valueOf(mesh.width)).build();
+        Structs.Property height_property =  Structs.Property.newBuilder().setKey("Height").setValue(String.valueOf(mesh.height)).build();
+
+        return result.addProperties(height_property).addProperties(width_property).build();
     }
 
     private void registerPolygons(Mesh mesh, Structs.Mesh.Builder result,
