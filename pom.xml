@@ -16,6 +16,7 @@
         <module>generator</module>
         <module>io</module>
         <module>visualizer</module>
+		<module>island</module>
     </modules>
 
     <properties>
