@@ -27,7 +27,9 @@ public class islandGen {
         int r2 = (height)/4;
 
         //Iterate through each polygon, and assign biome
-        
+        for (Polygon p : aMesh.getPolygonsList()){
+            
+        }
 
 
 
