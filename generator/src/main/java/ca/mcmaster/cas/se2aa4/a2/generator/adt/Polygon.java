@@ -39,34 +39,6 @@ public class Polygon implements Cropable<Polygon>, Iterable<Vertex> {
         return new Polygon(cropped);
     }
 
-    public Structs.Property assignBiome(Polygon p, Mesh aMesh){
-        Vertex centroid = p.centroid();
-        float x = centroid.x();
-        float y = centroid.y();
-
-        int width = aMesh.width;
-        int height = aMesh.height;
-
-        int r1 = (2*height)/5;
-        int r2 = (height)/4;
-        //fix radius for all widths and heights, current radius is ideal for 1080x1920
-
-        //put formula and check stuff
-        double circle = Math.pow((x - (width / 2.0)), 2) + Math.pow((y - (height / 2.0)), 2);
-        if (circle <= Math.pow(r2, 2)){
-            return Structs.Property.newBuilder().setKey("Biome").setValue("Lagoon").build();
-        }
-        else if ((circle <= Math.pow(r1,2)) && (circle > Math.pow(r2,2))){
-            return Structs.Property.newBuilder().setKey("Biome").setValue("Land").build();
-        }
-        else if (circle > Math.pow(r1,2)){
-            return Structs.Property.newBuilder().setKey("Biome").setValue("Ocean").build();
-        }
-        else {
-            return null;
-        }
-    }
-
     public Vertex centroid() {
         float xs = 0.0f, ys = 0.0f;
         for (Vertex v: this.hull) {

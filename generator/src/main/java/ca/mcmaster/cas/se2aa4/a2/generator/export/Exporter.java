@@ -35,23 +35,13 @@ public class Exporter {
                 segmentIdxs.add(segments.get(pov));
             }
             List<Integer> neigbhoursIdx = new ArrayList<>();
-            Structs.Property property = p.assignBiome(p, mesh);
             for(Polygon n: p.neighbours()){
                 neigbhoursIdx.add(polygons.get(n));
-                Structs.Property prop = n.assignBiome(n, mesh);
-                if (prop.getKey().equals("Biome")) {
-                    if (prop.getValue().equals("Lagoon") || prop.getValue().equals("Ocean")) {
-                        if (property.getValue().equals("Land")) {
-                            property = Structs.Property.newBuilder().setKey("Biome").setValue("Beach").build();
-                        }
-                    }
-                }
             }
             Structs.Polygon exported = Structs.Polygon.newBuilder()
                     .setCentroidIdx(centroidIdx)
                     .addAllSegmentIdxs(segmentIdxs)
-                    .addAllNeighborIdxs(neigbhoursIdx)
-                    .addProperties(property).build();
+                    .addAllNeighborIdxs(neigbhoursIdx).build();
             result.addPolygons(exported);
         }
     }
