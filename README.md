@@ -51,12 +51,15 @@ To start debug mode, use '-X' at the end of the java command;
 `java -jar visualizer.jar ../generator/sample.mesh sample.svg -X`
  
 ### Master Commands:
-### Island Irregular (Test):
-java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh
+### Island Command:
+To check what commands user can run, type `java -jar island/island.jar -h`
 
-java -jar island/island.jar img/irregular.mesh
+java -jar island/island.jar -i "input file name" -o "output file name" --mode "island mode"
+Current modes:
+  - Lagoon
 
-java -jar visualizer/visualizer.jar -i img/lagoon.mesh -o img/irregular.svg
+### Irregular Lagoon island cmd:
+java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/lagoon.mesh --mode lagoon   && java -jar visualizer/visualizer.jar -i img/lagoon.mesh -o img/irregular.svg
 
 # Regular Grid:
 java -jar generator/generator.jar -k grid -h 1080 -w 1920 -s 20 -o img/grid.mesh && java -jar visualizer/visualizer.jar -i img/grid.mesh -o img/grid.svg
