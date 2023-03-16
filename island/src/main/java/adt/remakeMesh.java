@@ -1,13 +1,19 @@
+package adt;
+
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Polygon;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Segment;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
-import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex.Builder;
+import lagoon.lagoonGen;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class remakeMesh {
+    private String island;
+    public remakeMesh(String island){
+        this.island = island;
+    }
 
     public Mesh newMeshBuilder(Mesh aMesh){
         
@@ -29,10 +35,14 @@ public class remakeMesh {
             polygon.setCentroidIdx(p.getCentroidIdx());
             polygon.addAllSegmentIdxs(p.getSegmentIdxsList());
 
-            islandGen assign = new islandGen();
-            polygon.addProperties(assign.assignBiome(aMesh, p, aMesh.getVerticesList()));
-            polygon.addProperties(assign.assignColour(polygon));
-
+            if (this.island.equals("Lagoon")) {
+                lagoonGen assign = new lagoonGen();
+                polygon.addProperties(assign.assignBiome(aMesh, p, aMesh.getVerticesList()));
+                polygon.addProperties(assign.assignColour(polygon));
+            }
+            else if (this.island.equals("Island")){
+                //input properties for island polygons
+            }
             newPolygons.add(polygon.build());
         }
 
@@ -43,7 +53,12 @@ public class remakeMesh {
         List<Segment> newSegmentList = new ArrayList<>();
         List<Segment> segmentList = aMesh.getSegmentsList();
         for (Segment s : segmentList){
-            newSegmentList.add(Segment.newBuilder().setV1Idx(s.getV1Idx()).setV2Idx(s.getV2Idx()).build());
+            Segment.Builder segment = Segment.newBuilder();
+            segment.setV1Idx(s.getV1Idx()).setV2Idx(s.getV2Idx());
+            if(this.island.equals("Island")){
+                //input new properties for just island
+            }
+            newSegmentList.add(segment.build());
         }
         newMesh.addAllSegments(newSegmentList);
     }
@@ -52,7 +67,12 @@ public class remakeMesh {
         List<Vertex> newVertexList = new ArrayList<>();
         List<Vertex> vertexList = aMesh.getVerticesList();
         for (Vertex v : vertexList){
-            newVertexList.add(Vertex.newBuilder().setX(v.getX()).setY(v.getY()).build());
+            Vertex.Builder vertex = Vertex.newBuilder();
+            vertex.setX(v.getX()).setY(v.getY());
+            if(this.island.equals("Island")){
+                //input new properties for just island
+            }
+            newVertexList.add(vertex.build());
         }
         newMesh.addAllVertices(newVertexList);
     }

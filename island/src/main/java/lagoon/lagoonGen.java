@@ -1,3 +1,5 @@
+package lagoon;
+
 import java.util.List;
 
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
@@ -5,7 +7,7 @@ import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Polygon;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 
-public class islandGen {
+public class lagoonGen {
     
     public Structs.Property assignBiome(Mesh aMesh, Polygon p, List<Vertex> vertices){
         Vertex centroid = vertices.get(p.getCentroidIdx());

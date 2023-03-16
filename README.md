@@ -56,10 +56,14 @@ To check what commands user can run, type `java -jar island/island.jar -h`
 
 java -jar island/island.jar -i "input file name" -o "output file name" --mode "island mode"
 Current modes:
-  - Lagoon
+  - lagoon
+  - island
 
 ### Irregular Lagoon island cmd:
-java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/lagoon.mesh --mode lagoon   && java -jar visualizer/visualizer.jar -i img/lagoon.mesh -o img/irregular.svg
+java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/lagoon.mesh --mode lagoon && java -jar visualizer/visualizer.jar -i img/lagoon.mesh -o img/irregular.svg
+
+### Irregular Island island cmd:
+java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
 
 # Regular Grid:
 java -jar generator/generator.jar -k grid -h 1080 -w 1920 -s 20 -o img/grid.mesh && java -jar visualizer/visualizer.jar -i img/grid.mesh -o img/grid.svg
