@@ -42,6 +42,8 @@ public class remakeMesh {
             }
             else if (this.island.equals("Island")){
                 //input properties for island polygons
+                //create a this.shape, use it here to get a path2d object from one of the shape classes
+                //pass it through to generateIsland, which will assign land properties and return the polygon list with properties
             }
             newPolygons.add(polygon.build());
         }

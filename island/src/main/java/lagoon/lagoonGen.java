@@ -45,7 +45,7 @@ public class lagoonGen {
         List<Integer> neighbours = p.getNeighborIdxsList();
         if(biome.getValue().equals("Land")) {
             for (int i = 0; i < neighbours.size(); i++) {
-                Polygon p1 = aMesh.getPolygons(neighbours.get(i)); //double check where to find the neighbours, might need to take buildpolygonregistry from exporter
+                Polygon p1 = aMesh.getPolygons(neighbours.get(i));
                 Vertex centroid1 = vertices.get(p1.getCentroidIdx());
                 double x1 = centroid1.getX();
                 double y1 = centroid1.getY();

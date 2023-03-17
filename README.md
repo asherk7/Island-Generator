@@ -107,7 +107,7 @@ A feature is done when it meets all conditions that is required of it, satisfies
 | F9 | colour in polygons using biome attributes                                         | Asher/Mehdi | 03/06/23   |   03/07/23     |    D   |
 | F10 | Visualize island, lagoon, and ocean                                              | Asher/Mehdi | 03/06/23   |   03/07/23     |    D    |
 | F11 | Create beaches by adding property to polygons                                    | Asher/Mehdi | 03/06/23   |   03/08/23     |    D    |
-| F12 | Create option for different shaped islands                                       | name | start   |    end    |    P    |
+| F12 | Create option for different shaped islands                                       | Asher | 03/16/23   |    end    |    S    |
 | F13 | Add elevation to each polygon                                                    | name | start   |    end    |    P    |
 | F14 | Create and visualize lakes                                                       | name | start   |    end    |    P    |
 | F15 | Create and visualize rivers                                                      | name | start   |    end    |    P    |
