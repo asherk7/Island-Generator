@@ -16,8 +16,9 @@ public class remakeMeshTest {
 
     @Test
     public void testMakePolygons() {
-        Structs.Polygon p = Structs.Polygon.newBuilder().setCentroidIdx(1).build();
-        Mesh aMesh = Mesh.newBuilder().addPolygons(p).build();
+        Structs.Polygon p = Structs.Polygon.newBuilder().setCentroidIdx(0).build();
+        Structs.Vertex v = Structs.Vertex.newBuilder().setX(10).setY(10).build();
+        Mesh aMesh = Mesh.newBuilder().addPolygons(p).addVertices(v).build();
         Mesh.Builder aMeshBuild = Mesh.newBuilder();
         remake.makePolygons(aMesh, aMeshBuild);
         Structs.Polygon p1 = aMeshBuild.build().getPolygons(0);

@@ -31,7 +31,7 @@ public class remakeMesh {
     }
 
     public void makePolygons(Mesh aMesh, Mesh.Builder newMesh){
-        List<Polygon.Builder> newPolygons = new ArrayList<>();
+        List<Structs.Polygon.Builder> newPolygons = new ArrayList<>();
         List<Polygon> meshPolygonsList = aMesh.getPolygonsList();
 
         int width = 0;
