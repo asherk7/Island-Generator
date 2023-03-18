@@ -51,5 +51,38 @@ public class Volcano implements AltProfile {
         Structs.Property peak = Structs.Property.newBuilder().setKey("Elevation").setValue("750").build();
         pCenter.addProperties(peak);
         
+        List<Integer> neighbourIdx = pCenter.getNeighborIdxsList();
+        for (int i = 0; i < neighbourIdx.size(); i++){
+            Polygon.Builder neighbour_Poly = polygonList.get(neighbourIdx.get(i));
+            List<Structs.Property> propertyList = neighbour_Poly.getPropertiesList();
+            if ((contains(neighbour_Poly, polygonList))&&(elevationDNE(neighbour_Poly))){
+                Structs.Property height = Structs.Property.newBuilder().setKey("Elevation").setValue("700").build();
+                neighbour_Poly.addProperties(height);
+            }
+            // if neighbour poly is in polygonList && is not assigned an elevation:
+                // Add elevation of -50
+            //Use recursion for propogation?
+            
+        }
+
+    }
+
+    public Boolean contains(Polygon.Builder polygon, List<Structs.Polygon.Builder> polygonList){
+        for (Polygon.Builder p : polygonList){
+            if (p.equals(polygon)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Boolean elevationDNE(Polygon.Builder polygon){
+        for (int i=0; i<polygon.getPropertiesList().size(); i++){
+            Structs.Property property = polygon.getPropertiesList().get(i);
+            if (property.getKey().equals("Elevation")){
+                return false;
+            }
+        }
+        return true;
     }
 }   
