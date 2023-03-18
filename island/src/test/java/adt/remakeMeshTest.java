@@ -3,16 +3,18 @@ package adt;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import ElevationProfiles.Volcano;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import org.junit.jupiter.api.Test;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 import shapes.Circle;
 
 public class remakeMeshTest {
-    public remakeMesh remake = new remakeMesh("lagoon", new Circle());
+    public remakeMesh remake = new remakeMesh("lagoon", new Circle(), new Volcano());
 
     //add test for island and lagoon
     //add test for circle rectangle and triangle shape in island
+    //add test for volcano elevation
 
     @Test
     public void testMakePolygons() {

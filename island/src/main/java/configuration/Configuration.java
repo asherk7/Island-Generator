@@ -37,6 +37,8 @@ public class Configuration {
                 - circle
                 - rectangle
                 - triangle
+            Types of elevation:
+                - volcano
             """);
             return;
         }

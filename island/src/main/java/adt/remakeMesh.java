@@ -53,7 +53,6 @@ public class remakeMesh {
         generateIsland gen = new generateIsland(width, height);
         setElevation atltitudeGen = new setElevation();
 
-
         for (Polygon p: meshPolygonsList){
             Polygon.Builder polygon = Polygon.newBuilder();
 
