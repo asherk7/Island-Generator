@@ -12,12 +12,16 @@ import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import ElevationProfiles.AltProfile;
+
 public class remakeMesh {
     private String island;
     private Shape<Path2D> shape;
-    public remakeMesh(String island, Shape<Path2D> shape){
+    private AltProfile elevationType;
+    public remakeMesh(String island, Shape<Path2D> shape, AltProfile elevationType){
         this.island = island;
         this.shape = shape;
+        this.elevationType = elevationType;
     }
 
     public Mesh newMeshBuilder(Mesh aMesh){
@@ -47,6 +51,8 @@ public class remakeMesh {
 
         lagoonGen lagoon = new lagoonGen();
         generateIsland gen = new generateIsland(width, height);
+        setElevation atltitudeGen = new setElevation();
+
 
         for (Polygon p: meshPolygonsList){
             Polygon.Builder polygon = Polygon.newBuilder();
@@ -70,6 +76,7 @@ public class remakeMesh {
 
         if (this.island.equals("island")){
             gen.drawIsland(this.shape, newPolygons);
+            atltitudeGen.setElevProfile(this.elevationType, newPolygons);
         }
 
         List<Polygon> polygonList = new ArrayList<>();

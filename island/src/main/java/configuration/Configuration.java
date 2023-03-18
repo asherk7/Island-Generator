@@ -4,11 +4,14 @@ import shapes.Circle;
 import shapes.Rectangle;
 import shapes.Shape;
 import shapes.Triangle;
+import ElevationProfiles.AltProfile;
+import ElevationProfiles.Volcano;
 
 import java.awt.geom.Path2D;
 
 public class Configuration {
     public String inputFileName, outputFileName, islandMode;
+    public AltProfile elevationType;
     public Shape<Path2D> shape;
     public Configuration(String[] args) {
         this.inputFileName = "";
@@ -68,6 +71,12 @@ public class Configuration {
                     this.shape = new Triangle();
                 }
             }
+            //Fifth argument will be Altitude
+            if (contains(args, "--altitude")){
+                if (returnString(args, "--altitude").equals("volcano")) {
+                    this.elevationType = new Volcano();
+                }
+            }
         }
     }
 
@@ -75,6 +84,7 @@ public class Configuration {
     public String inFile(){ return this.inputFileName; }
     public String islandType(){ return this.islandMode; }
     public Shape<Path2D> getShape(){ return this.shape; }
+    public AltProfile altitude(){ return this.elevationType; }
 
     public static boolean contains(String[] args, String check){
         for (String arg: args){
