@@ -12,10 +12,6 @@ import shapes.Circle;
 public class remakeMeshTest {
     public remakeMesh remake = new remakeMesh("lagoon", new Circle(), new Volcano());
 
-    //add test for island and lagoon
-    //add test for circle rectangle and triangle shape in island
-    //add test for volcano elevation
-
     @Test
     public void testMakePolygons() {
         Structs.Polygon p = Structs.Polygon.newBuilder().setCentroidIdx(0).build();
