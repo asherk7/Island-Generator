@@ -7,7 +7,6 @@ import java.util.List;
 
 public class generateIsland {
     int width, height;
-
     public generateIsland(int width, int height){
         this.width = width;
         this.height = height;
@@ -33,25 +32,8 @@ public class generateIsland {
                     break;
                 }
             }
-            assignColor(p);
             polygonList.set(i, p);
         }
     }
 
-    public void assignColor(Structs.Polygon.Builder polygon){
-        for (int i=0; i<polygon.getPropertiesList().size(); i++){
-            Structs.Property property = polygon.getPropertiesList().get(i);
-            if (property.getKey().equals("Biome")) {
-                if(property.getValue().equals("land")){
-                    Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("1,50,32").build();
-                    polygon.addProperties(color);
-                }
-                else if (property.getValue().equals("ocean")){
-                    Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("43,101,236").build();
-                    polygon.addProperties(color);
-                }
-                break;
-            }
-        }
-    }
 }

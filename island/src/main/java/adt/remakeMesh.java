@@ -5,6 +5,8 @@ import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Polygon;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Segment;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
+import enricher.setColor;
+import enricher.setElevation;
 import lagoon.lagoonGen;
 import shapes.Shape;
 
@@ -18,6 +20,7 @@ public class remakeMesh {
     private String island;
     private Shape<Path2D> shape;
     private AltProfile elevationType;
+    private setColor setColor = new setColor();
     public remakeMesh(String island, Shape<Path2D> shape, AltProfile elevationType){
         this.island = island;
         this.shape = shape;
@@ -76,6 +79,7 @@ public class remakeMesh {
         if (this.island.equals("island")){
             gen.drawIsland(this.shape, newPolygons);
             atltitudeGen.setElevProfile(this.elevationType, newPolygons);
+            setColor.assignColor(newPolygons);
         }
 
         List<Polygon> polygonList = new ArrayList<>();
