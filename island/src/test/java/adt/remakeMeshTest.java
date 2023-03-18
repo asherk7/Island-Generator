@@ -6,9 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import org.junit.jupiter.api.Test;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
+import shapes.Circle;
 
 public class remakeMeshTest {
-    public remakeMesh remake = new remakeMesh("lagoon");
+    public remakeMesh remake = new remakeMesh("lagoon", new Circle());
+
+    //add test for island and lagoon
+    //add test for circle rectangle and triangle shape in island
 
     @Test
     public void testMakePolygons() {

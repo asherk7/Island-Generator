@@ -58,12 +58,16 @@ java -jar island/island.jar -i "input file name" -o "output file name" --mode "i
 Current modes:
   - lagoon
   - island
+Current shapes:
+  - circle
+  - triangle
+  - rectangle
 
 ### Irregular Lagoon island cmd:
 java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/lagoon.mesh --mode lagoon && java -jar visualizer/visualizer.jar -i img/lagoon.mesh -o img/irregular.svg
 
-### Irregular Island island cmd:
-java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
+### Irregular Circle Island island cmd:
+java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
 
 # Regular Grid:
 java -jar generator/generator.jar -k grid -h 1080 -w 1920 -s 20 -o img/grid.mesh && java -jar visualizer/visualizer.jar -i img/grid.mesh -o img/grid.svg
@@ -108,7 +112,7 @@ A feature is done when it meets all conditions that is required of it, satisfies
 | F10 | Visualize island, lagoon, and ocean                                              | Asher/Mehdi | 03/06/23   |   03/07/23     |    D    |
 | F11 | Create beaches by adding property to polygons                                    | Asher/Mehdi | 03/06/23   |   03/08/23     |    D    |
 | F12 | Create option for different shaped islands                                       | Asher | 03/16/23   |    end    |    S    |
-| F13 | Add elevation to each polygon                                                    | name | start   |    end    |    P    |
+| F13 | Add elevation to each polygon                                                    | Mehdi | 03/17/23   |    end    |    S    |
 | F14 | Create and visualize lakes                                                       | name | start   |    end    |    P    |
 | F15 | Create and visualize rivers                                                      | name | start   |    end    |    P    |
 | F16 | Merge intersecting rivers                                                        | name | start   |    end    |    P   |

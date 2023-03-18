@@ -1,7 +1,15 @@
 package configuration;
 
+import shapes.Circle;
+import shapes.Rectangle;
+import shapes.Shape;
+import shapes.Triangle;
+
+import java.awt.geom.Path2D;
+
 public class Configuration {
     public String inputFileName, outputFileName, islandMode;
+    public Shape<Path2D> shape;
     public Configuration(String[] args) {
         this.inputFileName = "";
         this.outputFileName = "";
@@ -16,10 +24,16 @@ public class Configuration {
             -i <input filename>     Takes in a mesh built by a generator
             -o <output filename>    Returns new mesh in specified output name
             --mode <island mode>    Based on island choosen, remakeMesh will build a new mesh of specified type
+            --shape <shape>
 
             Types of modes:
                 - lagoon
                 - island
+                
+            Types of shapes:
+                - circle
+                - rectangle
+                - triangle
             """);
             return;
         }
@@ -37,9 +51,22 @@ public class Configuration {
         //Third argument will be island mode
         if (contains(args, "--mode")){
             if (returnString(args, "--mode").equals("lagoon")){
-                this.islandMode = "Lagoon";
+                this.islandMode = "lagoon";
             } else if (returnString(args, "--mode").equals("island")){
-                this.islandMode = "Island";
+                this.islandMode = "island";
+            }
+        }
+
+        //Fourth argument will be shape
+        if (this.islandMode.equals("island")) {
+            if (contains(args, "--shape")) {
+                if (returnString(args, "--shape").equals("circle")) {
+                    this.shape = new Circle();
+                } else if (returnString(args, "--shape").equals("rectangle")) {
+                    this.shape = new Rectangle();
+                } else if (returnString(args, "--shape").equals("triangle")) {
+                    this.shape = new Triangle();
+                }
             }
         }
     }
@@ -47,6 +74,7 @@ public class Configuration {
     public String outFile(){ return this.outputFileName; }
     public String inFile(){ return this.inputFileName; }
     public String islandType(){ return this.islandMode; }
+    public Shape<Path2D> getShape(){ return this.shape; }
 
     public static boolean contains(String[] args, String check){
         for (String arg: args){

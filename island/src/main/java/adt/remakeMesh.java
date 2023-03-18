@@ -1,18 +1,23 @@
 package adt;
 
+import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Polygon;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Segment;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import lagoon.lagoonGen;
+import shapes.Shape;
 
+import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.List;
 
 public class remakeMesh {
     private String island;
-    public remakeMesh(String island){
+    private Shape<Path2D> shape;
+    public remakeMesh(String island, Shape<Path2D> shape){
         this.island = island;
+        this.shape = shape;
     }
 
     public Mesh newMeshBuilder(Mesh aMesh){
@@ -26,29 +31,52 @@ public class remakeMesh {
     }
 
     public void makePolygons(Mesh aMesh, Mesh.Builder newMesh){
-        List<Polygon> newPolygons = new ArrayList<>();
-        List<Polygon> polygonList = aMesh.getPolygonsList();
-        for (Polygon p: polygonList){
+        List<Polygon.Builder> newPolygons = new ArrayList<>();
+        List<Polygon> meshPolygonsList = aMesh.getPolygonsList();
+
+        int width = 0;
+        int height = 0;
+        for (Structs.Property property: aMesh.getPropertiesList()){
+            if (property.getKey().equals("Width")){
+                width = Integer.parseInt(property.getValue());
+            }
+            if (property.getKey().equals("Height")){
+                height = Integer.parseInt(property.getValue());
+            }
+        }
+
+        lagoonGen lagoon = new lagoonGen();
+        generateIsland gen = new generateIsland(width, height);
+
+        for (Polygon p: meshPolygonsList){
             Polygon.Builder polygon = Polygon.newBuilder();
 
             polygon.addAllNeighborIdxs(p.getNeighborIdxsList());
             polygon.setCentroidIdx(p.getCentroidIdx());
             polygon.addAllSegmentIdxs(p.getSegmentIdxsList());
 
-            if (this.island.equals("Lagoon")) {
-                lagoonGen assign = new lagoonGen();
-                polygon.addProperties(assign.assignBiome(aMesh, p, aMesh.getVerticesList()));
-                polygon.addProperties(assign.assignColour(polygon));
+            Vertex c = aMesh.getVerticesList().get(p.getCentroidIdx());
+            String x = Double.toString(c.getX());
+            String y = Double.toString(c.getY());
+            Structs.Property centroid = Structs.Property.newBuilder().setKey("Centroid").setValue(x+","+y).build();
+            polygon.addProperties(centroid);
+
+            if (this.island.equals("lagoon")) {
+                polygon.addProperties(lagoon.assignBiome(aMesh, p, aMesh.getVerticesList()));
+                polygon.addProperties(lagoon.assignColour(polygon));
             }
-            else if (this.island.equals("Island")){
-                //input properties for island polygons
-                //create a this.shape, use it here to get a path2d object from one of the shape classes
-                //pass it through to generateIsland, which will assign land properties and return the polygon list with properties
-            }
-            newPolygons.add(polygon.build());
+            newPolygons.add(polygon);
         }
 
-        newMesh.addAllPolygons(newPolygons);
+        if (this.island.equals("island")){
+            gen.drawIsland(this.shape, newPolygons);
+        }
+
+        List<Polygon> polygonList = new ArrayList<>();
+        for(Polygon.Builder p: newPolygons){
+            polygonList.add(p.build());
+        }
+        newMesh.addAllPolygons(polygonList);
     }
 
     public void makeSegments(Mesh aMesh, Mesh.Builder newMesh){

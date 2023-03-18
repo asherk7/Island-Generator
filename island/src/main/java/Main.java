@@ -18,7 +18,7 @@ public class Main {
             System.out.println("No such input file");
             return;
         }
-        remakeMesh createNewMesh = new remakeMesh(config.islandType());
+        remakeMesh createNewMesh = new remakeMesh(config.islandType(), config.getShape());
         Structs.Mesh newMesh = createNewMesh.newMeshBuilder(aMesh);
         new MeshFactory().write(newMesh, config.outFile());
     }
