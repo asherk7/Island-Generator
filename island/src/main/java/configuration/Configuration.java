@@ -6,6 +6,7 @@ import shapes.Shape;
 import shapes.Triangle;
 import ElevationProfiles.AltProfile;
 import ElevationProfiles.Hills;
+import ElevationProfiles.Plains;
 import ElevationProfiles.Volcano;
 
 import java.awt.geom.Path2D;
@@ -40,6 +41,8 @@ public class Configuration {
                 - triangle
             Types of elevation:
                 - volcano
+                - hills
+                - plains
             """);
             return;
         }
@@ -80,6 +83,8 @@ public class Configuration {
                     this.elevationType = new Volcano();
                 } else if (returnString(args, "--altitude").equals("hills")){
                     this.elevationType = new Hills();
+                } else if (returnString(args, "--altitude").equals("plains")){
+                    this.elevationType = new Plains();
                 }
             }
         }

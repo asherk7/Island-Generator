@@ -64,6 +64,8 @@ Current shapes:
   - rectangle
 Current elevations:
   - volcano
+  - hills
+  - plains
 
 ### Irregular Lagoon island cmd:
 java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/lagoon.mesh --mode lagoon && java -jar visualizer/visualizer.jar -i img/lagoon.mesh -o img/irregular.svg
@@ -71,10 +73,12 @@ java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/ir
 ### Irregular Circle Volcano Island island cmd:
 java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --elevation volcano && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
 
-### Test
+### Irregular Circle Island with 3 different altitudes cmd:
 java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --altitude hills && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
 
 java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --altitude volcano && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
+
+java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --altitude hills && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
 
 # Regular Grid:
 java -jar generator/generator.jar -k grid -h 1080 -w 1920 -s 20 -o img/grid.mesh && java -jar visualizer/visualizer.jar -i img/grid.mesh -o img/grid.svg
