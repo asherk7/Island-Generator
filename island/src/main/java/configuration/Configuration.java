@@ -5,6 +5,7 @@ import shapes.Rectangle;
 import shapes.Shape;
 import shapes.Triangle;
 import ElevationProfiles.AltProfile;
+import ElevationProfiles.Hills;
 import ElevationProfiles.Volcano;
 
 import java.awt.geom.Path2D;
@@ -77,6 +78,8 @@ public class Configuration {
             if (contains(args, "--altitude")){
                 if (returnString(args, "--altitude").equals("volcano")) {
                     this.elevationType = new Volcano();
+                } else if (returnString(args, "--altitude").equals("hills")){
+                    this.elevationType = new Hills();
                 }
             }
         }
