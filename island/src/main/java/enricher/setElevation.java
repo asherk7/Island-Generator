@@ -23,11 +23,10 @@ public class setElevation{
                     } else {
                         islandPolygonList.add(p);
                     }
-
                 }
             }
         }
-        altitudeType.markHeight(islandPolygonList);
+        altitudeType.markHeight(islandPolygonList,polygonList);
     }
     
 }
