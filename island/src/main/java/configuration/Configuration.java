@@ -39,7 +39,7 @@ public class Configuration {
                 - circle
                 - rectangle
                 - triangle
-            Types of elevation:
+            Types of altitude:
                 - volcano
                 - hills
                 - plains

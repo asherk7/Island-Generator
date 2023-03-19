@@ -22,36 +22,49 @@ public class Hills implements AltProfile{
 
             hillCreation(neighbourIdx, polygonList, 200);
         }
+        missedElevation(polygonList);
         assignColor(polygonList);
     }
 
     //This method checks if the polygon can be marked as a neighbour elevation
     public void hillPropogation(Polygon.Builder polygon, List<Structs.Polygon.Builder> polygonList, Integer altitude_value){
         //If the current polygon exists in polygonList, and the elevation property has not been assigned
-        if ((contains(polygon, polygonList))&&(elevationDNE(polygon))){
-            Structs.Property height = Structs.Property.newBuilder().setKey("Elevation").setValue(String.valueOf(altitude_value)).build();
-            polygon.addProperties(height);
-        } else {return;}
-
+        if ((contains(polygon, polygonList))){
+            if (!elevationDNE(polygon)){
+                if (!isOcean(polygon)){
+                    for (int i=0; i<polygon.getPropertiesList().size(); i++){
+                        Structs.Property property = polygon.getPropertiesList().get(i);
+                        if (property.getKey().equals("Elevation")){
+                            int old_altitude = Integer.parseInt(property.getValue());
+                            if (old_altitude < altitude_value){
+                                polygon.removeProperties(i);
+                                Structs.Property height = Structs.Property.newBuilder().setKey("Elevation").setValue(String.valueOf(altitude_value)).build();
+                                polygon.addProperties(height);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                Structs.Property height = Structs.Property.newBuilder().setKey("Elevation").setValue(String.valueOf(altitude_value)).build();
+                polygon.addProperties(height);
+            }
+        }
     }
 
     //Main method for hill propogation
     public void hillCreation(List<Integer> neighbourList, List<Structs.Polygon.Builder> polygonList, Integer altitudeValue){
+        if (altitudeValue == 0){ return; }
         List<Integer> nextIterationNeighbour = new ArrayList<>();
         for (int i : neighbourList){
             Polygon.Builder neighbour_Poly = polygonList.get(i);
             for (int j : neighbour_Poly.getNeighborIdxsList()){
                 nextIterationNeighbour.add(j);
             }
-            //Structs.Property height = Structs.Property.newBuilder().setKey("Elevation").setValue(String.valueOf(700)).build();
-            //neighbour_Poly.addProperties(height);
             hillPropogation(neighbour_Poly, polygonList, altitudeValue);
         }
-        if (altitudeValue == 0){
-            return;
-        } else {
-            hillCreation(nextIterationNeighbour, polygonList, altitudeValue-100);
-        }
+        hillCreation(nextIterationNeighbour, polygonList, altitudeValue - 100);
     }
 
     //Is the polygon within polygon list
@@ -72,6 +85,29 @@ public class Hills implements AltProfile{
             }
         }
         return true;
+    }
+
+    public boolean isOcean(Polygon.Builder polygon){
+        for (int i=0; i<polygon.getPropertiesList().size(); i++){
+            Structs.Property property = polygon.getPropertiesList().get(i);
+            if (property.getKey().equals("Biome")){
+                if (property.getValue().equals("ocean")){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void missedElevation(List<Structs.Polygon.Builder> polygonList){
+        for (int i=0; i<polygonList.size(); i++){
+            Polygon.Builder polygon = polygonList.get(i);
+            if (elevationDNE(polygon)){
+                Structs.Property height = Structs.Property.newBuilder().setKey("Elevation").setValue("0").build();
+                polygon.addProperties(height);
+            }
+            polygonList.set(i, polygon);
+        }
     }
 
     //Testing Colours
