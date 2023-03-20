@@ -76,6 +76,7 @@ public class Configuration {
                 } else if (returnString(args, "--shape").equals("triangle")) {
                     this.shape = new Triangle();
                 }
+
             }
             //Fifth argument will be Altitude
             if (contains(args, "--altitude")){
