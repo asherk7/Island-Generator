@@ -5,9 +5,10 @@ import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class lakeGen {
-    private List<Point> lakecoords = new ArrayList<>();
+    private List<Point> lakecoords = new ArrayList<>();//TODO establish lakeCoords based on the map grid
     public int lakeSize;
     public void drawLakes(int lakes, List<Structs.Polygon.Builder> newPolygons) {
         this.lakeSize = 1;
@@ -18,16 +19,30 @@ public class lakeGen {
     }
 
     public void makeLake(Structs.Polygon.Builder pLake, List<Structs.Polygon.Builder> newPolygons) {
-        Structs.Property.Builder lake = Structs.Property.newBuilder().setKey("Lake");
-        pLake.addProperties(lake);
+        List<Structs.Property> c = pLake.getPropertiesList();
+        for (Structs.Property p: c) {
+            if (p.getKey().equals("Biome")) {
+                p.toBuilder().setValue("lake").build();
+            }
+        }
         Structs.Polygon.Builder lakeNeighbor;
         for (int n: pLake.getNeighborIdxsList()) {
-            newPolygons.get(n).addProperties(lake);
+            c = newPolygons.get(n).getPropertiesList();
+            for (Structs.Property p: c) {
+                if (p.getKey().equals("Biome")) {
+                    p.toBuilder().setValue("lake").build();
+                }
+            }
         }
         for (int j = 0; j < lakeSize; j++) {
             lakeNeighbor = newPolygons.get(pLake.getNeighborIdxsList().get(j));
             for (int n: lakeNeighbor.getNeighborIdxsList()) {
-                newPolygons.get(n).addProperties(lake);
+                c = newPolygons.get(n).getPropertiesList();
+                for (Structs.Property p: c) {
+                    if (p.getKey().equals("Biome")) {
+                        p.toBuilder().setValue("lake").build();
+                    }
+                }
             }
         }
     }
