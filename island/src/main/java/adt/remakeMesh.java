@@ -8,6 +8,7 @@ import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import enricher.setColor;
 import enricher.setElevation;
 import lagoon.lagoonGen;
+import lake.lakeGen;
 import shapes.Shape;
 
 import java.awt.geom.Path2D;
@@ -20,11 +21,13 @@ public class remakeMesh {
     private String island;
     private Shape<Path2D> shape;
     private AltProfile elevationType;
+    private int lakes = 0;
     private setColor setColor = new setColor();
-    public remakeMesh(String island, Shape<Path2D> shape, AltProfile elevationType){
+    public remakeMesh(String island, Shape<Path2D> shape, AltProfile elevationType, int lakes){
         this.island = island;
         this.shape = shape;
         this.elevationType = elevationType;
+        this.lakes = lakes;
     }
 
     public Mesh newMeshBuilder(Mesh aMesh){
@@ -55,6 +58,7 @@ public class remakeMesh {
         lagoonGen lagoon = new lagoonGen();
         generateIsland gen = new generateIsland(width, height);
         setElevation atltitudeGen = new setElevation();
+        lakeGen lakeGenerator = new lakeGen();
 
         for (Polygon p: meshPolygonsList){
             Polygon.Builder polygon = Polygon.newBuilder();
@@ -78,9 +82,12 @@ public class remakeMesh {
 
         if (this.island.equals("island")){
             gen.drawIsland(this.shape, newPolygons);
-            //atltitudeGen.setElevProfile(this.elevationType, newPolygons);
             setColor.assignColor(newPolygons);
             atltitudeGen.setElevProfile(this.elevationType, newPolygons);
+        }
+
+        if (this.lakes != 0) {
+            lakeGenerator.drawLakes(this.lakes, newPolygons);
         }
 
         List<Polygon> polygonList = new ArrayList<>();

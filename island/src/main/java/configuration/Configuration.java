@@ -14,6 +14,7 @@ import java.awt.geom.Path2D;
 public class Configuration {
     public String inputFileName, outputFileName, islandMode;
     public AltProfile elevationType;
+    public int lakes = 0;
     public Shape<Path2D> shape;
     public Configuration(String[] args) {
         this.inputFileName = "";
@@ -76,7 +77,6 @@ public class Configuration {
                 } else if (returnString(args, "--shape").equals("triangle")) {
                     this.shape = new Triangle();
                 }
-
             }
             //Fifth argument will be Altitude
             if (contains(args, "--altitude")){
@@ -88,14 +88,21 @@ public class Configuration {
                     this.elevationType = new Plains();
                 }
             }
-        }
-    }
 
+            //Sixth argument will lake amount
+            if (contains(args, "--lake")){
+                this.lakes = Integer.parseInt(returnString(args, "--lake"));
+                }
+            }
+        }
     public String outFile(){ return this.outputFileName; }
     public String inFile(){ return this.inputFileName; }
     public String islandType(){ return this.islandMode; }
     public Shape<Path2D> getShape(){ return this.shape; }
     public AltProfile altitude(){ return this.elevationType; }
+    public int getLakes() {
+        return this.lakes;
+    }
 
     public static boolean contains(String[] args, String check){
         for (String arg: args){
