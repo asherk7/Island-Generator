@@ -17,8 +17,11 @@ public class setColor {
                     } else if (property.getValue().equals("ocean")) {
                         Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("43,101,236").build();
                         polygon.addProperties(color);
+                    } else if (property.getValue().equals("lake")) {
+                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("43,101,236").build();
+                        polygon.addProperties(color);
+                        break;
                     }
-                    break;
                 }
             }
         }

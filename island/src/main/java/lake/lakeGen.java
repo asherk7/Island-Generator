@@ -8,14 +8,43 @@ import java.util.List;
 import java.util.Properties;
 
 public class lakeGen {
-    private List<Point> lakecoords = new ArrayList<>();//TODO establish lakeCoords based on the map grid
+    private List<Point> lakeCoords = new ArrayList<>();
     public int lakeSize;
     public void drawLakes(int lakes, List<Structs.Polygon.Builder> newPolygons) {
         this.lakeSize = 1;
+        setLakeCoords(newPolygons);
         for (int j=0; j < lakes; j++) {
-            Structs.Polygon.Builder pLake = getClosestPoly(lakecoords.get(j), newPolygons);
+            Structs.Polygon.Builder pLake = getClosestPoly(lakeCoords.get(j), newPolygons);
             makeLake(pLake, newPolygons);
         }
+    }
+    public void setLakeCoords(List<Structs.Polygon.Builder> newPolygons) {
+        Structs.Polygon.Builder pFirst = newPolygons.get(1);
+        Structs.Polygon.Builder pLast = newPolygons.get(newPolygons.size()-1);
+        int xDistance = getCentroidPoint(pLast).x/6;
+        int yDistance = getCentroidPoint(pLast).y/4;
+        for (int i = getCentroidPoint(pFirst).x + xDistance; i <= getCentroidPoint(pLast).x - xDistance; i += xDistance) {
+            for (int j = getCentroidPoint(pFirst).y + yDistance; j <= getCentroidPoint(pLast).x - yDistance; j += yDistance) {
+                Point lakeCoord = new Point();
+                lakeCoord.x = i;
+                lakeCoord.y = j;
+                lakeCoords.add(lakeCoord);
+            }
+        }
+    }
+
+    private Point getCentroidPoint(Structs.Polygon.Builder pLast) {
+        Point h = new Point();
+        for (Structs.Property p: pLast.getPropertiesList()) {
+            if (p.getKey().equals("Centroid")) {
+                String[] coord = p.getValue().split(",");
+                int x = Integer.parseInt(coord[0]);
+                int y = Integer.parseInt(coord[1]);
+                h.x = x;
+                h.y = y;
+            }
+        }
+        return h;
     }
 
     public void makeLake(Structs.Polygon.Builder pLake, List<Structs.Polygon.Builder> newPolygons) {
@@ -40,7 +69,9 @@ public class lakeGen {
                 c = newPolygons.get(n).getPropertiesList();
                 for (Structs.Property p: c) {
                     if (p.getKey().equals("Biome")) {
-                        p.toBuilder().setValue("lake").build();
+                        if (!(p.getValue().equals("ocean"))) {
+                            p.toBuilder().setValue("lake").build();
+                        }
                     }
                 }
             }
