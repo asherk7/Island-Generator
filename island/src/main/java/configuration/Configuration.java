@@ -27,10 +27,11 @@ public class Configuration {
             Commands
             --------
 
-            -i <input filename>     Takes in a mesh built by a generator
-            -o <output filename>    Returns new mesh in specified output name
-            --mode <island mode>    Based on island choosen, remakeMesh will build a new mesh of specified type
-            --shape <shape>
+            -i <input filename>      Takes in a mesh built by a generator
+            -o <output filename>     Returns new mesh in specified output name
+            --mode <island mode>     Based on island choosen, remakeMesh will build a new mesh of specified type
+            --shape <shape>          Creates the shape of the island 
+            --lakes <number>          Creates the max amount of lakes specified
 
             Types of modes:
                 - lagoon
@@ -90,7 +91,7 @@ public class Configuration {
             }
 
             //Sixth argument will lake amount
-            if (contains(args, "--lake")){
+            if (contains(args, "--lakes")){
                 this.lakes = Integer.parseInt(returnString(args, "--lake"));
                 }
             }

@@ -23,12 +23,11 @@ public class Hills implements AltProfile{
             hillCreation(neighbourIdx, polygonList, 200);
         }
         missedElevation(polygonList);
-        assignColor(polygonList);
     }
 
     //This method checks if the polygon can be marked as a neighbour elevation
     public void hillPropogation(Polygon.Builder polygon, List<Structs.Polygon.Builder> polygonList, Integer altitude_value){
-        //If the current polygon exists in polygonList, and the elevation property has not been assigned
+        //merges hills with similar elevation so that there's no canyon between them
         if ((contains(polygon, polygonList))){
             if (!elevationDNE(polygon)){
                 if (!isOcean(polygon)){
@@ -107,30 +106,6 @@ public class Hills implements AltProfile{
                 polygon.addProperties(height);
             }
             polygonList.set(i, polygon);
-        }
-    }
-
-    //Testing Colours
-    public void assignColor(List<Structs.Polygon.Builder> polygonList){
-        for (int k = 0; k < polygonList.size(); k++){
-            Polygon.Builder polygon = polygonList.get(k);
-            for (int i=0; i<polygon.getPropertiesList().size(); i++){
-                Structs.Property property = polygon.getPropertiesList().get(i);
-                if (property.getKey().equals("Elevation")) {
-                    if(property.getValue().equals("300")){
-                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("45,235,42").build();
-                        polygon.addProperties(color);
-                    }
-                    else if (property.getValue().equals("200")){
-                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("33,184,86").build();
-                        polygon.addProperties(color);
-                    }
-                    else if (property.getValue().equals("100")){
-                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("20,110,77").build();
-                        polygon.addProperties(color);
-                    }
-                }
-            }
         }
     }
 }

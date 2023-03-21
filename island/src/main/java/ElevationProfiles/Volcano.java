@@ -55,21 +55,6 @@ public class Volcano implements AltProfile {
 
         volcanoCreation(neighbourIdx, polygonList, 700);
 
-        /*
-        for (int i = 0; i < neighbourIdx.size(); i++){
-            Polygon.Builder neighbour_Poly = polygonList.get(neighbourIdx.get(i));
-            //Structs.Property height = Structs.Property.newBuilder().setKey("Elevation").setValue(String.valueOf(700)).build();
-            //neighbour_Poly.addProperties(height);
-            mountainPropogation(neighbour_Poly, polygonList, 700);
-            // if neighbour poly is in polygonList && is not assigned an elevation:
-                // Add elevation of -50
-            //Use recursion for propogation?
-
-        }
-         */
-        //test
-        assignColor(polygonList);
-
     }
 
     //Is the polygon within polygon list
@@ -109,47 +94,12 @@ public class Volcano implements AltProfile {
             for (int j : neighbour_Poly.getNeighborIdxsList()){
                 nextIterationNeighbour.add(j);
             }
-            //Structs.Property height = Structs.Property.newBuilder().setKey("Elevation").setValue(String.valueOf(700)).build();
-            //neighbour_Poly.addProperties(height);
             mountainPropogation(neighbour_Poly, polygonList, altitudeValue);
         }
         if (altitudeValue == 0){
             return;
         } else {
             volcanoCreation(nextIterationNeighbour, polygonList, altitudeValue-100);
-        }
-    }
-
-    //Testing Colours
-    public void assignColor(List<Structs.Polygon.Builder> polygonList){
-        for (int k = 0; k < polygonList.size(); k++){
-            Polygon.Builder polygon = polygonList.get(k);
-            for (int i=0; i<polygon.getPropertiesList().size(); i++){
-                Structs.Property property = polygon.getPropertiesList().get(i);
-                if (property.getKey().equals("Elevation")) {
-                    if(property.getValue().equals("800")){
-                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("255,0,0").build();
-                        polygon.addProperties(color);
-                    }
-                    else if ((property.getValue().equals("700") || (property.getValue().equals("600")))){
-                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("255,106,0").build();
-                        polygon.addProperties(color);
-                    }
-                    else if ((property.getValue().equals("500") || (property.getValue().equals("400")))){
-                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("157,255,0").build();
-                        polygon.addProperties(color);
-                    }
-                    else if ((property.getValue().equals("300") || (property.getValue().equals("200")))){
-                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("43,255,0").build();
-                        polygon.addProperties(color);
-                    }
-                    else if ((property.getValue().equals("200") || (property.getValue().equals("100")))){
-                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("0,255,166").build();
-                        polygon.addProperties(color);
-                    }
-                    break;
-                }
-            }
         }
     }
 }
