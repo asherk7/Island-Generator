@@ -20,13 +20,13 @@ public class lakeGen {
                 //a new lake couldn't be formed due to biome issues
             }
         }
+        assignHumidity(newPolygons);
     }
     public int findLakePolygon(List<Structs.Polygon.Builder> newPolygons) {
         List<Structs.Polygon.Builder> polyon_copy = new ArrayList<>(newPolygons) ;
         Collections.shuffle(polyon_copy);
-        //for(int i=0; i< newPolygons.size(); i++){
+        //creating a shuffled list, so we can iterate through random polygons
         for (Structs.Polygon.Builder polygon: polyon_copy){
-            //Structs.Polygon.Builder polygon = newPolygons.get(rand.nextInt(newPolygons.size()));
             for (Structs.Property property : polygon.getPropertiesList()) {
                 //make sure elevation is low
                 if (property.getKey().equals("Elevation") && (property.getValue().equals("50") || property.getValue().equals("100"))) {
@@ -130,6 +130,28 @@ public class lakeGen {
                                         }
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void assignHumidity(List<Structs.Polygon.Builder> newPolygons){
+        for(int i=0; i < newPolygons.size(); i++){
+            Structs.Polygon.Builder polygon = newPolygons.get(i);
+            for (int j = 0; j < polygon.getPropertiesList().size(); j++) {
+                Structs.Property property = polygon.getPropertiesList().get(j);
+                if (property.getKey().equals("Biome") && property.getValue().equals("lake")) {
+                    for (int n : polygon.getNeighborIdxsList())     {
+                        Structs.Polygon.Builder neighbour = newPolygons.get(n);
+                        for (int k = 0; k < neighbour.getPropertiesList().size(); k++) {
+                            Structs.Property property1 = neighbour.getPropertiesList().get(k);
+                            if (property1.getKey().equals("Biome") && property1.getValue().equals("land")) {
+                                Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue("50").build();
+                                neighbour.addProperties(humidity);
+                                break;
                             }
                         }
                     }
