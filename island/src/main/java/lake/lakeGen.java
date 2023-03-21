@@ -3,102 +3,138 @@ package lake;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Properties;
 
 public class lakeGen {
-    private List<Point> lakeCoords = new ArrayList<>();
     public int lakeSize;
+    Random rand = new Random();
+
     public void drawLakes(int lakes, List<Structs.Polygon.Builder> newPolygons) {
         this.lakeSize = 1;
-        setLakeCoords(newPolygons);
         for (int j=0; j < lakes; j++) {
-            Structs.Polygon.Builder pLake = getClosestPoly(lakeCoords.get(j), newPolygons);
-            makeLake(pLake, newPolygons);
-        }
-    }
-    public void setLakeCoords(List<Structs.Polygon.Builder> newPolygons) {
-        Structs.Polygon.Builder pFirst = newPolygons.get(1);
-        Structs.Polygon.Builder pLast = newPolygons.get(newPolygons.size()-1);
-        int xDistance = getCentroidPoint(pLast).x/6;
-        int yDistance = getCentroidPoint(pLast).y/4;
-        for (int i = getCentroidPoint(pFirst).x + xDistance; i <= getCentroidPoint(pLast).x - xDistance; i += xDistance) {
-            for (int j = getCentroidPoint(pFirst).y + yDistance; j <= getCentroidPoint(pLast).x - yDistance; j += yDistance) {
-                Point lakeCoord = new Point();
-                lakeCoord.x = i;
-                lakeCoord.y = j;
-                lakeCoords.add(lakeCoord);
+            try {
+                makeLake(newPolygons, findLakePolygon(newPolygons));
+            }
+            catch(Exception e){
+                //a new lake couldn't be formed due to biome issues
             }
         }
     }
-
-    private Point getCentroidPoint(Structs.Polygon.Builder pLast) {
-        Point h = new Point();
-        for (Structs.Property p: pLast.getPropertiesList()) {
-            if (p.getKey().equals("Centroid")) {
-                String[] coord = p.getValue().split(",");
-                int x = Integer.parseInt(coord[0]);
-                int y = Integer.parseInt(coord[1]);
-                h.x = x;
-                h.y = y;
-            }
-        }
-        return h;
-    }
-
-    public void makeLake(Structs.Polygon.Builder pLake, List<Structs.Polygon.Builder> newPolygons) {
-        List<Structs.Property> c = pLake.getPropertiesList();
-        for (Structs.Property p: c) {
-            if (p.getKey().equals("Biome")) {
-                p.toBuilder().setValue("lake").build();
-            }
-        }
-        Structs.Polygon.Builder lakeNeighbor;
-        for (int n: pLake.getNeighborIdxsList()) {
-            c = newPolygons.get(n).getPropertiesList();
-            for (Structs.Property p: c) {
-                if (p.getKey().equals("Biome")) {
-                    p.toBuilder().setValue("lake").build();
-                }
-            }
-        }
-        for (int j = 0; j < lakeSize; j++) {
-            lakeNeighbor = newPolygons.get(pLake.getNeighborIdxsList().get(j));
-            for (int n: lakeNeighbor.getNeighborIdxsList()) {
-                c = newPolygons.get(n).getPropertiesList();
-                for (Structs.Property p: c) {
-                    if (p.getKey().equals("Biome")) {
-                        if (!(p.getValue().equals("ocean"))) {
-                            p.toBuilder().setValue("lake").build();
+    public int findLakePolygon(List<Structs.Polygon.Builder> newPolygons) {
+        List<Structs.Polygon.Builder> polyon_copy = new ArrayList<>(newPolygons) ;
+        Collections.shuffle(polyon_copy);
+        //for(int i=0; i< newPolygons.size(); i++){
+        for (Structs.Polygon.Builder polygon: polyon_copy){
+            //Structs.Polygon.Builder polygon = newPolygons.get(rand.nextInt(newPolygons.size()));
+            for (Structs.Property property : polygon.getPropertiesList()) {
+                //make sure elevation is low
+                if (property.getKey().equals("Elevation") && (property.getValue().equals("50") || property.getValue().equals("100"))) {
+                    for (Structs.Property property1 : polygon.getPropertiesList()) {
+                        //make sure polygon isn't an ocean or lake
+                        if (property1.getKey().equals("Biome") && !(property1.getValue().equals("ocean") || property1.getValue().equals("lake"))) {
+                            boolean neighbour_isntWater = checkWaterNeighbours(polygon, newPolygons);
+                            if(neighbour_isntWater){ return newPolygons.indexOf(polygon); }
                         }
                     }
                 }
             }
         }
+        return -1;
     }
 
-    private Structs.Polygon.Builder getClosestPoly(Point point, List<Structs.Polygon.Builder> newPolygons) {
-        double min_distance = 100000; //arbitrary
-        Structs.Polygon.Builder pLakeCenter = newPolygons.get(0);
-        int xLake = point.x;
-        int yLake = point.y;
-        for (int i = 0; i < newPolygons.size(); i++) {
-            Structs.Polygon.Builder p = newPolygons.get(i);
-            for (int j = 0; j < p.getPropertiesList().size(); j++) {
-                Structs.Property property = p.getPropertiesList().get(j);
-                if (property.getKey().equals("Centroid")) {
-                    String[] coord = property.getValue().split(",");
-                    double x = Double.parseDouble(coord[0]);
-                    double y = Double.parseDouble(coord[1]);
-                    double distance = Math.sqrt(Math.pow(xLake - x, 2) + Math.pow(yLake - y, 2));
-                    if (distance < min_distance) {
-                        min_distance = distance;
-                        pLakeCenter = p;
+    public boolean checkWaterNeighbours(Structs.Polygon.Builder polygon, List<Structs.Polygon.Builder> newPolygons){
+        for (int n : polygon.getNeighborIdxsList()) {
+            Structs.Polygon.Builder neighbour_p = newPolygons.get(n);
+            //make sure none of the neighbours are oceans and lakes
+            for (Structs.Property property2 : neighbour_p.getPropertiesList()) {
+                if (property2.getKey().equals("Biome") && (property2.getValue().equals("ocean") || property2.getValue().equals("lake"))) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean isLake(Structs.Polygon.Builder polygon){
+        for (Structs.Property property : polygon.getPropertiesList()) {
+            if (property.getKey().equals("Biome") && (property.getValue().equals("lake"))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkOceanNeighbours(Structs.Polygon.Builder polygon, List<Structs.Polygon.Builder> newPolygons){
+        for (int n : polygon.getNeighborIdxsList()) {
+            Structs.Polygon.Builder neighbour_p = newPolygons.get(n);
+            //make sure none of the neighbours are oceans and lakes
+            for (Structs.Property property2 : neighbour_p.getPropertiesList()) {
+                if (property2.getKey().equals("Biome") && (property2.getValue().equals("ocean"))) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void makeLake(List<Structs.Polygon.Builder> newPolygons, int polygon_position) {
+        Structs.Polygon.Builder polygon = newPolygons.get(polygon_position);
+        for (int i=0; i < polygon.getPropertiesList().size(); i++){
+            Structs.Property property = polygon.getPropertiesList().get(i);
+            if (property.getKey().equals("Biome")){
+                polygon.removeProperties(i);
+                Structs.Property biome = Structs.Property.newBuilder().setKey("Biome").setValue("lake").build();
+                polygon.addProperties(biome);
+            }
+        }
+        for (int n: polygon.getNeighborIdxsList()) {
+            Structs.Polygon.Builder neighbour_p = newPolygons.get(n);
+            boolean neighbour_isntOcean = checkOceanNeighbours(neighbour_p, newPolygons);
+            if (neighbour_isntOcean) {
+                for (int i = 0; i < neighbour_p.getPropertiesList().size(); i++) {
+                    Structs.Property property = neighbour_p.getPropertiesList().get(i);
+                    if (property.getKey().equals("Elevation")) {
+                        if (property.getValue().equals("50") || property.getValue().equals("100")) {
+                            for (int j = 0; j < neighbour_p.getPropertiesList().size(); j++) {
+                                Structs.Property property1 = neighbour_p.getPropertiesList().get(j);
+                                if (property1.getKey().equals("Biome")) {
+                                    neighbour_p.removeProperties(j);
+                                    Structs.Property biome = Structs.Property.newBuilder().setKey("Biome").setValue("lake").build();
+                                    neighbour_p.addProperties(biome);
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
-        return pLakeCenter;
+        Structs.Polygon.Builder lakeNeighbor;
+        for (int j = 0; j < lakeSize; j++) {
+            lakeNeighbor = newPolygons.get(polygon.getNeighborIdxsList().get(j));
+            if (isLake(lakeNeighbor)) {
+                for (int n : lakeNeighbor.getNeighborIdxsList()) {
+                    Structs.Polygon.Builder neighbour = newPolygons.get(n);
+                    boolean neighbour_isntOcean = checkOceanNeighbours(neighbour, newPolygons);
+                    if (neighbour_isntOcean) {
+                        for (int i = 0; i < neighbour.getPropertiesList().size(); i++) {
+                            Structs.Property property = neighbour.getPropertiesList().get(i);
+                            if (property.getKey().equals("Elevation")) {
+                                if (property.getValue().equals("50") || property.getValue().equals("100")) {
+                                    for (int k = 0; k < neighbour.getPropertiesList().size(); k++) {
+                                        Structs.Property property1 = neighbour.getPropertiesList().get(k);
+                                        if (property1.getKey().equals("Biome")) {
+                                            neighbour.removeProperties(k);
+                                            Structs.Property biome = Structs.Property.newBuilder().setKey("Biome").setValue("lake").build();
+                                            neighbour.addProperties(biome);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

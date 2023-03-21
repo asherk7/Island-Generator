@@ -92,7 +92,7 @@ public class Configuration {
 
             //Sixth argument will lake amount
             if (contains(args, "--lakes")){
-                this.lakes = Integer.parseInt(returnString(args, "--lake"));
+                this.lakes = Integer.parseInt(returnString(args, "--lakes"));
                 }
             }
         }

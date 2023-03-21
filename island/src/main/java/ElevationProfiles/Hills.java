@@ -102,10 +102,9 @@ public class Hills implements AltProfile{
         for (int i=0; i<polygonList.size(); i++){
             Polygon.Builder polygon = polygonList.get(i);
             if (elevationDNE(polygon)){
-                Structs.Property height = Structs.Property.newBuilder().setKey("Elevation").setValue("0").build();
+                Structs.Property height = Structs.Property.newBuilder().setKey("Elevation").setValue("50").build();
                 polygon.addProperties(height);
             }
-            polygonList.set(i, polygon);
         }
     }
 }

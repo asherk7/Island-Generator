@@ -28,6 +28,6 @@ public class setColorTest {
         String c1 = polygon1.getProperties(1).getValue();
 
         assertEquals(c, "1,50,32");
-        assertEquals(c1, "43,101,236");
+        assertEquals(c1, "32,4,145");
     }
 }

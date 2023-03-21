@@ -22,6 +22,7 @@ public class Plains implements AltProfile {
 
             hillCreation(neighbourIdx, polygonList, 100, rand.nextInt(5)+1);
         }
+        missedElevation(polygonList);
     }
 
     //This method checks if the polygon can be marked as a neighbour elevation
@@ -42,8 +43,6 @@ public class Plains implements AltProfile {
             for (int j : neighbour_Poly.getNeighborIdxsList()){
                 nextIterationNeighbour.add(j);
             }
-            //Structs.Property height = Structs.Property.newBuilder().setKey("Elevation").setValue(String.valueOf(700)).build();
-            //neighbour_Poly.addProperties(height);
             hillPropogation(neighbour_Poly, polygonList, altitudeValue);
         }
         if (numOfTimes == 0){
@@ -71,5 +70,16 @@ public class Plains implements AltProfile {
             }
         }
         return true;
+    }
+
+    public void missedElevation(List<Structs.Polygon.Builder> polygonList){
+        for (int i=0; i<polygonList.size(); i++){
+            Polygon.Builder polygon = polygonList.get(i);
+            if (elevationDNE(polygon)){
+                Structs.Property height = Structs.Property.newBuilder().setKey("Elevation").setValue("50").build();
+                polygon.addProperties(height);
+            }
+            polygonList.set(i, polygon);
+        }
     }
 }

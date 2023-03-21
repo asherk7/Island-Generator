@@ -15,12 +15,11 @@ public class setColor {
                         Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("1,50,32").build();
                         polygon.addProperties(color);
                     } else if (property.getValue().equals("ocean")) {
-                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("43,101,236").build();
+                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("32,4,145").build();
                         polygon.addProperties(color);
                     } else if (property.getValue().equals("lake")) {
-                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("53,81,92").build();
+                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("43,101,236").build();
                         polygon.addProperties(color);
-                        break;
                     }
                 }
             }

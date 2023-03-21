@@ -82,11 +82,11 @@ public class remakeMesh {
 
         if (this.island.equals("island")){
             gen.drawIsland(this.shape, newPolygons);
-            setColor.assignColor(newPolygons);
             atltitudeGen.setElevProfile(this.elevationType, newPolygons);
             if (this.lakes != 0) {
                 lakeGenerator.drawLakes(this.lakes, newPolygons);
             }
+            setColor.assignColor(newPolygons);
         }
 
         List<Polygon> polygonList = new ArrayList<>();

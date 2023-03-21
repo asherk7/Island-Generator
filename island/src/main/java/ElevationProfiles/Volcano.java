@@ -54,7 +54,7 @@ public class Volcano implements AltProfile {
         List<Integer> neighbourIdx = pCenter.getNeighborIdxsList();
 
         volcanoCreation(neighbourIdx, polygonList, 700);
-
+        missedElevation(polygonList);
     }
 
     //Is the polygon within polygon list
@@ -88,6 +88,7 @@ public class Volcano implements AltProfile {
     }
 
     public void volcanoCreation(List<Integer> neighbourList, List<Structs.Polygon.Builder> polygonList, Integer altitudeValue){
+        if(altitudeValue==0){return;}
         List<Integer> nextIterationNeighbour = new ArrayList<>();
         for (int i : neighbourList){
             Polygon.Builder neighbour_Poly = polygonList.get(i);
@@ -96,10 +97,17 @@ public class Volcano implements AltProfile {
             }
             mountainPropogation(neighbour_Poly, polygonList, altitudeValue);
         }
-        if (altitudeValue == 0){
-            return;
-        } else {
-            volcanoCreation(nextIterationNeighbour, polygonList, altitudeValue-100);
+        volcanoCreation(nextIterationNeighbour, polygonList, altitudeValue - 100);
+    }
+
+    public void missedElevation(List<Structs.Polygon.Builder> polygonList){
+        for (int i=0; i<polygonList.size(); i++){
+            Polygon.Builder polygon = polygonList.get(i);
+            if (elevationDNE(polygon)){
+                Structs.Property height = Structs.Property.newBuilder().setKey("Elevation").setValue("50").build();
+                polygon.addProperties(height);
+            }
+            polygonList.set(i, polygon);
         }
     }
 }
