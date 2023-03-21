@@ -12,6 +12,7 @@ public class lakeGen {
 
     public void drawLakes(int lakes, List<Structs.Polygon.Builder> newPolygons) {
         this.lakeSize = 1;
+<<<<<<< HEAD
         for (int j=0; j < lakes; j++) {
             try {
                 makeLake(newPolygons, findLakePolygon(newPolygons));
