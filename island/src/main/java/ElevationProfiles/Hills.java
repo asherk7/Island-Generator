@@ -11,7 +11,7 @@ public class Hills implements AltProfile{
     public void markHeight(List<Structs.Polygon.Builder> islandPolygonList, List<Structs.Polygon.Builder> polygonList){
         //create 3-5 high value points, and have them propogate. Peaks will be 200-400m in altitude(not accurate IRL)
         List<Polygon.Builder> hillPeaks = new ArrayList<>();
-        int numOfPeaks = rand.nextInt(3) + 5;
+        int numOfPeaks = 5;
 
         for (int i = 0; i < numOfPeaks; i++){ hillPeaks.add(islandPolygonList.get(rand.nextInt(islandPolygonList.size()))); }
 
