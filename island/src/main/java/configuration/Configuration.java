@@ -15,6 +15,7 @@ public class Configuration {
     public String inputFileName, outputFileName, islandMode;
     public AltProfile elevationType;
     public int lakes = 0;
+    public int rivers = 0;
     public Shape<Path2D> shape;
     public Configuration(String[] args) {
         this.inputFileName = "";
@@ -31,7 +32,8 @@ public class Configuration {
             -o <output filename>     Returns new mesh in specified output name
             --mode <island mode>     Based on island choosen, remakeMesh will build a new mesh of specified type
             --shape <shape>          Creates the shape of the island 
-            --lakes <number>          Creates the max amount of lakes specified
+            --lakes <number>         Creates the max amount of lakes specified
+            --rivers <number>        Creates the number of rivers specified
 
             Types of modes:
                 - lagoon
@@ -80,30 +82,33 @@ public class Configuration {
                 }
             }
             //Fifth argument will be Altitude
-            if (contains(args, "--altitude")){
+            if (contains(args, "--altitude")) {
                 if (returnString(args, "--altitude").equals("volcano")) {
                     this.elevationType = new Volcano();
-                } else if (returnString(args, "--altitude").equals("hills")){
+                } else if (returnString(args, "--altitude").equals("hills")) {
                     this.elevationType = new Hills();
-                } else if (returnString(args, "--altitude").equals("plains")){
+                } else if (returnString(args, "--altitude").equals("plains")) {
                     this.elevationType = new Plains();
                 }
             }
 
             //Sixth argument will lake amount
-            if (contains(args, "--lakes")){
+            if (contains(args, "--lakes")) {
                 this.lakes = Integer.parseInt(returnString(args, "--lakes"));
-                }
             }
+
+            if (contains(args, "--rivers")) {
+                this.rivers = Integer.parseInt(returnString(args, "--rivers"));
+            }
+        }
         }
     public String outFile(){ return this.outputFileName; }
     public String inFile(){ return this.inputFileName; }
     public String islandType(){ return this.islandMode; }
     public Shape<Path2D> getShape(){ return this.shape; }
     public AltProfile altitude(){ return this.elevationType; }
-    public int getLakes() {
-        return this.lakes;
-    }
+    public int getLakes() { return this.lakes; }
+    public int getRivers() { return this.rivers; }
 
     public static boolean contains(String[] args, String check){
         for (String arg: args){

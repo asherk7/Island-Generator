@@ -35,6 +35,14 @@ public class setColorTest {
 
         assertEquals(c, "1,50,32");
         assertEquals(c1, "32,4,145");
-        assertEquals(c2, "43,101,236");
+        assertEquals(c2, "32,4,145");
+
+        Structs.Segment.Builder segment = Structs.Segment.newBuilder();
+        Structs.Property river = Structs.Property.newBuilder().setKey("River").setValue("3").build();
+        segment.addProperties(river);
+        setColor.assignColor(segment);
+        String c3 = segment.getProperties(1).getValue();
+        assertEquals(c3, "32,4,145");
+
     }
 }

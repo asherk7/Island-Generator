@@ -8,7 +8,7 @@ import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import enricher.setColor;
 import enricher.setElevation;
 import lagoon.lagoonGen;
-import lake.lakeGen;
+import water.lakeGen;
 import shapes.Shape;
 
 import java.awt.geom.Path2D;
@@ -16,18 +16,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ElevationProfiles.AltProfile;
+import water.riverGen;
 
 public class remakeMesh {
     private String island;
     private Shape<Path2D> shape;
     private AltProfile elevationType;
     private int lakes = 0;
+    private int rivers = 0;
     private setColor setColor = new setColor();
-    public remakeMesh(String island, Shape<Path2D> shape, AltProfile elevationType, int lakes){
+    public remakeMesh(String island, Shape<Path2D> shape, AltProfile elevationType, int lakes, int rivers){
         this.island = island;
         this.shape = shape;
         this.elevationType = elevationType;
         this.lakes = lakes;
+        this.rivers = rivers;
     }
 
     public Mesh newMeshBuilder(Mesh aMesh){
@@ -36,13 +39,14 @@ public class remakeMesh {
         makeVertices(aMesh, newMesh);
         makeSegments(aMesh, newMesh);
         makePolygons(aMesh, newMesh);
-        
+
         return newMesh.build();
     }
 
     public void makePolygons(Mesh aMesh, Mesh.Builder newMesh){
         List<Structs.Polygon.Builder> newPolygons = new ArrayList<>();
         List<Polygon> meshPolygonsList = aMesh.getPolygonsList();
+        List<Segment.Builder> riverList = new ArrayList<>();
 
         int width = 0;
         int height = 0;
@@ -59,6 +63,7 @@ public class remakeMesh {
         generateIsland gen = new generateIsland(width, height);
         setElevation atltitudeGen = new setElevation();
         lakeGen lakeGenerator = new lakeGen();
+        riverGen riverGenerator = new riverGen();
 
         for (Polygon p: meshPolygonsList){
             Polygon.Builder polygon = Polygon.newBuilder();
@@ -86,27 +91,33 @@ public class remakeMesh {
             if (this.lakes != 0) {
                 lakeGenerator.drawLakes(this.lakes, newPolygons);
             }
+            if (this.rivers != 0){
+                riverList = riverGenerator.drawRivers(this.rivers, newPolygons);
+                for (Segment.Builder s : riverList){
+                    setColor.assignColor(s);
+                }
+            }
             setColor.assignColor(newPolygons);
         }
 
-        List<Polygon> polygonList = new ArrayList<>();
         for(Polygon.Builder p: newPolygons){
-            polygonList.add(p.build());
+            newMesh.addPolygons(p.build());
         }
-        newMesh.addAllPolygons(polygonList);
+        for (Segment.Builder s:riverList){
+            newMesh.addSegments(s.build());
+        }
     }
 
     public void makeSegments(Mesh aMesh, Mesh.Builder newMesh){
         List<Segment> newSegmentList = new ArrayList<>();
         List<Segment> segmentList = aMesh.getSegmentsList();
+
         for (Segment s : segmentList){
             Segment.Builder segment = Segment.newBuilder();
             segment.setV1Idx(s.getV1Idx()).setV2Idx(s.getV2Idx());
-            if(this.island.equals("Island")){
-                //input new properties for just island
-            }
             newSegmentList.add(segment.build());
         }
+
         newMesh.addAllSegments(newSegmentList);
     }
 

@@ -1,4 +1,4 @@
-package lake;
+package water;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import org.junit.jupiter.api.Test;
 

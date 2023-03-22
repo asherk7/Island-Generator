@@ -22,6 +22,7 @@ public class GraphicRenderer implements Renderer {
         Stroke stroke = new BasicStroke(0.2f);
         canvas.setStroke(stroke);
         drawPolygons(aMesh,canvas);
+        drawSegments(aMesh, canvas);
     }
 
     private void drawPolygons(Mesh aMesh, Graphics2D canvas) {
@@ -64,6 +65,44 @@ public class GraphicRenderer implements Renderer {
         canvas.setColor(c);
         canvas.fill(path);
         canvas.setColor(old);
+    }
+
+    private void drawSegments(Mesh aMesh, Graphics2D canvas){
+        for(Structs.Segment s: aMesh.getSegmentsList()){
+            drawASegment(s, aMesh, canvas);
+        }
+    }
+
+    private void drawASegment(Structs.Segment segment, Mesh aMesh, Graphics2D canvas){
+        Color c = null;
+        String[] code = null;
+        int thickness;
+        for(Structs.Property p : segment.getPropertiesList()){
+            if (p.getKey().equals("River")){
+                thickness = Integer.parseInt(p.getValue());
+                Stroke stroke = new BasicStroke(thickness);
+                canvas.setStroke(stroke);
+            }
+        }
+        for (Structs.Property property: segment.getPropertiesList()){
+            if (property.getKey().equals("Color")){
+
+                code = property.getValue().split(",");
+                int red = Integer.parseInt(code[0]);
+                int green = Integer.parseInt(code[1]);
+                int blue = Integer.parseInt(code[2]);
+
+                c = new Color(red, green, blue);
+                Color old = canvas.getColor();
+                canvas.setColor(c);
+                Vertex v1_p = aMesh.getVerticesList().get(segment.getV1Idx());
+                Vertex v2_p = aMesh.getVerticesList().get(segment.getV2Idx());
+
+                canvas.drawLine((int)v1_p.getX(), (int)v1_p.getY(), (int)v2_p.getX(), (int)v2_p.getY());
+                canvas.setColor(old);
+            }
+        }
+
     }
 
 }

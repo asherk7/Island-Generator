@@ -18,10 +18,20 @@ public class setColor {
                         Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("32,4,145").build();
                         polygon.addProperties(color);
                     } else if (property.getValue().equals("lake")) {
-                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("43,101,236").build();
+                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("32,4,145").build();
                         polygon.addProperties(color);
                     }
                 }
+            }
+        }
+    }
+
+    public void assignColor(Structs.Segment.Builder segment) {
+        for (int i = 0; i < segment.getPropertiesList().size(); i++) {
+            Structs.Property property = segment.getPropertiesList().get(i);
+            if(property.getKey().equals("River")){
+                Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("32,4,145").build();
+                segment.addProperties(color);
             }
         }
     }

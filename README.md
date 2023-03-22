@@ -54,7 +54,7 @@ To start debug mode, use '-X' at the end of the java command;
 ### Island Command:
 To check what commands user can run, type `java -jar island/island.jar -h`
 
-java -jar island/island.jar -i "input file name" -o "output file name" --mode "island mode" --shape "shape" --altitude "elevation" --lakes "number"
+java -jar island/island.jar -i "input file name" -o "output file name" --mode "island mode" --shape "shape" --altitude "elevation" --lakes "number" --rivers "number"
 Current modes:
   - lagoon
   - island
@@ -70,12 +70,12 @@ Current elevations:
 ### Irregular Lagoon island cmd:
 java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/lagoon.mesh --mode lagoon && java -jar visualizer/visualizer.jar -i img/lagoon.mesh -o img/irregular.svg
 
-### Irregular Circle Island with 3 different altitudes and 3 lakes cmd:
-java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --altitude hills --lakes 3 && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
+### Irregular Circle Island with 3 different altitudes, 3 lakes, 3 rivers cmd:
+java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --altitude hills --lakes 3 --rivers 3 && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
 
-java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --altitude volcano --lakes 3 && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
+java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --altitude volcano --lakes 3 --rivers 3 && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
 
-java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --altitude plains --lakes 3 && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
+java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --altitude plains --lakes 3 -- rivers 3 && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
 
 # Regular Grid:
 java -jar generator/generator.jar -k grid -h 1080 -w 1920 -s 20 -o img/grid.mesh && java -jar visualizer/visualizer.jar -i img/grid.mesh -o img/grid.svg
@@ -122,7 +122,7 @@ A feature is done when it meets all conditions that is required of it, satisfies
 | F12 | Create option for different shaped islands                                       | Asher | 03/16/23   |    03/17/23    |    D    |
 | F13 | Add elevation to each polygon                                                    | Mehdi/Asher | 03/17/23   |    03/21/23    |    D    |
 | F14 | Create and visualize lakes                                                       | Spencer/Asher | 03/19/23   |    03/21/23    |    D    |
-| F15 | Create and visualize rivers                                                      | Asher | 03/21/23   |    end    |    S    |
+| F15 | Create and visualize rivers                                                      | Asher | 03/21/23   |    03/22/23    |    D    |
 | F16 | Merge intersecting rivers                                                        | Asher | 03/21/23   |    end    |    S   |
 | F17 | Create aquifers                                                                  | name | start   |    end    |    P   |
 | F18 | implement soil absorption                                                        | name | start   |    end    |    P   |
