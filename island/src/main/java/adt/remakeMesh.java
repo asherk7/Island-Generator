@@ -8,6 +8,7 @@ import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import enricher.setColor;
 import enricher.setElevation;
 import lagoon.lagoonGen;
+import water.aquiferGen;
 import water.lakeGen;
 import shapes.Shape;
 
@@ -24,6 +25,7 @@ public class remakeMesh {
     private AltProfile elevationType;
     private int lakes = 0;
     private int rivers = 0;
+    private int aquifers = 0;
     private setColor setColor = new setColor();
     public remakeMesh(String island, Shape<Path2D> shape, AltProfile elevationType, int lakes, int rivers){
         this.island = island;
@@ -64,6 +66,7 @@ public class remakeMesh {
         setElevation atltitudeGen = new setElevation();
         lakeGen lakeGenerator = new lakeGen();
         riverGen riverGenerator = new riverGen();
+        aquiferGen aquiferGenerator = new aquiferGen();
 
         for (Polygon p: meshPolygonsList){
             Polygon.Builder polygon = Polygon.newBuilder();
@@ -96,6 +99,9 @@ public class remakeMesh {
                 for (Segment.Builder s : riverList){
                     setColor.assignColor(s);
                 }
+            }
+            if (this.aquifers != 0) {
+                aquiferGenerator.drawAquifers(this.aquifers, newPolygons);
             }
             setColor.assignColor(newPolygons);
         }

@@ -16,6 +16,7 @@ public class Configuration {
     public AltProfile elevationType;
     public int lakes = 0;
     public int rivers = 0;
+    public int aquifers = 0;
     public Shape<Path2D> shape;
     public Configuration(String[] args) {
         this.inputFileName = "";
@@ -34,6 +35,7 @@ public class Configuration {
             --shape <shape>          Creates the shape of the island 
             --lakes <number>         Creates the max amount of lakes specified
             --rivers <number>        Creates the number of rivers specified
+            --aquifers <number>      Creates the number of aquifers specified
 
             Types of modes:
                 - lagoon
@@ -92,13 +94,17 @@ public class Configuration {
                 }
             }
 
-            //Sixth argument will lake amount
+            //Sixth argument will be lake amount
             if (contains(args, "--lakes")) {
                 this.lakes = Integer.parseInt(returnString(args, "--lakes"));
             }
 
             if (contains(args, "--rivers")) {
                 this.rivers = Integer.parseInt(returnString(args, "--rivers"));
+            }
+
+            if (contains(args, "--aquifers")) {
+                this.aquifers = Integer.parseInt(returnString(args, "--aquifers"));
             }
         }
         }
