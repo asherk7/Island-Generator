@@ -54,12 +54,13 @@ public class aquiferGen {
         Structs.Property aquifer = Structs.Property.newBuilder().setKey("Aquifer").setValue("50").build();
         //value is amount of moisture given to neighbours
         polygon.addProperties(aquifer);
-        for (int n : polygon.getNeighborIdxsList()) {
-            if (polygon.getProperties(n).getKey().equals("Humidity")){
-                int oldHumidity = Integer.parseInt(polygon.getProperties(n).getValue());
-                polygon.removeProperties(n);
+        for (int i=0; i< polygon.getPropertiesList().size(); i++) {
+            if (polygon.getProperties(i).getKey().equals("Humidity")){
+                int oldHumidity = Integer.parseInt(polygon.getProperties(i).getValue());
+                polygon.removeProperties(i);
                 Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue(String.valueOf(50 + oldHumidity)).build();
                 polygon.addProperties(humidity);
+                break;
             }
         }
     }
@@ -82,7 +83,7 @@ public class aquiferGen {
                                         neighbour.removeProperties(z);
                                         Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue(String.valueOf(Integer.parseInt(property.getValue()) + oldHumidity)).build();
                                         neighbour.addProperties(humidity);
-                                        return;
+                                        break;
                                     }
                                 }
                             }

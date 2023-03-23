@@ -23,6 +23,8 @@ public class lakeGenTest {
         Structs.Property e4 = Structs.Property.newBuilder().setKey("Elevation").setValue("50").build();
         Structs.Property e5 = Structs.Property.newBuilder().setKey("Elevation").setValue("200").build();
 
+        Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue("0").build();
+
         Structs.Property biome = Structs.Property.newBuilder().setKey("Biome").setValue("land").build();
         Structs.Property biome1 = Structs.Property.newBuilder().setKey("Biome").setValue("land").build();
         Structs.Property biome2 = Structs.Property.newBuilder().setKey("Biome").setValue("land").build();
@@ -35,7 +37,7 @@ public class lakeGenTest {
         Structs.Polygon.Builder polygon2 = Structs.Polygon.newBuilder().addProperties(e2).addProperties(biome2).addNeighborIdxs(1);
         Structs.Polygon.Builder polygon3 = Structs.Polygon.newBuilder().addProperties(e3).addProperties(biome3).addNeighborIdxs(0);
         Structs.Polygon.Builder polygon4 = Structs.Polygon.newBuilder().addProperties(e4).addProperties(biome4).addNeighborIdxs(1);
-        Structs.Polygon.Builder polygon5 = Structs.Polygon.newBuilder().addProperties(e5).addProperties(biome5).addNeighborIdxs(0);
+        Structs.Polygon.Builder polygon5 = Structs.Polygon.newBuilder().addProperties(e5).addProperties(biome5).addProperties(humidity).addNeighborIdxs(0);
 
         landland.add(polygon);
         landland.add(polygon1);

@@ -154,6 +154,7 @@ public class lakeGen {
                                         neighbour.removeProperties(z);
                                         Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue("50").build();
                                         neighbour.addProperties(humidity);
+                                        break;
                                     }
                                 }
                             }
