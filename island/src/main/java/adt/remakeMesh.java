@@ -9,6 +9,7 @@ import enricher.setColor;
 import enricher.setElevation;
 import lagoon.lagoonGen;
 import water.aquiferGen;
+import water.humidity;
 import water.lakeGen;
 import shapes.Shape;
 
@@ -68,6 +69,7 @@ public class remakeMesh {
         lakeGen lakeGenerator = new lakeGen();
         riverGen riverGenerator = new riverGen();
         aquiferGen aquiferGenerator = new aquiferGen();
+        humidity humidGen = new humidity();
 
         for (Polygon p: meshPolygonsList){
             Polygon.Builder polygon = Polygon.newBuilder();
@@ -92,6 +94,7 @@ public class remakeMesh {
         if (this.island.equals("island")){
             gen.drawIsland(this.shape, newPolygons);
             atltitudeGen.setElevProfile(this.elevationType, newPolygons);
+            humidGen.setHumidity(newPolygons);
             if (this.lakes != 0) {
                 lakeGenerator.drawLakes(this.lakes, newPolygons);
             }

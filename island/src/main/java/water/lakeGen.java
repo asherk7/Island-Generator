@@ -148,9 +148,14 @@ public class lakeGen {
                         for (int k = 0; k < neighbour.getPropertiesList().size(); k++) {
                             Structs.Property property1 = neighbour.getPropertiesList().get(k);
                             if (property1.getKey().equals("Biome") && property1.getValue().equals("land")) {
-                                Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue("50").build();
-                                neighbour.addProperties(humidity);
-                                break;
+                                for (int z = 0; z < neighbour.getPropertiesList().size(); z++) {
+                                    Structs.Property property2 = neighbour.getPropertiesList().get(z);
+                                    if (property2.getKey().equals("Humidity")) {
+                                        neighbour.removeProperties(z);
+                                        Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue("50").build();
+                                        neighbour.addProperties(humidity);
+                                    }
+                                }
                             }
                         }
                     }

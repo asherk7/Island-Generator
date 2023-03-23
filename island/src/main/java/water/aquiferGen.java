@@ -60,11 +60,8 @@ public class aquiferGen {
                 polygon.removeProperties(n);
                 Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue(String.valueOf(50 + oldHumidity)).build();
                 polygon.addProperties(humidity);
-                return;
             }
         }
-        Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue("50").build();
-        polygon.addProperties(humidity);
     }
 
     public void assignHumidity(List<Structs.Polygon.Builder> newPolygons){
@@ -88,9 +85,6 @@ public class aquiferGen {
                                         return;
                                     }
                                 }
-                                Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue("50").build();
-                                neighbour.addProperties(humidity);
-                                break;
                             }
                         }
                     }
