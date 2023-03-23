@@ -9,7 +9,6 @@ public class humidity {
             Structs.Polygon.Builder polygon = polygonList.get(i);
             Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue("0").build();
             polygon.addProperties(humidity);
-
         }
     }
 }

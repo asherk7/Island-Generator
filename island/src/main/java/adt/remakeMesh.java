@@ -1,5 +1,6 @@
 package adt;
 
+import SoilProfiles.AbsProfile;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Polygon;
@@ -24,17 +25,19 @@ public class remakeMesh {
     private String island;
     private Shape<Path2D> shape;
     private AltProfile elevationType;
+    private AbsProfile soilType;
     private int lakes = 0;
     private int rivers = 0;
     private int aquifers = 0;
     private setColor setColor = new setColor();
-    public remakeMesh(String island, Shape<Path2D> shape, AltProfile elevationType, int lakes, int rivers, int aquifers){
+    public remakeMesh(String island, Shape<Path2D> shape, AltProfile elevationType, AbsProfile soilType, int lakes, int rivers, int aquifers) {
         this.island = island;
         this.shape = shape;
         this.elevationType = elevationType;
         this.lakes = lakes;
         this.rivers = rivers;
         this.aquifers = aquifers;
+        this.soilType = soilType;
     }
 
     public Mesh newMeshBuilder(Mesh aMesh){
@@ -116,6 +119,7 @@ public class remakeMesh {
         for (Segment.Builder s:riverList){
             newMesh.addSegments(s.build());
         }
+        soilType.absorption(newPolygons);
     }
 
     public void makeSegments(Mesh aMesh, Mesh.Builder newMesh){

@@ -1,5 +1,7 @@
 package configuration;
 
+import SoilProfiles.AbsProfile;
+import SoilProfiles.Sand;
 import shapes.Circle;
 import shapes.Rectangle;
 import shapes.Shape;
@@ -14,6 +16,7 @@ import java.awt.geom.Path2D;
 public class Configuration {
     public String inputFileName, outputFileName, islandMode;
     public AltProfile elevationType;
+    public AbsProfile soilType;
     public int lakes = 0;
     public int rivers = 0;
     public int aquifers = 0;
@@ -32,7 +35,11 @@ public class Configuration {
             -i <input filename>      Takes in a mesh built by a generator
             -o <output filename>     Returns new mesh in specified output name
             --mode <island mode>     Based on island choosen, remakeMesh will build a new mesh of specified type
-            --shape <shape>          Creates the shape of the island 
+            --shape <shape>          Creates the shape of the island
+            --altitude 
+              <elevation profile>    Creates the elevation profile of the island
+            --soil 
+              <absorption profile>   Creates the soil profile of the island
             --lakes <number>         Creates the max amount of lakes specified
             --rivers <number>        Creates the number of rivers specified
             --aquifers <number>      Creates the number of aquifers specified
@@ -49,6 +56,8 @@ public class Configuration {
                 - volcano
                 - hills
                 - plains
+            Types of soil:
+                - sand
             """);
             return;
         }
@@ -94,11 +103,17 @@ public class Configuration {
                 }
             }
 
-            //Sixth argument will be lake amount
+            if (contains(args, "--soil")) {
+                if (returnString(args, "--soil").equals("sand")) {
+                    this.soilType = new Sand();
+                }
+            }
+
+            //Seventh argument will be lake amount
             if (contains(args, "--lakes")) {
                 this.lakes = Integer.parseInt(returnString(args, "--lakes"));
             }
-
+            //
             if (contains(args, "--rivers")) {
                 this.rivers = Integer.parseInt(returnString(args, "--rivers"));
             }
@@ -113,6 +128,7 @@ public class Configuration {
     public String islandType(){ return this.islandMode; }
     public Shape<Path2D> getShape(){ return this.shape; }
     public AltProfile altitude(){ return this.elevationType; }
+    public AbsProfile getSoilType(){return this.soilType; }
     public int getLakes() { return this.lakes; }
     public int getRivers() { return this.rivers; }
     public int getAquifers() { return this.aquifers; }

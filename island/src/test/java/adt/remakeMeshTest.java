@@ -3,13 +3,14 @@ package adt;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import ElevationProfiles.Volcano;
+import SoilProfiles.Sand;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import org.junit.jupiter.api.Test;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 import shapes.Circle;
 
 public class remakeMeshTest {
-    public remakeMesh remake = new remakeMesh("lagoon", new Circle(), new Volcano(), 3, 3, 3);
+    public remakeMesh remake = new remakeMesh("lagoon", new Circle(), new Volcano(), new Sand(), 3, 3, 3);
 
     @Test
     public void testMakePolygons() {
