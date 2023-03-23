@@ -27,12 +27,13 @@ public class remakeMesh {
     private int rivers = 0;
     private int aquifers = 0;
     private setColor setColor = new setColor();
-    public remakeMesh(String island, Shape<Path2D> shape, AltProfile elevationType, int lakes, int rivers){
+    public remakeMesh(String island, Shape<Path2D> shape, AltProfile elevationType, int lakes, int rivers, int aquifers){
         this.island = island;
         this.shape = shape;
         this.elevationType = elevationType;
         this.lakes = lakes;
         this.rivers = rivers;
+        this.aquifers = aquifers;
     }
 
     public Mesh newMeshBuilder(Mesh aMesh){
@@ -95,7 +96,7 @@ public class remakeMesh {
                 lakeGenerator.drawLakes(this.lakes, newPolygons);
             }
             if (this.rivers != 0){
-                riverList = riverGenerator.drawRivers(this.rivers, newPolygons);
+                riverList = riverGenerator.drawRivers(this.rivers, newPolygons, 5);
                 for (Segment.Builder s : riverList){
                     setColor.assignColor(s);
                 }

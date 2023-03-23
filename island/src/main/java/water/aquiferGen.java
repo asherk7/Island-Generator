@@ -49,33 +49,22 @@ public class aquiferGen {
         return true;
     }
 
-    public boolean checkOceanNeighbours(Structs.Polygon.Builder polygon, List<Structs.Polygon.Builder> newPolygons){
-        for (int n : polygon.getNeighborIdxsList()) {
-            Structs.Polygon.Builder neighbour_p = newPolygons.get(n);
-            //make sure none of the neighbours are oceans and lakes
-            for (Structs.Property property2 : neighbour_p.getPropertiesList()) {
-                if (property2.getKey().equals("Biome") && (property2.getValue().equals("ocean"))) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     public void makeAquifer(List<Structs.Polygon.Builder> newPolygons, int polygon_position) {
         Structs.Polygon.Builder polygon = newPolygons.get(polygon_position);
-        Structs.Property aquifer = Structs.Property.newBuilder().setKey("Aquifer").setValue("10").build();
-        //value is amt of moisture given to neighbours
-        for (int i=0; i < polygon.getPropertiesList().size(); i++){
-                polygon.addProperties(aquifer);
-        }
-        for (int n: polygon.getNeighborIdxsList()) {
-            Structs.Polygon.Builder neighbour_p = newPolygons.get(n);
-            boolean neighbour_isntOcean = checkOceanNeighbours(neighbour_p, newPolygons);
-            if (neighbour_isntOcean) {
-                neighbour_p.addProperties(aquifer);
+        Structs.Property aquifer = Structs.Property.newBuilder().setKey("Aquifer").setValue("50").build();
+        //value is amount of moisture given to neighbours
+        polygon.addProperties(aquifer);
+        for (int n : polygon.getNeighborIdxsList()) {
+            if (polygon.getProperties(n).getKey().equals("Humidity")){
+                int oldHumidity = Integer.parseInt(polygon.getProperties(n).getValue());
+                polygon.removeProperties(n);
+                Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue(String.valueOf(50 + oldHumidity)).build();
+                polygon.addProperties(humidity);
+                return;
             }
         }
+        Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue("50").build();
+        polygon.addProperties(humidity);
     }
 
     public void assignHumidity(List<Structs.Polygon.Builder> newPolygons){
@@ -94,10 +83,14 @@ public class aquiferGen {
                                     if (property2.getKey().equals("Humidity")) {
                                         int oldHumidity = Integer.parseInt(property2.getValue());
                                         neighbour.removeProperties(z);
-                                        Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue("" + (property.getValue() + oldHumidity)).build();
+                                        Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue(String.valueOf(Integer.parseInt(property.getValue()) + oldHumidity)).build();
                                         neighbour.addProperties(humidity);
+                                        return;
                                     }
                                 }
+                                Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue("50").build();
+                                neighbour.addProperties(humidity);
+                                break;
                             }
                         }
                     }

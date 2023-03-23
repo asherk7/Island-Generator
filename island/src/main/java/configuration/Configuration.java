@@ -107,7 +107,7 @@ public class Configuration {
                 this.aquifers = Integer.parseInt(returnString(args, "--aquifers"));
             }
         }
-        }
+    }
     public String outFile(){ return this.outputFileName; }
     public String inFile(){ return this.inputFileName; }
     public String islandType(){ return this.islandMode; }
@@ -115,6 +115,7 @@ public class Configuration {
     public AltProfile altitude(){ return this.elevationType; }
     public int getLakes() { return this.lakes; }
     public int getRivers() { return this.rivers; }
+    public int getAquifers() { return this.aquifers; }
 
     public static boolean contains(String[] args, String check){
         for (String arg: args){
