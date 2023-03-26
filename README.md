@@ -135,6 +135,6 @@ A feature is done when it meets all conditions that is required of it, satisfies
 | F16 | Create aquifers                                                                  | Spencer | 03/22/23   |    03/22/23    |    D   |
 | F17 | Merge intersecting rivers                                                        | Asher | 03/21/23   |    03/23/23    |    D   |
 | F18 | implement soil absorption                                                        | Spencer/Asher | 03/22/23   |    03/24/23    |    D   |
-| F20 | Create biomes for each polygon                                                   | Asher | 03/25/23   |    03/26/23    |    D   |
-| F21 | Implement Whittaker diagrams                                                     | Asher | 03/25/23   |    03/26/23    |    D   |
-| F22 | adding seeds for each unique island                                              | name | start   |    end    |    P   |
+| F19 | Create biomes for each polygon                                                   | Asher | 03/25/23   |    03/26/23    |    D   |
+| F20 | Implement Whittaker diagrams                                                     | Asher | 03/25/23   |    03/26/23    |    D   |
+| F21 | adding seeds for each unique island                                              | name | start   |    end    |    P   |
