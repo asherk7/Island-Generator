@@ -1,11 +1,10 @@
 package configuration;
 
 import SoilProfiles.AbsProfile;
+import SoilProfiles.DrySoil;
 import SoilProfiles.Sand;
-import shapes.Circle;
-import shapes.Rectangle;
-import shapes.Shape;
-import shapes.Triangle;
+import SoilProfiles.WetSoil;
+import shapes.*;
 import ElevationProfiles.AltProfile;
 import ElevationProfiles.Hills;
 import ElevationProfiles.Plains;
@@ -32,32 +31,32 @@ public class Configuration {
             Commands
             --------
 
-            -i <input filename>      Takes in a mesh built by a generator
-            -o <output filename>     Returns new mesh in specified output name
-            --mode <island mode>     Based on island choosen, remakeMesh will build a new mesh of specified type
-            --shape <shape>          Creates the shape of the island
-            --altitude 
-              <elevation profile>    Creates the elevation profile of the island
-            --soil 
-              <absorption profile>   Creates the soil profile of the island
-            --lakes <number>         Creates the max amount of lakes specified
-            --rivers <number>        Creates the number of rivers specified
-            --aquifers <number>      Creates the number of aquifers specified
+            -i <input filename>               Takes in a mesh built by a generator
+            -o <output filename>              Returns new mesh in specified output name
+            --mode <island mode>              Based on island choosen, remakeMesh will build a new mesh of specified type
+            --shape <shape>                   Creates the shape of the island
+            --altitude <elevation profile>    Creates the elevation profile of the island
+            --lakes <number>                  Creates the max amount of lakes specified
+            --rivers <number>                 Creates the number of rivers specified
+            --aquifers <number>               Creates the number of aquifers specified
+            --soil <absorption profile>       Creates the soil profile of the island
 
             Types of modes:
                 - lagoon
                 - island
-                
             Types of shapes:
                 - circle
                 - rectangle
                 - triangle
+                - star
             Types of altitude:
                 - volcano
                 - hills
                 - plains
             Types of soil:
                 - sand
+                - wetsoil
+                - drysoil
             """);
             return;
         }
@@ -90,6 +89,8 @@ public class Configuration {
                     this.shape = new Rectangle();
                 } else if (returnString(args, "--shape").equals("triangle")) {
                     this.shape = new Triangle();
+                } else if (returnString(args, "--shape").equals("star")) {
+                    this.shape = new Star();
                 }
             }
             //Fifth argument will be Altitude
@@ -106,6 +107,12 @@ public class Configuration {
             if (contains(args, "--soil")) {
                 if (returnString(args, "--soil").equals("sand")) {
                     this.soilType = new Sand();
+                }
+                else if (returnString(args, "--soil").equals("drysoil")) {
+                    this.soilType = new DrySoil();
+                }
+                else if (returnString(args, "--soil").equals("wetsoil")) {
+                    this.soilType = new WetSoil();
                 }
             }
 

@@ -9,6 +9,7 @@ import java.util.Random;
 
 public class riverGen {
     Random rand = new Random();
+    humidity humidity = new humidity();
     private List<Structs.Segment.Builder> riverList = new ArrayList<>();
 
     public List<Structs.Segment.Builder> drawRivers(int rivers, List<Structs.Polygon.Builder> polygonList, int repeat) {
@@ -19,7 +20,7 @@ public class riverGen {
                 //a new river couldn't be formed due to biome issues
             }
         }
-        assignRiverHumidity(polygonList);
+        humidity.assignRiverHumidity(polygonList);
         return riverList;
     }
 
@@ -48,7 +49,7 @@ public class riverGen {
             polygon.removeProperties(getBiomeProperty(polygon));
             Structs.Property biome = Structs.Property.newBuilder().setKey("Biome").setValue("lake").build();
             polygon.addProperties(biome);
-            assignLakeHumidity(polygon, polygonList);
+            humidity.assignLakeHumidity(polygonList);
             return;
         }
         Structs.Polygon.Builder polygon = polygonList.get(polygon_position);
@@ -89,7 +90,7 @@ public class riverGen {
             polygon.removeProperties(getBiomeProperty(polygon));
             Structs.Property biome = Structs.Property.newBuilder().setKey("Biome").setValue("lake").build();
             polygon.addProperties(biome);
-            assignLakeHumidity(polygon, polygonList);
+            humidity.assignLakeHumidity(polygonList);
         } else {
             Structs.Segment.Builder segment = Structs.Segment.newBuilder();
             segment.setV1Idx(polygon.getCentroidIdx()).setV2Idx(neighbour.getCentroidIdx());
@@ -124,70 +125,6 @@ public class riverGen {
             }
         }
         return -1;
-    }
-
-    public void assignLakeHumidity(Structs.Polygon.Builder polygon, List<Structs.Polygon.Builder> polygonList) {
-        for (int j = 0; j < polygon.getPropertiesList().size(); j++) {
-            Structs.Property property = polygon.getPropertiesList().get(j);
-            if (property.getKey().equals("Biome") && property.getValue().equals("lake")) {
-                for (int n : polygon.getNeighborIdxsList()) {
-                    Structs.Polygon.Builder neighbour = polygonList.get(n);
-                    for (int k = 0; k < neighbour.getPropertiesList().size(); k++) {
-                        Structs.Property property1 = neighbour.getPropertiesList().get(k);
-                        if (property1.getKey().equals("Biome") && property1.getValue().equals("land")) {
-                            for (int z = 0; z < neighbour.getPropertiesList().size(); z++) {
-                                Structs.Property property2 = neighbour.getPropertiesList().get(z);
-                                if (property2.getKey().equals("Humidity")) {
-                                    int oldHumidity = Integer.parseInt(property2.getValue());
-                                    neighbour.removeProperties(z);
-                                    Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue(String.valueOf(50 + oldHumidity)).build();
-                                    neighbour.addProperties(humidity);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public void assignRiverHumidity(List<Structs.Polygon.Builder> polygonList) {
-        for (int j = 0; j < polygonList.size(); j++) {
-            Structs.Polygon.Builder polygon = polygonList.get(j);
-            for (int i = 0; i < polygon.getPropertiesList().size(); i++) {
-                if (polygon.getProperties(i).getKey().equals("River")) {
-                    for (int w = 0; w < polygon.getPropertiesList().size(); w++) {
-                        Structs.Property prop = polygon.getPropertiesList().get(w);
-                        if (prop.getKey().equals("Humidity")) {
-                            int oldHumidity = Integer.parseInt(prop.getValue());
-                            polygon.removeProperties(w);
-                            Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue(String.valueOf(25 + oldHumidity)).build();
-                            polygon.addProperties(humidity);
-                            break;
-                        }
-                    }
-                    for (int n : polygon.getNeighborIdxsList()) {
-                        Structs.Polygon.Builder neighbour = polygonList.get(n);
-                        for (int k = 0; k < neighbour.getPropertiesList().size(); k++) {
-                            Structs.Property property1 = neighbour.getPropertiesList().get(k);
-                            if (property1.getKey().equals("Biome") && property1.getValue().equals("land")) {
-                                for (int z = 0; z < neighbour.getPropertiesList().size(); z++) {
-                                    Structs.Property property2 = neighbour.getPropertiesList().get(z);
-                                    if (property2.getKey().equals("Humidity")) {
-                                        int oldHumidity = Integer.parseInt(property2.getValue());
-                                        neighbour.removeProperties(z);
-                                        Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue(String.valueOf(25 + oldHumidity)).build();
-                                        neighbour.addProperties(humidity);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 
     public void mergeRiver(Structs.Polygon.Builder polygon, Structs.Polygon.Builder neighbour, List<Structs.Segment.Builder> riverList, List<Structs.Polygon.Builder> polygonList, int iteration){

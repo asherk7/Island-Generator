@@ -54,7 +54,7 @@ To start debug mode, use '-X' at the end of the java command;
 ### Island Command:
 To check what commands user can run, type `java -jar island/island.jar -h`
 
-java -jar island/island.jar -i "input file name" -o "output file name" --mode "island mode" --shape "shape" --altitude "elevation" --lakes "number" --rivers "number" --aquifers "number"
+java -jar island/island.jar -i "input file name" -o "output file name" --mode "island mode" --shape "shape" --altitude "elevation" --lakes "number" --rivers "number" --aquifers "number" --soil "type"
 Current modes:
   - lagoon
   - island
@@ -62,20 +62,25 @@ Current shapes:
   - circle
   - triangle
   - rectangle
+  - star
 Current elevations:
   - volcano
   - hills
   - plains
+Current soils:
+  - sand
+  - drysoil
+  - wetsoil
 
 ### Irregular Lagoon island cmd:
 java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/lagoon.mesh --mode lagoon && java -jar visualizer/visualizer.jar -i img/lagoon.mesh -o img/irregular.svg
 
-### Irregular Circle Island with 3 different altitudes, 3 lakes, 8 rivers, 3 aquifers cmd:
-java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --altitude hills --lakes 3 --rivers 8 --aquifers 3 && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
+### Irregular Circle Island with 3 different altitudes, 3 lakes, 8 rivers, 3 aquifers, drysoil cmd:
+java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --altitude hills --lakes 3 --rivers 8 --aquifers 3 --soil drysoil && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
 
-java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --altitude volcano --lakes 3 --rivers 8 --aquifers 3 && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
+java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --altitude volcano --lakes 3 --rivers 8 --aquifers 3 --soil drysoil && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
 
-java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --altitude plains --lakes 3 --rivers 8 --aquifers 3 && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
+java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1000 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --altitude plains --lakes 3 --rivers 8 --aquifers 3 --soil drysoil && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
 
 # Regular Grid:
 java -jar generator/generator.jar -k grid -h 1080 -w 1920 -s 20 -o img/grid.mesh && java -jar visualizer/visualizer.jar -i img/grid.mesh -o img/grid.svg
@@ -125,7 +130,7 @@ A feature is done when it meets all conditions that is required of it, satisfies
 | F15 | Create and visualize rivers                                                      | Asher | 03/21/23   |    03/22/23    |    D    |
 | F16 | Create aquifers                                                                  | Spencer | 03/22/23   |    03/22/23    |    D   |
 | F17 | Merge intersecting rivers                                                        | Asher | 03/21/23   |    03/23/23    |    D   |
-| F18 | implement soil absorption                                                        | Mehdi | 03/22/23   |    end    |    S   |
-| F20 | Create biomes for each polygon                                                   | Asher | 03/23/23   |    end    |    S   |
-| F21 | Implement Whittaker diagrams                                                     | name | start   |    end    |    P   |
+| F18 | implement soil absorption                                                        | Spencer/Asher | 03/22/23   |    03/24/23    |    D   |
+| F20 | Create biomes for each polygon                                                   | Asher | 03/25/23   |    03/26/23    |    S   |
+| F21 | Implement Whittaker diagrams                                                     | Asher | 03/25/23   |    03/26/23    |    S   |
 | F22 | adding seeds for each unique island                                              | name | start   |    end    |    P   |

@@ -8,6 +8,7 @@ import java.util.List;
 public class lakeGen {
     public int lakeSize;
     Random rand = new Random();
+    humidity humidity = new humidity();
 
     public void drawLakes(int lakes, List<Structs.Polygon.Builder> newPolygons) {
         this.lakeSize = 1;
@@ -19,7 +20,7 @@ public class lakeGen {
                 //a new lake couldn't be formed due to biome issues
             }
         }
-        assignHumidity(newPolygons);
+        humidity.assignLakeHumidity(newPolygons);
     }
     public int findLakePolygon(List<Structs.Polygon.Builder> newPolygons) {
         List<Structs.Polygon.Builder> polyon_copy = new ArrayList<>(newPolygons) ;
@@ -127,34 +128,6 @@ public class lakeGen {
                                             Structs.Property biome = Structs.Property.newBuilder().setKey("Biome").setValue("lake").build();
                                             neighbour.addProperties(biome);
                                         }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    public void assignHumidity(List<Structs.Polygon.Builder> newPolygons){
-        for(int i=0; i < newPolygons.size(); i++){
-            Structs.Polygon.Builder polygon = newPolygons.get(i);
-            for (int j = 0; j < polygon.getPropertiesList().size(); j++) {
-                Structs.Property property = polygon.getPropertiesList().get(j);
-                if (property.getKey().equals("Biome") && property.getValue().equals("lake")) {
-                    for (int n : polygon.getNeighborIdxsList())     {
-                        Structs.Polygon.Builder neighbour = newPolygons.get(n);
-                        for (int k = 0; k < neighbour.getPropertiesList().size(); k++) {
-                            Structs.Property property1 = neighbour.getPropertiesList().get(k);
-                            if (property1.getKey().equals("Biome") && property1.getValue().equals("land")) {
-                                for (int z = 0; z < neighbour.getPropertiesList().size(); z++) {
-                                    Structs.Property property2 = neighbour.getPropertiesList().get(z);
-                                    if (property2.getKey().equals("Humidity")) {
-                                        neighbour.removeProperties(z);
-                                        Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue("50").build();
-                                        neighbour.addProperties(humidity);
-                                        break;
                                     }
                                 }
                             }

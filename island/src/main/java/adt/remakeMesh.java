@@ -110,16 +110,15 @@ public class remakeMesh {
             if (this.aquifers != 0) {
                 aquiferGenerator.drawAquifers(this.aquifers, newPolygons);
             }
+            soilType.absorption(newPolygons);
             setColor.assignColor(newPolygons);
         }
-
         for(Polygon.Builder p: newPolygons){
             newMesh.addPolygons(p.build());
         }
         for (Segment.Builder s:riverList){
             newMesh.addSegments(s.build());
         }
-        soilType.absorption(newPolygons);
     }
 
     public void makeSegments(Mesh aMesh, Mesh.Builder newMesh){

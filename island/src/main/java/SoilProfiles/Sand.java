@@ -37,7 +37,7 @@ public class Sand implements AbsProfile{
                 if ((p.getKey().equals("Biome") && (p.getValue().equals("lake") || p.getValue().equals("river")))
                         || p.getKey().equals("Aquifer")) {
                     for (Structs.Property h: poly.getPropertiesList()) {
-                        if (p.getKey().equals("Centroid")) {
+                        if (h.getKey().equals("Centroid")) {
                             String[] coord = p.getValue().split(",");
                             x2 = Double.parseDouble(coord[0]);
                             y2 = Double.parseDouble(coord[1]);
