@@ -57,7 +57,7 @@ public class lakeGenTest {
         lakegen.drawLakes(1, landhighland);
         assertEquals(polygon4.getProperties(1).getValue(), "lake");
         assertNotEquals(polygon5.getProperties(1).getValue(), "lake");
-        assertEquals(polygon5.getProperties(2).getValue(), "50");
+        assertEquals(polygon5.getProperties(2).getValue(), "150");
 
     }
 }

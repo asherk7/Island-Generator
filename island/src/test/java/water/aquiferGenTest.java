@@ -39,13 +39,13 @@ public class aquiferGenTest {
         aquifer.drawAquifers(1, land);
 
         assertEquals(polygon2.getProperties(2).getKey(), "Aquifer");
-        assertEquals(polygon2.getProperties(3).getValue(), "50");
+        assertEquals(polygon2.getProperties(3).getValue(), "150");
 
         if (polygon.getPropertiesList().size() == 4){
-            assertEquals(polygon1.getProperties(2).getValue(), "50");
+            assertEquals(polygon1.getProperties(2).getValue(), "150");
         }
         else{
-            assertEquals(polygon.getProperties(2).getValue(), "50");
+            assertEquals(polygon.getProperties(2).getValue(), "150");
         }
 
     }

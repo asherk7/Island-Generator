@@ -52,14 +52,14 @@ public class aquiferGen {
 
     public void makeAquifer(List<Structs.Polygon.Builder> newPolygons, int polygon_position) {
         Structs.Polygon.Builder polygon = newPolygons.get(polygon_position);
-        Structs.Property aquifer = Structs.Property.newBuilder().setKey("Aquifer").setValue("50").build();
+        Structs.Property aquifer = Structs.Property.newBuilder().setKey("Aquifer").setValue("150").build();
         //value is amount of moisture given to neighbours
         polygon.addProperties(aquifer);
         for (int i=0; i< polygon.getPropertiesList().size(); i++) {
             if (polygon.getProperties(i).getKey().equals("Humidity")){
                 int oldHumidity = Integer.parseInt(polygon.getProperties(i).getValue());
                 polygon.removeProperties(i);
-                Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue(String.valueOf(50 + oldHumidity)).build();
+                Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue(String.valueOf(150 + oldHumidity)).build();
                 polygon.addProperties(humidity);
                 break;
             }

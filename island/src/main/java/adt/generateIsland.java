@@ -32,7 +32,6 @@ public class generateIsland {
                     break;
                 }
             }
-            polygonList.set(i, p);
         }
     }
 

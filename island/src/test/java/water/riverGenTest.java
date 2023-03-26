@@ -48,20 +48,20 @@ public class riverGenTest {
         for (int i = 0; i<polygon.getPropertiesList().size(); i++){
             if (polygon.getProperties(i).getKey().equals("River")){
                 assertEquals(polygon1.getProperties(2).getValue(), "lake");
-                assertEquals(polygon.getProperties(3).getValue(), "75");
+                assertEquals(polygon.getProperties(3).getValue(), "225");
             }
         }
         for (int i = 0; i<polygon1.getPropertiesList().size(); i++){
             if (polygon1.getProperties(i).getKey().equals("River")){
                 assertEquals(polygon.getProperties(2).getValue(), "lake");
-                assertEquals(polygon1.getProperties(3).getValue(), "75");
+                assertEquals(polygon1.getProperties(3).getValue(), "225");
             }
         }
 
         List<Structs.Segment.Builder> river2 = river.drawRivers(1, landocean, 1);
         assertEquals(river2.get(1).getV1Idx(), 5);
         assertEquals(river2.get(1).getV2Idx(), 5);
-        assertEquals(polygon2.getProperties(3).getValue(), "25");
+        assertEquals(polygon2.getProperties(3).getValue(), "75");
 
         List<Structs.Segment.Builder> river3 = river.drawRivers(1, landtolake, 0);
         assertEquals(polygon4.getProperties(2).getValue(), "lake");
