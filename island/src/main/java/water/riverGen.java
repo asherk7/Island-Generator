@@ -2,10 +2,7 @@ package water;
 
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class riverGen {
     Random rand = new Random();
@@ -15,7 +12,8 @@ public class riverGen {
     public List<Structs.Segment.Builder> drawRivers(int rivers, List<Structs.Polygon.Builder> polygonList, int repeat) {
         for (int j = 0; j < rivers; j++) {
             try {
-                makeRiver(riverList, polygonList, findRiver(polygonList), repeat, -1);
+                HashMap<Integer, Boolean> visited = new HashMap<Integer, Boolean>();
+                makeRiver(riverList, polygonList, findRiver(polygonList), repeat, visited);
             } catch (Exception e) {
                 //a new river couldn't be formed due to biome issues
             }
@@ -43,7 +41,7 @@ public class riverGen {
         return -1;
     }
 
-    public void makeRiver(List<Structs.Segment.Builder> riverList, List<Structs.Polygon.Builder> polygonList, int polygon_position, int repeat, int prev) {
+    public void makeRiver(List<Structs.Segment.Builder> riverList, List<Structs.Polygon.Builder> polygonList, int polygon_position, int repeat, HashMap<Integer, Boolean> visited) {
         if (repeat == 0) {
             Structs.Polygon.Builder polygon = polygonList.get(polygon_position);
             polygon.removeProperties(getBiomeProperty(polygon));
@@ -79,7 +77,7 @@ public class riverGen {
         for (int n : polygon.getNeighborIdxsList()) {
             Structs.Polygon.Builder neighbour_p = polygonList.get(n);
             if (elevation == getElevation(neighbour_p)) {
-                if (polygonList.indexOf(neighbour_p) != prev) {
+                if (!visited.containsKey(polygonList.indexOf(neighbour_p))) {
                     neighbour = neighbour_p;
                     repeat -= 1;
                     break;
@@ -105,7 +103,8 @@ public class riverGen {
                     return;
                 }
             }
-            makeRiver(riverList, polygonList, polygonList.indexOf(neighbour), repeat, polygon_position);
+            visited.put(polygonList.indexOf(polygon), true);
+            makeRiver(riverList, polygonList, polygonList.indexOf(neighbour), repeat, visited);
         }
     }
 

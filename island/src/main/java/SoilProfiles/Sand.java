@@ -8,6 +8,8 @@ import java.util.List;
 public class Sand implements AbsProfile{
     private final double SAND_ADJUSTMENT = 0.01;
     humidity humidity = new humidity();
+    public int lakeSize = 0;
+
     @Override
     public void absorption(List<Structs.Polygon.Builder> polygons) {
         for (int i = 0; i < polygons.size(); i++) {
@@ -16,4 +18,6 @@ public class Sand implements AbsProfile{
             humidity.replaceHumidity(newHumidity, polygons, i);
         }
     }
+    @Override
+    public int lakeSize(){ return lakeSize; }
 }

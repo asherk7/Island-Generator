@@ -1,6 +1,7 @@
 package adt;
 
 import SoilProfiles.AbsProfile;
+import biomes.Biome;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Polygon;
@@ -26,11 +27,12 @@ public class remakeMesh {
     private Shape<Path2D> shape;
     private AltProfile elevationType;
     private AbsProfile soilType;
+    private Biome biome;
     private int lakes = 0;
     private int rivers = 0;
     private int aquifers = 0;
     private setColor setColor = new setColor();
-    public remakeMesh(String island, Shape<Path2D> shape, AltProfile elevationType, AbsProfile soilType, int lakes, int rivers, int aquifers) {
+    public remakeMesh(String island, Shape<Path2D> shape, AltProfile elevationType, AbsProfile soilType, Biome biome, int lakes, int rivers, int aquifers) {
         this.island = island;
         this.shape = shape;
         this.elevationType = elevationType;
@@ -38,6 +40,7 @@ public class remakeMesh {
         this.rivers = rivers;
         this.aquifers = aquifers;
         this.soilType = soilType;
+        this.biome = biome;
     }
 
     public Mesh newMeshBuilder(Mesh aMesh){
@@ -99,7 +102,7 @@ public class remakeMesh {
             atltitudeGen.setElevProfile(this.elevationType, newPolygons);
             humidGen.setHumidity(newPolygons);
             if (this.lakes != 0) {
-                lakeGenerator.drawLakes(this.lakes, newPolygons);
+                lakeGenerator.drawLakes(this.lakes, newPolygons, soilType.lakeSize());
             }
             if (this.rivers != 0){
                 riverList = riverGenerator.drawRivers(this.rivers, newPolygons, 5);
@@ -111,6 +114,7 @@ public class remakeMesh {
                 aquiferGenerator.drawAquifers(this.aquifers, newPolygons);
             }
             soilType.absorption(newPolygons);
+            biome.assignBiome(newPolygons);
             setColor.assignColor(newPolygons);
         }
         for(Polygon.Builder p: newPolygons){

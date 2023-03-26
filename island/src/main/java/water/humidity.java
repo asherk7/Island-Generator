@@ -12,6 +12,17 @@ public class humidity {
         }
     }
 
+    public int getHumidity(Structs.Polygon.Builder polygon){
+        int humidity = 0;
+        for (int i=0; i<polygon.getPropertiesList().size(); i++){
+            Structs.Property property = polygon.getProperties(i);
+            if (property.getKey().equals("Humidity")){
+                humidity = Integer.parseInt(property.getValue());
+            }
+        }
+        return humidity;
+    }
+
     public void assignAquiferHumidity(List<Structs.Polygon.Builder> newPolygons){
         for(int i=0; i < newPolygons.size(); i++){
             Structs.Polygon.Builder polygon = newPolygons.get(i);

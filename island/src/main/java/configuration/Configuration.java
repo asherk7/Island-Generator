@@ -4,6 +4,10 @@ import SoilProfiles.AbsProfile;
 import SoilProfiles.DrySoil;
 import SoilProfiles.Sand;
 import SoilProfiles.WetSoil;
+import biomes.Tundra;
+import biomes.Biome;
+import biomes.Canada;
+import biomes.Tropical;
 import shapes.*;
 import ElevationProfiles.AltProfile;
 import ElevationProfiles.Hills;
@@ -16,6 +20,7 @@ public class Configuration {
     public String inputFileName, outputFileName, islandMode;
     public AltProfile elevationType;
     public AbsProfile soilType;
+    public Biome biome;
     public int lakes = 0;
     public int rivers = 0;
     public int aquifers = 0;
@@ -40,6 +45,7 @@ public class Configuration {
             --rivers <number>                 Creates the number of rivers specified
             --aquifers <number>               Creates the number of aquifers specified
             --soil <absorption profile>       Creates the soil profile of the island
+            --biomes <localization>           Creates an island based on the localization
 
             Types of modes:
                 - lagoon
@@ -57,6 +63,10 @@ public class Configuration {
                 - sand
                 - wetsoil
                 - drysoil
+            Types of biomes:
+                - tundra
+                - tropical
+                - canada
             """);
             return;
         }
@@ -116,6 +126,16 @@ public class Configuration {
                 }
             }
 
+            if (contains(args, "--biomes")) {
+                if (returnString(args, "--biomes").equals("tundra")) {
+                    this.biome = new Tundra();
+                } else if (returnString(args, "--biomes").equals("tropical")) {
+                    this.biome = new Tropical();
+                } else if (returnString(args, "--biomes").equals("canada")) {
+                    this.biome = new Canada();
+                }
+            }
+
             //Seventh argument will be lake amount
             if (contains(args, "--lakes")) {
                 this.lakes = Integer.parseInt(returnString(args, "--lakes"));
@@ -136,6 +156,7 @@ public class Configuration {
     public Shape<Path2D> getShape(){ return this.shape; }
     public AltProfile altitude(){ return this.elevationType; }
     public AbsProfile getSoilType(){return this.soilType; }
+    public Biome getBiome(){ return this.biome; }
     public int getLakes() { return this.lakes; }
     public int getRivers() { return this.rivers; }
     public int getAquifers() { return this.aquifers; }

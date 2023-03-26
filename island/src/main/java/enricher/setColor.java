@@ -14,6 +14,30 @@ public class setColor {
                     if (property.getValue().equals("land")) {
                         Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("1,50,32").build();
                         polygon.addProperties(color);
+                    } else if (property.getValue().equals("rainforest")) {
+                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("3,110,23").build();
+                        polygon.addProperties(color);
+                    } else if (property.getValue().equals("dryforest")) {
+                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("121,186,74").build();
+                        polygon.addProperties(color);
+                    } else if (property.getValue().equals("wetland")) {
+                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("5,66,4").build();
+                        polygon.addProperties(color);
+                    } else if (property.getValue().equals("dryland")) {
+                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("158,162,107").build();
+                        polygon.addProperties(color);
+                    } else if (property.getValue().equals("snowpeak")) {
+                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("255,255,255").build();
+                        polygon.addProperties(color);
+                    } else if (property.getValue().equals("permafrost")) {
+                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("18,126,148").build();
+                        polygon.addProperties(color);
+                    } else if (property.getValue().equals("ice")) {
+                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("165,242,243").build();
+                        polygon.addProperties(color);
+                    } else if (property.getValue().equals("deadland")) {
+                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("128,91,0").build();
+                        polygon.addProperties(color);
                     } else if (property.getValue().equals("ocean")) {
                         Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("32,4,145").build();
                         polygon.addProperties(color);

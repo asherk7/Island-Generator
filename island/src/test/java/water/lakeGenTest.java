@@ -46,15 +46,15 @@ public class lakeGenTest {
         landhighland.add(polygon4);
         landhighland.add(polygon5);
 
-        lakegen.drawLakes(1, landland);
+        lakegen.drawLakes(1, landland, 0);
         assertEquals(polygon.getProperties(1).getValue(), "lake");
         assertEquals(polygon1.getProperties(1).getValue(), "lake");
 
-        lakegen.drawLakes(1, landocean);
+        lakegen.drawLakes(1, landocean, 0);
         assertNotEquals(polygon2.getProperties(1).getValue(), "lake");
         assertNotEquals(polygon3.getProperties(1).getValue(), "lake");
 
-        lakegen.drawLakes(1, landhighland);
+        lakegen.drawLakes(1, landhighland, 0);
         assertEquals(polygon4.getProperties(1).getValue(), "lake");
         assertNotEquals(polygon5.getProperties(1).getValue(), "lake");
         assertEquals(polygon5.getProperties(2).getValue(), "150");

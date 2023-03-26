@@ -29,6 +29,6 @@ public class WetSoilTest {
         polygonList.add(polygon1);
 
         soil.absorption(polygonList);
-        assertEquals(polygon.getProperties(2).getValue(), "3");
+        assertEquals(polygon.getProperties(2).getValue(), "6");
     }
 }

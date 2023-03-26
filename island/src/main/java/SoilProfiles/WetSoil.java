@@ -6,9 +6,11 @@ import water.humidity;
 import java.util.List;
 
 public class WetSoil implements AbsProfile{
-    private final double WETSOIL_ADJUSTMENT = 0.02;
+    private final double WETSOIL_ADJUSTMENT = 0.04;
 
     water.humidity humidity = new humidity();
+    public int lakeSize = 0;
+
 
     @Override
     public void absorption(List<Structs.Polygon.Builder> polygons) {
@@ -18,4 +20,6 @@ public class WetSoil implements AbsProfile{
             humidity.replaceHumidity(newHumidity, polygons, i);
         }
     }
+    @Override
+    public int lakeSize(){ return lakeSize; }
 }

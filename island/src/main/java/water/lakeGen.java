@@ -10,8 +10,8 @@ public class lakeGen {
     Random rand = new Random();
     humidity humidity = new humidity();
 
-    public void drawLakes(int lakes, List<Structs.Polygon.Builder> newPolygons) {
-        this.lakeSize = 1;
+    public void drawLakes(int lakes, List<Structs.Polygon.Builder> newPolygons, int lakeSize) {
+        this.lakeSize = lakeSize;
         for (int j=0; j < lakes; j++) {
             try {
                 makeLake(newPolygons, findLakePolygon(newPolygons));
