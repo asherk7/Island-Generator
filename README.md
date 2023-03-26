@@ -51,30 +51,31 @@ To start debug mode, use '-X' at the end of the java command;
 `java -jar visualizer.jar ../generator/sample.mesh sample.svg -X`
  
 ### Master Commands:
-### Island Command:
-To check what commands user can run, type `java -jar island/island.jar -h`
 
-java -jar island/island.jar -i "input file name" -o "output file name" --mode "island mode" --shape "shape" --altitude "elevation" --lakes "number" --rivers "number" --aquifers "number" --soil "type" --biomes "type"
+java -jar island/island.jar -i "input file name" -o "output file name" --mode "island mode" --shape "shape" --altitude "elevation" --lakes "number" --rivers "number" --aquifers "number" --soil "type" --biomes "type"  
+### Island Command:
+To check what commands user can run, type `java -jar island/island.jar -h`  
+
 Current modes:
   - lagoon
-  - island
+  - island  
 Current shapes:
   - circle
   - triangle
   - rectangle
-  - star
+  - star  
 Current elevations:
   - volcano
   - hills
-  - plains
+  - plains  
 Current soils:
   - sand
   - drysoil
-  - wetsoil
+  - wetsoil  
 current biomes:
   - tundra
   - tropical
-  - canada
+  - canada  
 
 ### Irregular Lagoon island cmd:
 java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1500 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/lagoon.mesh --mode lagoon && java -jar visualizer/visualizer.jar -i img/lagoon.mesh -o img/irregular.svg
