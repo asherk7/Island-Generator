@@ -15,10 +15,10 @@ public class setColor {
                         Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("1,50,32").build();
                         polygon.addProperties(color);
                     } else if (property.getValue().equals("rainforest")) {
-                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("3,110,23").build();
+                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("3,190,23").build();
                         polygon.addProperties(color);
                     } else if (property.getValue().equals("dryforest")) {
-                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("121,186,74").build();
+                        Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("76,117,46").build();
                         polygon.addProperties(color);
                     } else if (property.getValue().equals("wetland")) {
                         Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("5,66,4").build();

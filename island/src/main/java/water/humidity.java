@@ -104,8 +104,9 @@ public class humidity {
                                 for (int z = 0; z < neighbour.getPropertiesList().size(); z++) {
                                     Structs.Property property2 = neighbour.getPropertiesList().get(z);
                                     if (property2.getKey().equals("Humidity")) {
+                                        int oldHumidity = Integer.parseInt(property2.getValue());
                                         neighbour.removeProperties(z);
-                                        Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue("150").build();
+                                        Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue(String.valueOf(150+oldHumidity)).build();
                                         neighbour.addProperties(humidity);
                                         break;
                                     }

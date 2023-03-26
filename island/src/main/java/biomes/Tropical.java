@@ -17,7 +17,7 @@ public class Tropical implements Biome{
                 if (property.getKey().equals("Biome") && property.getValue().equals("land")){
                     int humid = humidity.getHumidity(polygon);
                     int elev = elevation.getElevation(polygon);
-                    if (elev >= 300){
+                    if (elev >= 200){
                         if (humid >= 300){
                             replaceProperty(polygon, "rainforest");
                         }
@@ -26,7 +26,7 @@ public class Tropical implements Biome{
                         }
                     }
                     else{
-                        if (humid >= 300){
+                        if (humid >= 230){
                             replaceProperty(polygon, "wetland");
                         }
                         else{

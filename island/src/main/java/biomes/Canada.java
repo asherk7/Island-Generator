@@ -34,7 +34,7 @@ public class Canada implements Biome{
                         }
                     }
                     else{
-                        if (humid < 200){
+                        if (humid < 230){
                             replaceProperty(polygon, "deadland");
                         }
                     }
