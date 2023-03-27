@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import adt.remakeMesh;
 
@@ -9,7 +10,7 @@ import configuration.Configuration;
 
 public class Main {
     
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException, InvocationTargetException, IllegalAccessException {
         Mesh aMesh;
         Configuration config = new Configuration(args);
         try{
