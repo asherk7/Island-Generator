@@ -138,4 +138,4 @@ A feature is done when it meets all conditions that is required of it, satisfies
 | F18 | implement soil absorption                                                        | Spencer/Asher | 03/22/23   |    03/24/23    |    D   |
 | F19 | Create biomes for each polygon                                                   | Asher | 03/25/23   |    03/26/23    |    D   |
 | F20 | Implement Whittaker diagrams                                                     | Asher | 03/25/23   |    03/26/23    |    D   |
-| F21 | adding seeds for each unique island                                              | name | start   |    end    |    P   |
+| F21 | adding seeds for each unique island                                              | Spencer | 03/26/23   |    03/26/23    |    S   |
