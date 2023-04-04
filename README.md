@@ -1,55 +1,7 @@
-# Assignment A2: Mesh Generator
+# Assignment A4: Urbanism
 
-  - Spencer McLean [mcleas13@mcmaster.ca]
   - Asher Khan [khanm406@mcmaster.ca]
-  - Mehdi Syed [syedm55@mcmaster.ca]
 
-## How to run the product
-
-_This section needs to be edited to reflect how the user can interact with thefeature released in your project_
-
-### Installation instructions
-
-This product is handled by Maven, as a multi-module project. We assume here that you have cloned the project in a directory named `A2`
-
-To install the different tooling on your computer, simply run:
-
-```
-mosser@azrael A2 % mvn install
-```
-
-After installation, you'll find an application named `generator.jar` in the `generator` directory, and a file named `visualizer.jar` in the `visualizer` one. 
-
-### Generator
-
-To run the generator, go to the `generator` directory, and use `java -jar` to run the product. The product takes one single argument (so far), the name of the file where the generated mesh will be stored as binary.
-
-```
-mosser@azrael A2 % cd generator 
-mosser@azrael generator % java -jar generator.jar sample.mesh
-mosser@azrael generator % ls -lh sample.mesh
--rw-r--r--  1 mosser  staff    29K 29 Jan 10:52 sample.mesh
-mosser@azrael generator % 
-```
-
-### Visualizer
-
-To visualize an existing mesh, go the the `visualizer` directory, and use `java -jar` to run the product. The product take two arguments (so far): the file containing the mesh, and the name of the file to store the visualization (as an SVG image).
-
-```
-mosser@azrael A2 % cd visualizer 
-mosser@azrael visualizer % java -jar visualizer.jar ../generator/sample.mesh sample.svg
-
-... (lots of debug information printed to stdout) ...
-
-mosser@azrael visualizer % ls -lh sample.svg
--rw-r--r--  1 mosser  staff    56K 29 Jan 10:53 sample.svg
-mosser@azrael visualizer %
-```
-
-To start debug mode, use '-X' at the end of the java command;
-`java -jar visualizer.jar ../generator/sample.mesh sample.svg -X`
- 
 ### Master Commands:
 
 java -jar island/island.jar -i "input file name" -o "output file name" --mode "island mode" --shape "shape" --altitude "elevation" --lakes "number" --rivers "number" --aquifers "number" --soil "type" --biomes "type"  
@@ -138,4 +90,4 @@ A feature is done when it meets all conditions that is required of it, satisfies
 | F18 | implement soil absorption                                                        | Spencer/Asher | 03/22/23   |    03/24/23    |    D   |
 | F19 | Create biomes for each polygon                                                   | Asher | 03/25/23   |    03/26/23    |    D   |
 | F20 | Implement Whittaker diagrams                                                     | Asher | 03/25/23   |    03/26/23    |    D   |
-| F21 | adding seeds for each unique island                                              | Spencer | 03/26/23   |    03/26/23    |    S   |
+| F21 | adding seeds for each unique island                                              | Spencer | 03/26/23   |    03/26/23    |    D   |
