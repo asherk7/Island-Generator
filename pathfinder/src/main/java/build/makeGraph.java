@@ -1,6 +1,8 @@
 package build;
 
+import adt.Edge;
 import adt.Graph;
+import adt.Node;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 
 public class makeGraph {
@@ -16,18 +18,18 @@ public class makeGraph {
     public Graph run(Structs.Mesh.Builder mesh){
         Graph graph = new Graph();
         for (Structs.Polygon p: mesh.getPolygonsList()){
-            
+            Structs.Vertex v = mesh.getVertices(p.getCentroidIdx());
+            Node n = new Node(v.getX(), v.getY());
+            n.registerNeighbour(p.getNeighborIdxsList());
+            graph.registerNode(n);
+        }
+        for (Node n: graph.getNodeList()){
+            for (Integer i: n.getNeighbours()){
+                Node neighbour = graph.getNode(i);
+                Edge e = new Edge(n, neighbour);
+                graph.registerEdge(e);
+            }
         }
         return graph;
     }
-    //take in mesh
-    //iterate through mesh polygons, take the centroid and the neighbours and turn it into a node
-    //iterate through set of nodes, and each nodes neighbours and make edge
-    //set of edges shouldn't have duplicates if its a set of 2 nodes
-    //an edge can be a set of 2 nodes(centroids) with an attribute of weight (make a function to get weight)
-    //take these nodes and edges and add them to the graph adt
-    //for path, just use dijsktra algo
-    //return the path as an ordered list of edges(2 nodes)
-    //convert this path to a list of segments and send it back (just like how moser did with polygons)
-    //give each segment a property indicating that it's a path
 }
