@@ -1,5 +1,9 @@
 package paths;
+import adt.Edge;
+import adt.Graph;
+import adt.Node;
+import java.util.List;
 
 public interface pathfinder {
-    //open closed principle, user should make its own path
+    List<Edge> getPath(Graph graph, Node start, Node end);
 }
