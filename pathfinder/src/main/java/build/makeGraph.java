@@ -19,7 +19,7 @@ public class makeGraph {
         Graph graph = new Graph();
         for (Structs.Polygon p: mesh.getPolygonsList()){
             Structs.Vertex v = mesh.getVertices(p.getCentroidIdx());
-            Node n = new Node(v.getX(), v.getY());
+            Node n = new Node(v.getX(), v.getY()); //mapping nodes to the same index as its polygon
             n.registerNeighbour(p.getNeighborIdxsList());
             graph.registerNode(n);
         }

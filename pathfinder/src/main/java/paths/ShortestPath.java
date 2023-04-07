@@ -10,6 +10,7 @@ public class ShortestPath implements pathfinder {
     @Override
     public List<Edge> getPath(Graph graph, Node start, Node end) {
         List<Edge> path = new ArrayList<>();
+        //using dijkstra's shortest path algorithm
         Map<Node, Node> nodePath = new HashMap<>();
         Map<Node, Double> pathCost = new HashMap<>();
 
@@ -22,6 +23,7 @@ public class ShortestPath implements pathfinder {
         nodePath.put(start, start);
         pathCost.put(start, 0.0);
 
+        //using a priority queue, and giving it a node with a value(the cost), and sorting its priority by cost
         PriorityQueue<HashMap<Node, Double>> Q = new PriorityQueue<>((a, b) -> {
             Node keyInA = a.keySet().iterator().next();
             Node keyInB = b.keySet().iterator().next();
@@ -51,6 +53,7 @@ public class ShortestPath implements pathfinder {
             nodes.add(node_iterator);
             node_iterator = nodePath.get(node_iterator);
         }
+        //creating a path of edges
         nodes.add(start);
         for (int i = nodes.size()-1; i>0; i--){
             Node node1 = nodes.get(i);
