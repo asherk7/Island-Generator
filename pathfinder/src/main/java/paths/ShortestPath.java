@@ -27,7 +27,7 @@ public class ShortestPath implements pathfinder {
         PriorityQueue<HashMap<Node, Double>> Q = new PriorityQueue<>((a, b) -> {
             Node keyInA = a.keySet().iterator().next();
             Node keyInB = b.keySet().iterator().next();
-            return (int) (a.get(keyInB) - b.get(keyInA));
+            return (int) (a.get(keyInA) - b.get(keyInB));
         });
 
         Q.add(new HashMap<>(){ { put(start, pathCost.get(start)); } });

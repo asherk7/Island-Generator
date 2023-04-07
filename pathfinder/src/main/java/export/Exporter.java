@@ -28,7 +28,8 @@ public class Exporter {
             Structs.Polygon p1 = mesh.getPolygons(graph.getNodeList().indexOf(n1));
             Structs.Polygon p2 = mesh.getPolygons(graph.getNodeList().indexOf(n2));
 
-            segment.setV1Idx(p1.getCentroidIdx()).setV2Idx(p2.getCentroidIdx());
+            Structs.Property property = Structs.Property.newBuilder().setKey("Path").setValue("True").build();
+            segment.setV1Idx(p1.getCentroidIdx()).setV2Idx(p2.getCentroidIdx()).addProperties(property);
             final_path.add(segment.build());
         }
 

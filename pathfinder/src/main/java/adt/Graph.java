@@ -30,6 +30,8 @@ public class Graph {
     }
 
     public List<Node> getNodeList(){ return this.nodes; }
+    public Set<Edge> getEdgeSet(){ return this.edges; }
+
 
     public Edge getEdge(Node n1, Node n2){
         for (Edge e: this.edges){
