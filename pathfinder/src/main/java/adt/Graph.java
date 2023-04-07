@@ -31,6 +31,15 @@ public class Graph {
 
     public List<Node> getNodeList(){ return this.nodes; }
 
+    public Edge getEdge(Node n1, Node n2){
+        for (Edge e: this.edges){
+            if (e.contains(n1) && e.contains(n2)){
+                return e;
+            }
+        }
+        return null;
+    }
+
     public Node getNode(Integer position){ return nodes.get(position); }
 
 }
