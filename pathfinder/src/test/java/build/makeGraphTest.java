@@ -23,25 +23,30 @@ public class makeGraphTest {
         Structs.Vertex v1 = Structs.Vertex.newBuilder().setX(0).setY(0).build();
         Structs.Vertex v2 = Structs.Vertex.newBuilder().setX(7).setY(0).build();
         Structs.Vertex v3 = Structs.Vertex.newBuilder().setX(12).setY(0).build();
+        Structs.Vertex v4 = Structs.Vertex.newBuilder().setX(1).setY(1).build();
 
         Structs.Segment s1 = Structs.Segment.newBuilder().setV1Idx(1).setV2Idx(2).build();
         Structs.Segment s2 = Structs.Segment.newBuilder().setV1Idx(0).setV2Idx(2).build();
 
+        Structs.Polygon p = Structs.Polygon.newBuilder().setCentroidIdx(3).build();
+
         vertices.add(v1);
         vertices.add(v2);
         vertices.add(v3);
+        vertices.add(v4);
 
         segments.add(s1);
         segments.add(s2);
 
         mesh.addAllVertices(vertices);
         mesh.addAllSegments(segments);
+        mesh.addPolygons(p);
 
         Graph graph = makegraph.run(mesh);
         List<Node> nodes = graph.getNodeList();
         Set<Edge> edges = graph.getEdgeSet();
 
-        assertEquals(nodes.size(), 3); //making sure every node was creted
+        assertEquals(nodes.size(), 3); //making sure every node was created except the polygon centroid
         assertTrue(nodes.get(0).getNeighbours().contains(nodes.indexOf(nodes.get(2))));
         assertTrue(nodes.get(1).getNeighbours().contains(nodes.indexOf(nodes.get(2))));
         assertTrue(nodes.get(2).getNeighbours().contains(nodes.indexOf(nodes.get(0))));

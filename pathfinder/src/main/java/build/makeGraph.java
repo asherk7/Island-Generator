@@ -17,8 +17,14 @@ public class makeGraph {
 
     public Graph run(Structs.Mesh.Builder mesh){
         Graph graph = new Graph();
+        outer:
         for (Structs.Vertex v: mesh.getVerticesList()){
-            //find a way to make sure polygon centroids aren't created as nodes
+            //make sure polygon centroids aren't created as nodes
+            for (Structs.Polygon p: mesh.getPolygonsList()){
+                if (mesh.getVerticesList().indexOf(v) == p.getCentroidIdx()){
+                    continue outer;
+                }
+            }
             Node n = new Node(v.getX(), v.getY()); //mapping node index to the same index as the vertex index
             for (Structs.Segment s: mesh.getSegmentsList()){
                 if (s.getV1Idx() == mesh.getVerticesList().indexOf(v)){
