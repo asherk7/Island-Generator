@@ -17,19 +17,18 @@ public class ShortestPathTest {
     public void getPathTest(){
         Graph graph = new Graph();
 
-        List<Integer> pos1 = new ArrayList<>(Arrays.asList(1, 2));
-        List<Integer> pos2 = new ArrayList<>(Arrays.asList(0, 3));
-        List<Integer> pos3 = new ArrayList<>(Arrays.asList(0, 3));
-        List<Integer> pos4 = new ArrayList<>(Arrays.asList(1, 2));
-
         Node n1 = new Node(0.0, 0.0);
-        n1.registerNeighbour(pos1);
+        n1.registerNeighbour(1);
+        n1.registerNeighbour(2);
         Node n2 = new Node(5, 0);
-        n2.registerNeighbour(pos2);
+        n2.registerNeighbour(0);
+        n2.registerNeighbour(3);
         Node n3 = new Node(0, 7);
-        n3.registerNeighbour(pos3);
+        n3.registerNeighbour(0);
+        n3.registerNeighbour(3);
         Node n4 = new Node(6, 7);
-        n4.registerNeighbour(pos4);
+        n4.registerNeighbour(1);
+        n4.registerNeighbour(2);
 
         Edge e1 = new Edge(n1, n2);
         Edge e2 = new Edge(n1, n3);

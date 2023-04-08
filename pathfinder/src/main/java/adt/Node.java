@@ -14,8 +14,8 @@ public class Node {
         this.neighbours = new HashSet<>();
     }
 
-    public void registerNeighbour(List<Integer> positions){
-        this.neighbours.addAll(positions);
+    public void registerNeighbour(Integer position){
+        this.neighbours.add(position);
     }
 
     public Set<Integer> getNeighbours(){ return this.neighbours; }

@@ -17,10 +17,17 @@ public class makeGraph {
 
     public Graph run(Structs.Mesh.Builder mesh){
         Graph graph = new Graph();
-        for (Structs.Polygon p: mesh.getPolygonsList()){
-            Structs.Vertex v = mesh.getVertices(p.getCentroidIdx());
-            Node n = new Node(v.getX(), v.getY()); //mapping nodes to the same index as its polygon
-            n.registerNeighbour(p.getNeighborIdxsList());
+        for (Structs.Vertex v: mesh.getVerticesList()){
+            //find a way to make sure polygon centroids aren't created as nodes
+            Node n = new Node(v.getX(), v.getY()); //mapping node index to the same index as the vertex index
+            for (Structs.Segment s: mesh.getSegmentsList()){
+                if (s.getV1Idx() == mesh.getVerticesList().indexOf(v)){
+                    n.registerNeighbour(s.getV2Idx());
+                }
+                else if (s.getV2Idx() == mesh.getVerticesList().indexOf(v)){
+                    n.registerNeighbour(s.getV1Idx());
+                }
+            }
             graph.registerNode(n);
         }
         for (Node n: graph.getNodeList()){
