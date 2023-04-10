@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class Edge {
     private final Node n1, n2;
     private final double weight;
-    private final HashMap<String, String> properties;
+    private final HashMap<Object, Object> properties;
 
     public Edge(Node n1, Node n2){
         this.n1 = n1;

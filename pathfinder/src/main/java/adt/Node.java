@@ -1,14 +1,11 @@
 package adt;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Node {
     private final double x, y;
     private final Set<Integer> neighbours;
-    private final HashMap<String, String> properties;
+    private final HashMap<Object, Object> properties;
 
     public Node(double x, double y){
         this.x = x;

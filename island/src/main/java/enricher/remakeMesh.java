@@ -1,6 +1,10 @@
-package adt;
+package enricher;
 
 import SoilProfiles.AbsProfile;
+import adt.Edge;
+import adt.Graph;
+import adt.Node;
+import adt.generateIsland;
 import biomes.Biome;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
@@ -10,6 +14,7 @@ import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
 import enricher.setColor;
 import enricher.setElevation;
 import lagoon.lagoonGen;
+import paths.ShortestPath;
 import water.aquiferGen;
 import water.humidity;
 import water.lakeGen;
@@ -51,8 +56,25 @@ public class remakeMesh {
         makeVertices(aMesh, newMesh);
         makeSegments(aMesh, newMesh);
         makePolygons(aMesh, newMesh);
+        makeCities(aMesh, newMesh, this.cities);
 
         return newMesh.build();
+    }
+
+    public void makeCities(Mesh aMesh, Mesh.Builder mesh, int cities){
+        CreateCities city = new CreateCities();
+        Graph graph = city.makeGraph(mesh);
+        List<Node> nodes = graph.getNodeList();
+        //make graph give nodes and edges properties
+        //generate number of cities and assign it to random vertices that aren't lakes or oceans
+        //have one capital city, and multiple other cities of random sizes
+        //give vertices a property of it being a city
+        //get the capital city node, and the list of other cities and use it with pathfinder
+        //give edges a property of non-water(not bordered with lakes) and use those edges in shortest path
+        //give vertices a colour and size property for rendering
+        //update graphic renderer for vertices and edges
+        city.getPath(graph, mesh, nodes.get(0), nodes);
+
     }
 
     public void makePolygons(Mesh aMesh, Mesh.Builder newMesh){
@@ -146,9 +168,6 @@ public class remakeMesh {
         for (Vertex v : vertexList){
             Vertex.Builder vertex = Vertex.newBuilder();
             vertex.setX(v.getX()).setY(v.getY());
-            if(this.island.equals("Island")){
-                //input new properties for just island
-            }
             newVertexList.add(vertex.build());
         }
         newMesh.addAllVertices(newVertexList);

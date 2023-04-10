@@ -1,21 +1,17 @@
-package build;
+package enricher;
 
 import adt.Edge;
 import adt.Graph;
 import adt.Node;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
+import paths.ShortestPath;
 
-public class makeGraph {
+import java.util.ArrayList;
+import java.util.List;
 
-    //in remakeMesh, under makepolygons, have a makecity function
-    //makecity will make a capital city and whatever amount of cities, making sure they aren't on lakes or oceans
-    //it will then send the mesh here, and we return the graph adt
-    //use a loop and run the shortest path, using the graph adt and the 2 cities as parameters
-    //graph should have a function that takes in a x and y coordinate, and finds the node associated with it
-    //use that to get the nodes that belong to each city, and send those in as parameters
-    //we take the paths and add it to the list of segments
+public class CreateCities {
 
-    public Graph run(Structs.Mesh.Builder mesh){
+    public Graph makeGraph(Structs.Mesh.Builder mesh){
         Graph graph = new Graph();
         outer:
         for (Structs.Vertex v: mesh.getVerticesList()){
@@ -44,5 +40,26 @@ public class makeGraph {
             }
         }
         return graph;
+    }
+
+    public void getPath(Graph graph, Structs.Mesh.Builder mesh, Node start, List<Node> end){
+        ShortestPath createPath = new ShortestPath();
+        for (Node n: end) {
+            List<Edge> path = createPath.getPath(graph, start, n);
+
+            for (Edge e : path) {
+                Structs.Segment.Builder segment = Structs.Segment.newBuilder();
+                //nodes are mapped to the same index as the vertex
+                Node n1 = e.getNodes()[0];
+                Node n2 = e.getNodes()[1];
+
+                for (Structs.Segment s : mesh.getSegmentsList()) {
+                    if (s.getV1Idx() == graph.getNodeList().indexOf(n1) && s.getV2Idx() == graph.getNodeList().indexOf(n2)) {
+                        Structs.Property property = Structs.Property.newBuilder().setKey("Path").setValue("True").build();
+                        s.toBuilder().addProperties(property).build();
+                    }
+                }
+            }
+        }
     }
 }

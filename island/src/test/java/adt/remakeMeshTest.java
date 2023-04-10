@@ -6,6 +6,7 @@ import ElevationProfiles.Volcano;
 import SoilProfiles.Sand;
 import biomes.Tundra;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
+import enricher.remakeMesh;
 import org.junit.jupiter.api.Test;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 import shapes.Circle;

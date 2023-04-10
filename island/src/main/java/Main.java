@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-import adt.remakeMesh;
+import enricher.remakeMesh;
 
 import ca.mcmaster.cas.se2aa4.a2.io.MeshFactory;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
