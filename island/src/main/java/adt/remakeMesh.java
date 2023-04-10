@@ -31,8 +31,9 @@ public class remakeMesh {
     private int lakes = 0;
     private int rivers = 0;
     private int aquifers = 0;
+    private int cities = 0;
     private setColor setColor = new setColor();
-    public remakeMesh(String island, Shape<Path2D> shape, AltProfile elevationType, AbsProfile soilType, Biome biome, int lakes, int rivers, int aquifers) {
+    public remakeMesh(String island, Shape<Path2D> shape, AltProfile elevationType, AbsProfile soilType, Biome biome, int lakes, int rivers, int aquifers, int cities) {
         this.island = island;
         this.shape = shape;
         this.elevationType = elevationType;
@@ -41,6 +42,7 @@ public class remakeMesh {
         this.aquifers = aquifers;
         this.soilType = soilType;
         this.biome = biome;
+        this.cities = cities;
     }
 
     public Mesh newMeshBuilder(Mesh aMesh){

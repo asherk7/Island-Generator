@@ -24,6 +24,7 @@ public class Configuration {
     public int lakes = 0;
     public int rivers = 0;
     public int aquifers = 0;
+    public int cities = 0;
     public Shape<Path2D> shape;
     public Configuration(String[] args) {
         this.inputFileName = "";
@@ -46,6 +47,7 @@ public class Configuration {
             --aquifers <number>               Creates the number of aquifers specified
             --soil <absorption profile>       Creates the soil profile of the island
             --biomes <localization>           Creates an island based on the localization
+            --cities <number>                 Creates the number of cities specified
 
             Types of modes:
                 - lagoon
@@ -140,7 +142,9 @@ public class Configuration {
             if (contains(args, "--lakes")) {
                 this.lakes = Integer.parseInt(returnString(args, "--lakes"));
             }
-            //
+            if (contains(args, "--cities")) {
+                this.cities = Integer.parseInt(returnString(args, "--cities"));
+            }
             if (contains(args, "--rivers")) {
                 this.rivers = Integer.parseInt(returnString(args, "--rivers"));
             }
@@ -160,6 +164,7 @@ public class Configuration {
     public int getLakes() { return this.lakes; }
     public int getRivers() { return this.rivers; }
     public int getAquifers() { return this.aquifers; }
+    public int getCities(){ return this.cities; }
 
     public static boolean contains(String[] args, String check){
         for (String arg: args){

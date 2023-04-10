@@ -11,7 +11,7 @@ import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 import shapes.Circle;
 
 public class remakeMeshTest {
-    public remakeMesh remake = new remakeMesh("lagoon", new Circle(), new Volcano(), new Sand(), new Tundra(), 3, 3, 3);
+    public remakeMesh remake = new remakeMesh("lagoon", new Circle(), new Volcano(), new Sand(), new Tundra(), 3, 3, 3, 0);
 
     @Test
     public void testMakePolygons() {
