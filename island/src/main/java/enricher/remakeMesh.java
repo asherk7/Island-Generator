@@ -23,6 +23,7 @@ import shapes.Shape;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import ElevationProfiles.AltProfile;
 import water.riverGen;
@@ -38,6 +39,8 @@ public class remakeMesh {
     private int aquifers = 0;
     private int cities = 0;
     private setColor setColor = new setColor();
+    Random rnd = new Random();
+
     public remakeMesh(String island, Shape<Path2D> shape, AltProfile elevationType, AbsProfile soilType, Biome biome, int lakes, int rivers, int aquifers, int cities) {
         this.island = island;
         this.shape = shape;
@@ -61,19 +64,22 @@ public class remakeMesh {
         return newMesh.build();
     }
 
-    public void makeCities(Mesh aMesh, Mesh.Builder mesh, int cities){
+    public void makeCities(Mesh aMesh, Mesh.Builder newMesh, int cities){
         CreateCities city = new CreateCities();
-        Graph graph = city.makeGraph(mesh);
-        List<Node> nodes = graph.getNodeList();
-        //make graph give nodes and edges properties
+        List<Vertex> specialVertices = city.findValidVertices(newMesh);
+        Graph graph = city.makeGraph(newMesh, specialVertices);
+        Node capital = (Node) graph.getNodeList().toArray()[rnd.nextInt(graph.getNodeList().size())];
+
+
         //generate number of cities and assign it to random vertices that aren't lakes or oceans
         //have one capital city, and multiple other cities of random sizes
         //give vertices a property of it being a city
         //get the capital city node, and the list of other cities and use it with pathfinder
         //give edges a property of non-water(not bordered with lakes) and use those edges in shortest path
+        //when creating an edge, only 2 polygons can share the same 2 vertices
+        //check if both are a lake, and assign edges properties that way
         //give vertices a colour and size property for rendering
         //update graphic renderer for vertices and edges
-        city.getPath(graph, mesh, nodes.get(0), nodes);
 
     }
 

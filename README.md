@@ -35,7 +35,6 @@ java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1500 -o img/ir
 ### Irregular Circle Island Hills, 3 lakes, 10 rivers, 5 aquifers, wetsoil, canada, 10 cities cmd:
 java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1500 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --altitude hills --lakes 3 --rivers 10 --aquifers 5 --soil wetsoil --biomes canada --cities 10 && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
 
-
 ### Irregular Circle Island with 3 different altitudes, 3 lakes, 10 rivers, 5 aquifers, wetsoil, tundra cmd:
 java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1500 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --altitude hills --lakes 3 --rivers 10 --aquifers 5 --soil wetsoil --biomes tundra && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
 

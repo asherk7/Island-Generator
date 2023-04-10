@@ -35,4 +35,8 @@ public class Edge {
     }
 
     public double getWeight(){ return this.weight; }
+
+    public void addProperty(Object o, Object e){
+        this.properties.put(o, e);
+    }
 }

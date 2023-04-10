@@ -24,4 +24,8 @@ public class Node {
         Double[] coords = new Double[] { this.x, this.y } ;
         return coords;
     }
+
+    public void addProperty(Object o, Object e){
+        this.properties.put(o, e);
+    }
 }

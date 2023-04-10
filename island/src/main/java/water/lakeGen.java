@@ -9,6 +9,7 @@ public class lakeGen {
     public int lakeSize;
     Random rand = new Random();
     humidity humidity = new humidity();
+    CheckNeighbours check = new CheckNeighbours();
 
     public void drawLakes(int lakes, List<Structs.Polygon.Builder> newPolygons, int lakeSize) {
         this.lakeSize = lakeSize;
@@ -33,7 +34,7 @@ public class lakeGen {
                     for (Structs.Property property1 : polygon.getPropertiesList()) {
                         //make sure polygon isn't an ocean or lake
                         if (property1.getKey().equals("Biome") && !(property1.getValue().equals("ocean") || property1.getValue().equals("lake"))) {
-                            boolean neighbour_isntWater = checkWaterNeighbours(polygon, newPolygons);
+                            boolean neighbour_isntWater = check.checkWaterNeighbours(polygon, newPolygons);
                             if(neighbour_isntWater){ return newPolygons.indexOf(polygon); }
                         }
                     }
@@ -43,19 +44,6 @@ public class lakeGen {
         return -1;
     }
 
-    public boolean checkWaterNeighbours(Structs.Polygon.Builder polygon, List<Structs.Polygon.Builder> newPolygons){
-        for (int n : polygon.getNeighborIdxsList()) {
-            Structs.Polygon.Builder neighbour_p = newPolygons.get(n);
-            //make sure none of the neighbours are oceans and lakes
-            for (Structs.Property property2 : neighbour_p.getPropertiesList()) {
-                if (property2.getKey().equals("Biome") && (property2.getValue().equals("ocean") || property2.getValue().equals("lake"))) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     public boolean isLake(Structs.Polygon.Builder polygon){
         for (Structs.Property property : polygon.getPropertiesList()) {
             if (property.getKey().equals("Biome") && (property.getValue().equals("lake"))) {
@@ -63,19 +51,6 @@ public class lakeGen {
             }
         }
         return false;
-    }
-
-    public boolean checkOceanNeighbours(Structs.Polygon.Builder polygon, List<Structs.Polygon.Builder> newPolygons){
-        for (int n : polygon.getNeighborIdxsList()) {
-            Structs.Polygon.Builder neighbour_p = newPolygons.get(n);
-            //make sure none of the neighbours are oceans and lakes
-            for (Structs.Property property2 : neighbour_p.getPropertiesList()) {
-                if (property2.getKey().equals("Biome") && (property2.getValue().equals("ocean"))) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     public void makeLake(List<Structs.Polygon.Builder> newPolygons, int polygon_position) {
@@ -90,7 +65,7 @@ public class lakeGen {
         }
         for (int n: polygon.getNeighborIdxsList()) {
             Structs.Polygon.Builder neighbour_p = newPolygons.get(n);
-            boolean neighbour_isntOcean = checkOceanNeighbours(neighbour_p, newPolygons);
+            boolean neighbour_isntOcean = check.checkOceanNeighbours(neighbour_p, newPolygons);
             if (neighbour_isntOcean) {
                 for (int i = 0; i < neighbour_p.getPropertiesList().size(); i++) {
                     Structs.Property property = neighbour_p.getPropertiesList().get(i);
@@ -115,7 +90,7 @@ public class lakeGen {
             if (isLake(lakeNeighbor)) {
                 for (int n : lakeNeighbor.getNeighborIdxsList()) {
                     Structs.Polygon.Builder neighbour = newPolygons.get(n);
-                    boolean neighbour_isntOcean = checkOceanNeighbours(neighbour, newPolygons);
+                    boolean neighbour_isntOcean = check.checkOceanNeighbours(neighbour, newPolygons);
                     if (neighbour_isntOcean) {
                         for (int i = 0; i < neighbour.getPropertiesList().size(); i++) {
                             Structs.Property property = neighbour.getPropertiesList().get(i);

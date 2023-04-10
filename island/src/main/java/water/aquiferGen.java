@@ -8,6 +8,7 @@ import java.util.List;
 
 public class aquiferGen {
     public int aquiferSize;
+    CheckNeighbours check = new CheckNeighbours();
     humidity humidity = new humidity();
     public void drawAquifers(int aquifers, List<Structs.Polygon.Builder> newPolygons) {
         this.aquiferSize = 1;
@@ -29,25 +30,12 @@ public class aquiferGen {
             for (Structs.Property property1 : polygon.getPropertiesList()) {
                 //make sure polygon isn't an ocean or lake
                 if (property1.getKey().equals("Biome") && !(property1.getValue().equals("ocean") || property1.getValue().equals("lake"))) {
-                    boolean neighbour_isntWater = checkWaterNeighbours(polygon, newPolygons);
+                    boolean neighbour_isntWater = check.checkWaterNeighbours(polygon, newPolygons);
                     if(neighbour_isntWater){ return newPolygons.indexOf(polygon); }
                 }
             }
         }
         return -1;
-    }
-
-    public boolean checkWaterNeighbours(Structs.Polygon.Builder polygon, List<Structs.Polygon.Builder> newPolygons){
-        for (int n : polygon.getNeighborIdxsList()) {
-            Structs.Polygon.Builder neighbour_p = newPolygons.get(n);
-            //make sure none of the neighbours are oceans and lakes
-            for (Structs.Property property2 : neighbour_p.getPropertiesList()) {
-                if (property2.getKey().equals("Biome") && (property2.getValue().equals("ocean") || property2.getValue().equals("lake"))) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     public void makeAquifer(List<Structs.Polygon.Builder> newPolygons, int polygon_position) {
