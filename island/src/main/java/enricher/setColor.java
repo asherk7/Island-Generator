@@ -57,6 +57,20 @@ public class setColor {
                 Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("32,4,145").build();
                 segment.addProperties(color);
             }
+            else if(property.getKey().equals("Path")){
+                Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("105,105,105").build();
+                segment.addProperties(color);
+            }
+        }
+    }
+
+    public void assignColor(Structs.Vertex.Builder vertex) {
+        for (int i = 0; i < vertex.getPropertiesList().size(); i++) {
+            Structs.Property property = vertex.getPropertiesList().get(i);
+            if(property.getKey().equals("City")){
+                Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("128,128,128").build();
+                vertex.addProperties(color);
+            }
         }
     }
 }

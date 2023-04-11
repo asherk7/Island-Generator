@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.util.Iterator;
 import java.util.List;
@@ -23,6 +24,7 @@ public class GraphicRenderer implements Renderer {
         canvas.setStroke(stroke);
         drawPolygons(aMesh,canvas);
         drawSegments(aMesh, canvas);
+        drawVertices(aMesh, canvas);
     }
 
     private void drawPolygons(Mesh aMesh, Graphics2D canvas) {
@@ -102,7 +104,37 @@ public class GraphicRenderer implements Renderer {
                 canvas.setColor(old);
             }
         }
-
     }
 
+    private void drawVertices(Mesh aMesh, Graphics2D canvas){
+        for(Structs.Vertex v: aMesh.getVerticesList()){
+            drawAVertex(v, aMesh, canvas);
+        }
+    }
+
+    private void drawAVertex(Vertex v, Mesh aMesh, Graphics2D canvas){
+        Color c = null;
+        String[] code = null;
+        int size = 3;
+        List<Structs.Property> property_list = v.getPropertiesList();
+        for (Structs.Property property: property_list){
+            if (property.getKey().equals("Color")){
+
+                code = property.getValue().split(",");
+                int red = Integer.parseInt(code[0]);
+                int green = Integer.parseInt(code[1]);
+                int blue = Integer.parseInt(code[2]);
+
+                c = new Color(red, green, blue);
+            }
+            if (property.getKey().equals("City")){
+                size = Integer.parseInt(property.getValue());
+            }
+        }
+        if (property_list.size() > 0) {
+            canvas.setColor(c);
+            Ellipse2D circle = new Ellipse2D.Float((float) v.getX() - 1.5f, (float) v.getY() - 1.5f, size, size);
+            canvas.fill(circle);
+        }
+    }
 }

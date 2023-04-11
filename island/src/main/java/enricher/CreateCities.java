@@ -15,14 +15,7 @@ public class CreateCities {
 
     public Graph makeGraph(Structs.Mesh.Builder mesh, List<Structs.Vertex> specialVertices){
         Graph graph = new Graph();
-        outer:
         for (Structs.Vertex v: specialVertices){
-            //make sure polygon centroids aren't created as nodes
-            for (Structs.Polygon p: mesh.getPolygonsList()){ //delete since we're checking segment vertices
-                if (mesh.getVerticesList().indexOf(v) == p.getCentroidIdx()){
-                    continue outer;
-                }
-            }
             Node n = new Node(v.getX(), v.getY()); //mapping node index to the same index as the vertex index
             for (Structs.Segment s: mesh.getSegmentsList()){
                 if (s.getV1Idx() == mesh.getVerticesList().indexOf(v)){
@@ -32,7 +25,7 @@ public class CreateCities {
                     n.registerNeighbour(s.getV1Idx());
                 }
             }
-            for (Structs.Property p: v.getPropertiesList()){
+            for (Structs.Property p: v.getPropertiesList()){ //gets any properties/attributes of the vertex/node
                 n.addProperty(p.getKey(), p.getValue());
             }
             graph.registerNode(n);
@@ -44,7 +37,7 @@ public class CreateCities {
                 for (Structs.Segment s: mesh.getSegmentsList()){
                     if ((s.getV1Idx() == graph.getNodeList().indexOf(n) && s.getV2Idx() == i) || (s.getV2Idx() == graph.getNodeList().indexOf(n) && s.getV1Idx() == i) ){
                         for (Structs.Property p: s.getPropertiesList()){
-                            e.addProperty(p.getKey(), p.getValue());
+                            e.addProperty(p.getKey(), p.getValue()); //gets any properties/attributes of the segment/edge
                         }
                         break;
                     }
@@ -55,22 +48,19 @@ public class CreateCities {
         return graph;
     }
 
-    public void getPath(Graph graph, Structs.Mesh.Builder mesh, Node start, List<Node> end){
+    public void getPath(Graph graph, Structs.Mesh.Builder mesh, Node start, Node end){
         ShortestPath createPath = new ShortestPath();
-        for (Node n: end) {
-            List<Edge> path = createPath.getPath(graph, start, n);
+        List<Edge> path = createPath.getPath(graph, start, end);
+        for (Edge e : path) {
+            Structs.Segment.Builder segment = Structs.Segment.newBuilder();
+            //nodes are mapped to the same index as the vertex
+            Node n1 = e.getNodes()[0];
+            Node n2 = e.getNodes()[1];
 
-            for (Edge e : path) {
-                Structs.Segment.Builder segment = Structs.Segment.newBuilder();
-                //nodes are mapped to the same index as the vertex
-                Node n1 = e.getNodes()[0];
-                Node n2 = e.getNodes()[1];
-
-                for (Structs.Segment s : mesh.getSegmentsList()) {
-                    if (s.getV1Idx() == graph.getNodeList().indexOf(n1) && s.getV2Idx() == graph.getNodeList().indexOf(n2)) {
-                        Structs.Property property = Structs.Property.newBuilder().setKey("Path").setValue("True").build();
-                        s.toBuilder().addProperties(property).build();
-                    }
+            for (Structs.Segment s : mesh.getSegmentsList()) {
+                if (s.getV1Idx() == graph.getNodeList().indexOf(n1) && s.getV2Idx() == graph.getNodeList().indexOf(n2)) {
+                    Structs.Property property = Structs.Property.newBuilder().setKey("Path").setValue("True").build();
+                    s.toBuilder().addProperties(property).build();
                 }
             }
         }
@@ -92,7 +82,12 @@ public class CreateCities {
             for (Integer i: p.getSegmentIdxsList()){
                 int v1 = newMesh.getSegments(i).getV1Idx();
                 int v2 = newMesh.getSegments(i).getV2Idx();
-
+                if (!vertices.contains(newMesh.getVertices(v1))){
+                    vertices.add(newMesh.getVertices(v1));
+                }
+                if (!vertices.contains(newMesh.getVertices(v2))){
+                    vertices.add(newMesh.getVertices(v2));
+                }
             }
         }
         return vertices;

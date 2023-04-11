@@ -59,28 +59,43 @@ public class remakeMesh {
         makeVertices(aMesh, newMesh);
         makeSegments(aMesh, newMesh);
         makePolygons(aMesh, newMesh);
-        makeCities(aMesh, newMesh, this.cities);
+        makeCities(newMesh, this.cities);
 
         return newMesh.build();
     }
 
-    public void makeCities(Mesh aMesh, Mesh.Builder newMesh, int cities){
+    public void makeCities(Mesh.Builder newMesh, int cities){
         CreateCities city = new CreateCities();
-        List<Vertex> specialVertices = city.findValidVertices(newMesh);
+        List<Vertex> specialVertices = city.findValidVertices(newMesh); //vertices that arent a lake or ocean, or have neighbour water tiles
+        List<Integer> city_positions = new ArrayList<>();
+
+        int i = 0;
+        outer: //assigning the city property to random vertices
+        while (i<cities){
+            Vertex rand_city = specialVertices.get(rnd.nextInt(specialVertices.size()));
+            for (Structs.Property p: rand_city.getPropertiesList()){
+                if (p.getKey().equals("City")){
+                    continue outer;
+                }
+            }
+            Structs.Property cityproperty = Structs.Property.newBuilder().setKey("City").setValue(String.valueOf(rnd.nextInt(3)+5)).build();
+            rand_city.toBuilder().addProperties(cityproperty).build();
+            city_positions.add(specialVertices.indexOf(rand_city));
+            i += 1;
+        }
+        int capital = city_positions.get(rnd.nextInt(city_positions.size()));
+        city_positions.remove(capital);
+        Vertex capitalCity = specialVertices.get(capital); //getting the capital node and making it have the largest size
+        Structs.Property cityproperty = Structs.Property.newBuilder().setKey("City").setValue(String.valueOf(10)).build();
+        capitalCity.toBuilder().addProperties(cityproperty).build();
+
         Graph graph = city.makeGraph(newMesh, specialVertices);
-        Node capital = (Node) graph.getNodeList().toArray()[rnd.nextInt(graph.getNodeList().size())];
-
-
-        //generate number of cities and assign it to random vertices that aren't lakes or oceans
-        //have one capital city, and multiple other cities of random sizes
-        //give vertices a property of it being a city
-        //get the capital city node, and the list of other cities and use it with pathfinder
-        //give edges a property of non-water(not bordered with lakes) and use those edges in shortest path
-        //when creating an edge, only 2 polygons can share the same 2 vertices
-        //check if both are a lake, and assign edges properties that way
-        //give vertices a colour and size property for rendering
-        //update graphic renderer for vertices and edges
-
+        for (Integer integer: city_positions){
+            city.getPath(graph, newMesh, graph.getNode(capital), graph.getNode(integer)); //creating the path
+        }
+        for (Vertex v: newMesh.getVerticesList()){
+            setColor.assignColor(v.toBuilder());
+        }
     }
 
     public void makePolygons(Mesh aMesh, Mesh.Builder newMesh){
