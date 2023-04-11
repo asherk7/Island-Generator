@@ -87,26 +87,27 @@ public class remakeMesh {
         }
 
         int capital = city_positions.get(rnd.nextInt(city_positions.size()));
+        Graph graph = city.makeGraph(newMesh, specialVertices, this.polygonNeighbours);
+        for (Integer integer: city_positions){
+            if (integer != capital) {
+                city.makePath(graph, newMesh, graph.getNode(capital), graph.getNode(integer), specialVertices); //creating the path
+            }
+        }
+
         for (Integer integer : city_positions){
             int vertexplacement = newMesh.getVerticesList().indexOf(specialVertices.get(integer));
             Vertex cityVertex = newMesh.getVerticesList().get(vertexplacement);
             Vertex.Builder temp = cityVertex.toBuilder();
             Structs.Property cityproperty;
             if (integer != capital) {
-                cityproperty = Structs.Property.newBuilder().setKey("City").setValue(String.valueOf(rnd.nextInt(5) + 10)).build();
+                cityproperty = Structs.Property.newBuilder().setKey("City").setValue(String.valueOf(rnd.nextInt(5) + 8)).build();
             }
             else{
                 cityproperty = Structs.Property.newBuilder().setKey("City").setValue("20").build();
             }
             temp.addProperties(cityproperty);
-            newMesh.setVertices(vertexplacement, temp.build());
-        }
-
-        Graph graph = city.makeGraph(newMesh, specialVertices, this.polygonNeighbours);
-        for (Integer integer: city_positions){
-            if (integer != capital) {
-                city.makePath(graph, newMesh, graph.getNode(capital), graph.getNode(integer)); //creating the path
-            }
+            Vertex not_temp = temp.build();
+            newMesh.setVertices(vertexplacement, not_temp);
         }
 
         for (Vertex v: newMesh.getVerticesList()){
@@ -173,7 +174,7 @@ public class remakeMesh {
                 lakeGenerator.drawLakes(this.lakes, newPolygons, soilType.lakeSize());
             }
             if (this.rivers != 0){
-                riverList = riverGenerator.drawRivers(this.rivers, newPolygons, 5);
+                riverGenerator.drawRivers(this.rivers, newPolygons, newMesh, 5);
             }
             if (this.aquifers != 0) {
                 aquiferGenerator.drawAquifers(this.aquifers, newPolygons);
@@ -184,9 +185,6 @@ public class remakeMesh {
         }
         for(Polygon.Builder p: newPolygons){
             newMesh.addPolygons(p.build());
-        }
-        for (Segment.Builder s:riverList){
-            newMesh.addSegments(s.build());
         }
     }
 

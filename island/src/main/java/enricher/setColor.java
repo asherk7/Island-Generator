@@ -58,7 +58,7 @@ public class setColor {
                 segment.addProperties(color);
             }
             else if(property.getKey().equals("Path")){
-                Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("40,40,40").build();
+                Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("20,20,20").build();
                 segment.addProperties(color);
             }
         }

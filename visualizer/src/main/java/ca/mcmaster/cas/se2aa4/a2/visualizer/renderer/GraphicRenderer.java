@@ -122,9 +122,11 @@ public class GraphicRenderer implements Renderer {
         Color c = null;
         String[] code = null;
         int size = 3;
+        Boolean important = false;
         List<Structs.Property> property_list = v.getPropertiesList();
         for (Structs.Property property: property_list){
             if (property.getKey().equals("Color")){
+                important = true;
 
                 code = property.getValue().split(",");
                 int red = Integer.parseInt(code[0]);
@@ -137,7 +139,7 @@ public class GraphicRenderer implements Renderer {
                 size = Integer.parseInt(property.getValue());
             }
         }
-        if (property_list.size() > 0) {
+        if (important) {
             canvas.setColor(c);
             Ellipse2D circle = new Ellipse2D.Float((float) (v.getX() - (size/2)), (float) (v.getY() - (size/2)), size, size);
             canvas.fill(circle);

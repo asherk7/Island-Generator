@@ -11,7 +11,7 @@ import java.util.*;
 
 public class CreateCities {
 
-    public Graph makeGraph(Structs.Mesh.Builder mesh, List<Structs.Vertex> specialVertices, HashMap<Structs.Vertex, Set<Structs.Vertex>> polygonNeighbours){
+    public Graph makeGraph(Structs.Mesh.Builder newMesh, List<Structs.Vertex> specialVertices, HashMap<Structs.Vertex, Set<Structs.Vertex>> polygonNeighbours){
         Graph graph = new Graph();
         for (Structs.Vertex v : specialVertices){
             Node n = new Node(v.getX(), v.getY());
@@ -24,6 +24,7 @@ public class CreateCities {
             for (Structs.Property property : v.getPropertiesList()){
                 n.addProperty(property.getKey(), property.getValue());
             }
+            n.addProperty("Index", newMesh.getVerticesList().indexOf(v));
             graph.registerNode(n);
         }
         for (Node n: graph.getNodeList()){
@@ -36,7 +37,7 @@ public class CreateCities {
         return graph;
     }
 
-    public void makePath(Graph graph, Structs.Mesh.Builder mesh, Node start, Node end){
+    public void makePath(Graph graph, Structs.Mesh.Builder mesh, Node start, Node end, List<Structs.Vertex> specialVertices){
         ShortestPath createPath = new ShortestPath();
         List<Edge> path = createPath.getPath(graph, start, end);
         for (Edge e : path) {
@@ -44,10 +45,9 @@ public class CreateCities {
             Node n1 = e.getNodes()[0];
             Node n2 = e.getNodes()[1];
 
-            //FIX THIS PART
+            int v1 = (int) n1.getProperty("Index");
+            int v2 = (int) n2.getProperty("Index");
 
-            int v1 = mesh.getPolygonsList().get(graph.getNodeList().indexOf(n1)).getCentroidIdx();
-            int v2 = mesh.getPolygonsList().get(graph.getNodeList().indexOf(n2)).getCentroidIdx();
             Structs.Property property = Structs.Property.newBuilder().setKey("Path").setValue("True").build();
             Structs.Segment s = Structs.Segment.newBuilder().setV1Idx(v1).setV2Idx(v2).addProperties(property).build();
             mesh.addSegments(s);

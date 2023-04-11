@@ -17,7 +17,7 @@ public class ShortestPath implements pathfinder {
         //add every node
         for (Node n: graph.getNodeList()){
             nodePath.put(n, null);
-            pathCost.put(n, Double.POSITIVE_INFINITY);
+            pathCost.put(n, Double.MAX_VALUE);
         }
 
         nodePath.put(start, start);
@@ -45,7 +45,6 @@ public class ShortestPath implements pathfinder {
                 }
             }
         }
-
         List<Node> nodes = new ArrayList<>();
         nodes.add(end);
         Node node_iterator = nodePath.get(end);

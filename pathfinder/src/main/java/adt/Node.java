@@ -28,4 +28,6 @@ public class Node {
     public void addProperty(Object o, Object e){
         this.properties.put(o, e);
     }
+
+    public Object getProperty(Object o){ return this.properties.get(o); }
 }

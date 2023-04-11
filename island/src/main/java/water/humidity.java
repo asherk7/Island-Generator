@@ -1,6 +1,8 @@
 package water;
 
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
+
+import java.util.HashMap;
 import java.util.List;
 
 public class humidity {
@@ -52,37 +54,19 @@ public class humidity {
         }
     }
 
-    public void assignRiverHumidity(List<Structs.Polygon.Builder> polygonList) {
-        for (int j = 0; j < polygonList.size(); j++) {
-            Structs.Polygon.Builder polygon = polygonList.get(j);
-            for (int i = 0; i < polygon.getPropertiesList().size(); i++) {
-                if (polygon.getProperties(i).getKey().equals("River")) {
-                    for (int w = 0; w < polygon.getPropertiesList().size(); w++) {
-                        Structs.Property prop = polygon.getPropertiesList().get(w);
-                        if (prop.getKey().equals("Humidity")) {
-                            int oldHumidity = Integer.parseInt(prop.getValue());
-                            polygon.removeProperties(w);
+    public void assignRiverHumidity(Structs.Mesh.Builder mesh, HashMap<Integer, Boolean> check, HashMap<Integer, List<Structs.Polygon.Builder>> segmentPolygons) {
+        for (int i=0; i < mesh.getSegmentsList().size(); i++){
+            if (check.get(i)){
+                List<Structs.Polygon.Builder> polygonList = segmentPolygons.get(i);
+                for (int j = 0; j < polygonList.size(); j++){
+                    Structs.Polygon.Builder polygon = polygonList.get(j);
+                    for (int k = 0; k<polygon.getPropertiesList().size(); k++){
+                        if (polygon.getProperties(k).getKey().equals("Humidity")){
+                            int oldHumidity = Integer.parseInt(polygon.getProperties(k).getValue());
+                            polygon.removeProperties(k);
                             Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue(String.valueOf(75 + oldHumidity)).build();
                             polygon.addProperties(humidity);
                             break;
-                        }
-                    }
-                    for (int n : polygon.getNeighborIdxsList()) {
-                        Structs.Polygon.Builder neighbour = polygonList.get(n);
-                        for (int k = 0; k < neighbour.getPropertiesList().size(); k++) {
-                            Structs.Property property1 = neighbour.getPropertiesList().get(k);
-                            if (property1.getKey().equals("Biome") && property1.getValue().equals("land")) {
-                                for (int z = 0; z < neighbour.getPropertiesList().size(); z++) {
-                                    Structs.Property property2 = neighbour.getPropertiesList().get(z);
-                                    if (property2.getKey().equals("Humidity")) {
-                                        int oldHumidity = Integer.parseInt(property2.getValue());
-                                        neighbour.removeProperties(z);
-                                        Structs.Property humidity = Structs.Property.newBuilder().setKey("Humidity").setValue(String.valueOf(75 + oldHumidity)).build();
-                                        neighbour.addProperties(humidity);
-                                        break;
-                                    }
-                                }
-                            }
                         }
                     }
                 }
