@@ -7,26 +7,22 @@ import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import paths.ShortestPath;
 import water.CheckNeighbours;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class CreateCities {
-    CheckNeighbours check = new CheckNeighbours();
 
-    public Graph makeGraph(Structs.Mesh.Builder mesh, List<Structs.Vertex> specialVertices){
+    public Graph makeGraph(Structs.Mesh.Builder mesh, List<Structs.Vertex> specialVertices, HashMap<Structs.Vertex, Set<Structs.Vertex>> polygonNeighbours){
         Graph graph = new Graph();
-        for (Structs.Vertex v: specialVertices){
-            Node n = new Node(v.getX(), v.getY()); //mapping node index to the same index as the vertex index
-            for (Structs.Segment s: mesh.getSegmentsList()){
-                if (s.getV1Idx() == mesh.getVerticesList().indexOf(v)){
-                    n.registerNeighbour(s.getV2Idx());
-                }
-                else if (s.getV2Idx() == mesh.getVerticesList().indexOf(v)){
-                    n.registerNeighbour(s.getV1Idx());
+        for (Structs.Vertex v : specialVertices){
+            Node n = new Node(v.getX(), v.getY());
+            Set<Structs.Vertex> neighbours = polygonNeighbours.get(v);
+            for (Structs.Vertex v1 : neighbours){
+                if (specialVertices.contains(v1)){
+                    n.registerNeighbour(specialVertices.indexOf(v1));
                 }
             }
-            for (Structs.Property p: v.getPropertiesList()){ //gets any properties/attributes of the vertex/node
-                n.addProperty(p.getKey(), p.getValue());
+            for (Structs.Property property : v.getPropertiesList()){
+                n.addProperty(property.getKey(), property.getValue());
             }
             graph.registerNode(n);
         }
@@ -34,59 +30,38 @@ public class CreateCities {
             for (Integer i: n.getNeighbours()){
                 Node neighbour = graph.getNode(i);
                 Edge e = new Edge(n, neighbour);
-                for (Structs.Segment s: mesh.getSegmentsList()){
-                    if ((s.getV1Idx() == graph.getNodeList().indexOf(n) && s.getV2Idx() == i) || (s.getV2Idx() == graph.getNodeList().indexOf(n) && s.getV1Idx() == i) ){
-                        for (Structs.Property p: s.getPropertiesList()){
-                            e.addProperty(p.getKey(), p.getValue()); //gets any properties/attributes of the segment/edge
-                        }
-                        break;
-                    }
-                }
                 graph.registerEdge(e);
             }
         }
         return graph;
     }
 
-    public void getPath(Graph graph, Structs.Mesh.Builder mesh, Node start, Node end){
+    public void makePath(Graph graph, Structs.Mesh.Builder mesh, Node start, Node end){
         ShortestPath createPath = new ShortestPath();
         List<Edge> path = createPath.getPath(graph, start, end);
         for (Edge e : path) {
-            Structs.Segment.Builder segment = Structs.Segment.newBuilder();
             //nodes are mapped to the same index as the vertex
             Node n1 = e.getNodes()[0];
             Node n2 = e.getNodes()[1];
 
-            for (Structs.Segment s : mesh.getSegmentsList()) {
-                if (s.getV1Idx() == graph.getNodeList().indexOf(n1) && s.getV2Idx() == graph.getNodeList().indexOf(n2)) {
-                    Structs.Property property = Structs.Property.newBuilder().setKey("Path").setValue("True").build();
-                    s.toBuilder().addProperties(property).build();
-                }
-            }
+            //FIX THIS PART
+
+            int v1 = mesh.getPolygonsList().get(graph.getNodeList().indexOf(n1)).getCentroidIdx();
+            int v2 = mesh.getPolygonsList().get(graph.getNodeList().indexOf(n2)).getCentroidIdx();
+            Structs.Property property = Structs.Property.newBuilder().setKey("Path").setValue("True").build();
+            Structs.Segment s = Structs.Segment.newBuilder().setV1Idx(v1).setV2Idx(v2).addProperties(property).build();
+            mesh.addSegments(s);
         }
     }
 
     public List<Structs.Vertex> findValidVertices(Structs.Mesh.Builder newMesh){
-        List<Structs.Polygon> tempPoly = new ArrayList<>();
+        List<Structs.Polygon> polygons = newMesh.getPolygonsList();
         List<Structs.Vertex> vertices = new ArrayList<>();
-        for (int i=0; i<newMesh.getPolygonsList().size(); i++){
-            for (Structs.Property p: newMesh.getPolygons(i).getPropertiesList()){
-                if (p.getKey().equals("Biome") && !(p.getValue().equals("lake") || p.getValue().equals("ocean"))) {
-                    if (check.checkWaterNeighbours(newMesh.getPolygons(i), newMesh.getPolygonsList())){
-                        tempPoly.add(newMesh.getPolygons(i));
-                    }
-                }
-            }
-        }
-        for (Structs.Polygon p: tempPoly){
-            for (Integer i: p.getSegmentIdxsList()){
-                int v1 = newMesh.getSegments(i).getV1Idx();
-                int v2 = newMesh.getSegments(i).getV2Idx();
-                if (!vertices.contains(newMesh.getVertices(v1))){
-                    vertices.add(newMesh.getVertices(v1));
-                }
-                if (!vertices.contains(newMesh.getVertices(v2))){
-                    vertices.add(newMesh.getVertices(v2));
+
+        for (Structs.Polygon p: polygons){
+            for (Structs.Property property: p.getPropertiesList()){
+                if (property.getKey().equals("Biome") && !(property.getValue().equals("lake") || property.getValue().equals("ocean"))) {
+                    vertices.add(newMesh.getVertices(p.getCentroidIdx()));
                 }
             }
         }

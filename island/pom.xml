@@ -36,7 +36,7 @@
           <groupId>io.github.ace-design</groupId>
           <artifactId>2aa4.mesh.pathfinder</artifactId>
           <version>1.0</version>
-		  <scope>provided</scope>
+		  <scope>compile</scope>
       </dependency>
   </dependencies>
 

@@ -11,19 +11,14 @@ import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Polygon;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Segment;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Vertex;
-import enricher.setColor;
-import enricher.setElevation;
 import lagoon.lagoonGen;
-import paths.ShortestPath;
 import water.aquiferGen;
 import water.humidity;
 import water.lakeGen;
 import shapes.Shape;
 
 import java.awt.geom.Path2D;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import ElevationProfiles.AltProfile;
 import water.riverGen;
@@ -41,6 +36,8 @@ public class remakeMesh {
     private setColor setColor = new setColor();
     Random rnd = new Random();
 
+    HashMap<Vertex, Set<Vertex>> polygonNeighbours;
+
     public remakeMesh(String island, Shape<Path2D> shape, AltProfile elevationType, AbsProfile soilType, Biome biome, int lakes, int rivers, int aquifers, int cities) {
         this.island = island;
         this.shape = shape;
@@ -51,6 +48,7 @@ public class remakeMesh {
         this.soilType = soilType;
         this.biome = biome;
         this.cities = cities;
+        this.polygonNeighbours = new HashMap<>();
     }
 
     public Mesh newMeshBuilder(Mesh aMesh){
@@ -66,35 +64,60 @@ public class remakeMesh {
 
     public void makeCities(Mesh.Builder newMesh, int cities){
         CreateCities city = new CreateCities();
-        List<Vertex> specialVertices = city.findValidVertices(newMesh); //vertices that arent a lake or ocean, or have neighbour water tiles
+
+        for (Polygon p: newMesh.getPolygonsList()){
+            Vertex v = newMesh.getVertices(p.getCentroidIdx());
+            Set<Vertex> n = new HashSet<>();
+            for (Integer i: p.getNeighborIdxsList()){
+                n.add(newMesh.getVertices(newMesh.getPolygonsList().get(i).getCentroidIdx()));
+            }
+            this.polygonNeighbours.put(v, n);
+        }
+
+        List<Vertex> specialVertices = city.findValidVertices(newMesh); //vertices that aren't a lake or ocean
         List<Integer> city_positions = new ArrayList<>();
 
-        int i = 0;
-        outer: //assigning the city property to random vertices
+        int i = 0; //assigning the city property to random vertices
         while (i<cities){
             Vertex rand_city = specialVertices.get(rnd.nextInt(specialVertices.size()));
-            for (Structs.Property p: rand_city.getPropertiesList()){
-                if (p.getKey().equals("City")){
-                    continue outer;
-                }
+            if (!city_positions.contains(specialVertices.indexOf(rand_city))){
+                city_positions.add(specialVertices.indexOf(rand_city));
+                i += 1;
             }
-            Structs.Property cityproperty = Structs.Property.newBuilder().setKey("City").setValue(String.valueOf(rnd.nextInt(3)+5)).build();
-            rand_city.toBuilder().addProperties(cityproperty).build();
-            city_positions.add(specialVertices.indexOf(rand_city));
-            i += 1;
         }
-        int capital = city_positions.get(rnd.nextInt(city_positions.size()));
-        city_positions.remove(capital);
-        Vertex capitalCity = specialVertices.get(capital); //getting the capital node and making it have the largest size
-        Structs.Property cityproperty = Structs.Property.newBuilder().setKey("City").setValue(String.valueOf(10)).build();
-        capitalCity.toBuilder().addProperties(cityproperty).build();
 
-        Graph graph = city.makeGraph(newMesh, specialVertices);
-        for (Integer integer: city_positions){
-            city.getPath(graph, newMesh, graph.getNode(capital), graph.getNode(integer)); //creating the path
+        int capital = city_positions.get(rnd.nextInt(city_positions.size()));
+        for (Integer integer : city_positions){
+            int vertexplacement = newMesh.getVerticesList().indexOf(specialVertices.get(integer));
+            Vertex cityVertex = newMesh.getVerticesList().get(vertexplacement);
+            Vertex.Builder temp = cityVertex.toBuilder();
+            Structs.Property cityproperty;
+            if (integer != capital) {
+                cityproperty = Structs.Property.newBuilder().setKey("City").setValue(String.valueOf(rnd.nextInt(5) + 10)).build();
+            }
+            else{
+                cityproperty = Structs.Property.newBuilder().setKey("City").setValue("20").build();
+            }
+            temp.addProperties(cityproperty);
+            newMesh.setVertices(vertexplacement, temp.build());
         }
+
+        Graph graph = city.makeGraph(newMesh, specialVertices, this.polygonNeighbours);
+        for (Integer integer: city_positions){
+            if (integer != capital) {
+                city.makePath(graph, newMesh, graph.getNode(capital), graph.getNode(integer)); //creating the path
+            }
+        }
+
         for (Vertex v: newMesh.getVerticesList()){
-            setColor.assignColor(v.toBuilder());
+            Vertex.Builder v1 = v.toBuilder();
+            setColor.assignColor(v1);
+            newMesh.setVertices(newMesh.getVerticesList().indexOf(v), v1.build());
+        }
+        for (Segment s: newMesh.getSegmentsList()){
+            Segment.Builder s1 = s.toBuilder();
+            setColor.assignColor(s1);
+            newMesh.setSegments(newMesh.getSegmentsList().indexOf(s), s1.build());
         }
     }
 
@@ -151,9 +174,6 @@ public class remakeMesh {
             }
             if (this.rivers != 0){
                 riverList = riverGenerator.drawRivers(this.rivers, newPolygons, 5);
-                for (Segment.Builder s : riverList){
-                    setColor.assignColor(s);
-                }
             }
             if (this.aquifers != 0) {
                 aquiferGenerator.drawAquifers(this.aquifers, newPolygons);
@@ -176,7 +196,9 @@ public class remakeMesh {
 
         for (Segment s : segmentList){
             Segment.Builder segment = Segment.newBuilder();
-            segment.setV1Idx(s.getV1Idx()).setV2Idx(s.getV2Idx());
+            int v1 = s.getV1Idx();
+            int v2 = s.getV2Idx();
+            segment.setV1Idx(v1).setV2Idx(v2);
             newSegmentList.add(segment.build());
         }
 

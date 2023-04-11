@@ -28,7 +28,4 @@ public class Node {
     public void addProperty(Object o, Object e){
         this.properties.put(o, e);
     }
-    public Boolean checkProperty(Object o){
-        return this.properties.containsKey(o);
-    }
 }

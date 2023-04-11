@@ -58,7 +58,7 @@ public class setColor {
                 segment.addProperties(color);
             }
             else if(property.getKey().equals("Path")){
-                Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("105,105,105").build();
+                Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("40,40,40").build();
                 segment.addProperties(color);
             }
         }
@@ -68,7 +68,7 @@ public class setColor {
         for (int i = 0; i < vertex.getPropertiesList().size(); i++) {
             Structs.Property property = vertex.getPropertiesList().get(i);
             if(property.getKey().equals("City")){
-                Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("128,128,128").build();
+                Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("95,95,95").build();
                 vertex.addProperties(color);
             }
         }

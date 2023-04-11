@@ -53,8 +53,8 @@ public class ShortestPath implements pathfinder {
             nodes.add(node_iterator);
             node_iterator = nodePath.get(node_iterator);
         }
-        //creating a path of edges
         nodes.add(start);
+        //creating a path of edges
         for (int i = nodes.size()-1; i>0; i--){
             Node node1 = nodes.get(i);
             Node node2 = nodes.get(i-1);

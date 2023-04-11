@@ -79,10 +79,16 @@ public class GraphicRenderer implements Renderer {
         Color c = null;
         String[] code = null;
         int thickness;
+        Stroke stroke = new BasicStroke(0.2f);
+        canvas.setStroke(stroke);
         for(Structs.Property p : segment.getPropertiesList()){
             if (p.getKey().equals("River")){
                 thickness = Integer.parseInt(p.getValue());
-                Stroke stroke = new BasicStroke(thickness);
+                stroke = new BasicStroke(thickness);
+                canvas.setStroke(stroke);
+            }
+            else if(p.getKey().equals("Path")){
+                stroke = new BasicStroke(5);
                 canvas.setStroke(stroke);
             }
         }
@@ -108,11 +114,11 @@ public class GraphicRenderer implements Renderer {
 
     private void drawVertices(Mesh aMesh, Graphics2D canvas){
         for(Structs.Vertex v: aMesh.getVerticesList()){
-            drawAVertex(v, aMesh, canvas);
+            drawAVertex(v, canvas);
         }
     }
 
-    private void drawAVertex(Vertex v, Mesh aMesh, Graphics2D canvas){
+    private void drawAVertex(Vertex v, Graphics2D canvas){
         Color c = null;
         String[] code = null;
         int size = 3;
@@ -133,7 +139,7 @@ public class GraphicRenderer implements Renderer {
         }
         if (property_list.size() > 0) {
             canvas.setColor(c);
-            Ellipse2D circle = new Ellipse2D.Float((float) v.getX() - 1.5f, (float) v.getY() - 1.5f, size, size);
+            Ellipse2D circle = new Ellipse2D.Float((float) (v.getX() - (size/2)), (float) (v.getY() - (size/2)), size, size);
             canvas.fill(circle);
         }
     }

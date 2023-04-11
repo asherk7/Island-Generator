@@ -1,7 +1,5 @@
-package adt;
+package enricher;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import ElevationProfiles.Volcano;
 import SoilProfiles.Sand;
 import biomes.Tundra;
@@ -11,9 +9,14 @@ import org.junit.jupiter.api.Test;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs.Mesh;
 import shapes.Circle;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 public class remakeMeshTest {
     public remakeMesh remake = new remakeMesh("lagoon", new Circle(), new Volcano(), new Sand(), new Tundra(), 3, 3, 3, 0);
-
     @Test
     public void testMakePolygons() {
         Structs.Polygon p = Structs.Polygon.newBuilder().setCentroidIdx(0).build();
@@ -28,7 +31,7 @@ public class remakeMeshTest {
 
     @Test
     public void testMakeSegments(){
-        Structs.Segment s = Structs.Segment.newBuilder().setV1Idx(5).setV2Idx(10).build();
+        Structs.Segment s = Structs.Segment.newBuilder().setV1Idx(0).setV2Idx(0).build();
         Mesh aMesh = Mesh.newBuilder().addSegments(s).build();
         Mesh.Builder aMeshBuild = Mesh.newBuilder();
         remake.makeSegments(aMesh, aMeshBuild);
