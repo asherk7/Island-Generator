@@ -1,9 +1,7 @@
 package enricher;
 
 import SoilProfiles.AbsProfile;
-import adt.Edge;
 import adt.Graph;
-import adt.Node;
 import adt.generateIsland;
 import biomes.Biome;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
@@ -36,7 +34,7 @@ public class remakeMesh {
     private setColor setColor = new setColor();
     Random rnd = new Random();
 
-    HashMap<Vertex, Set<Vertex>> polygonNeighbours;
+    HashMap<Vertex, Set<Vertex>> vertexNeighbours;
 
     public remakeMesh(String island, Shape<Path2D> shape, AltProfile elevationType, AbsProfile soilType, Biome biome, int lakes, int rivers, int aquifers, int cities) {
         this.island = island;
@@ -48,7 +46,7 @@ public class remakeMesh {
         this.soilType = soilType;
         this.biome = biome;
         this.cities = cities;
-        this.polygonNeighbours = new HashMap<>();
+        this.vertexNeighbours = new HashMap<>();
     }
 
     public Mesh newMeshBuilder(Mesh aMesh){
@@ -71,7 +69,7 @@ public class remakeMesh {
             for (Integer i: p.getNeighborIdxsList()){
                 n.add(newMesh.getVertices(newMesh.getPolygonsList().get(i).getCentroidIdx()));
             }
-            this.polygonNeighbours.put(v, n);
+            this.vertexNeighbours.put(v, n);
         }
 
         List<Vertex> specialVertices = city.findValidVertices(newMesh); //vertices that aren't a lake or ocean
@@ -87,7 +85,7 @@ public class remakeMesh {
         }
 
         int capital = city_positions.get(rnd.nextInt(city_positions.size()));
-        Graph graph = city.makeGraph(newMesh, specialVertices, this.polygonNeighbours);
+        Graph graph = city.makeGraph(newMesh, specialVertices, this.vertexNeighbours);
         for (Integer integer: city_positions){
             if (integer != capital) {
                 city.makePath(graph, newMesh, graph.getNode(capital), graph.getNode(integer), specialVertices); //creating the path

@@ -5,20 +5,21 @@ import adt.Graph;
 import adt.Node;
 import ca.mcmaster.cas.se2aa4.a2.io.Structs;
 import paths.ShortestPath;
-import water.CheckNeighbours;
 
 import java.util.*;
 
 public class CreateCities {
 
-    public Graph makeGraph(Structs.Mesh.Builder newMesh, List<Structs.Vertex> specialVertices, HashMap<Structs.Vertex, Set<Structs.Vertex>> polygonNeighbours){
+    public Graph makeGraph(Structs.Mesh.Builder newMesh, List<Structs.Vertex> specialVertices, HashMap<Structs.Vertex, Set<Structs.Vertex>> vertexNeighbours){
         Graph graph = new Graph();
         for (Structs.Vertex v : specialVertices){
             Node n = new Node(v.getX(), v.getY());
-            Set<Structs.Vertex> neighbours = polygonNeighbours.get(v);
-            for (Structs.Vertex v1 : neighbours){
-                if (specialVertices.contains(v1)){
-                    n.registerNeighbour(specialVertices.indexOf(v1));
+            if (vertexNeighbours.get(v) != null) {
+                Set<Structs.Vertex> neighbours = vertexNeighbours.get(v);
+                for (Structs.Vertex v1 : neighbours) {
+                    if (specialVertices.contains(v1)) {
+                        n.registerNeighbour(specialVertices.indexOf(v1));
+                    }
                 }
             }
             for (Structs.Property property : v.getPropertiesList()){
