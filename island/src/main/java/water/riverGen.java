@@ -76,7 +76,6 @@ public class riverGen {
                 }
             }
         }
-
         if (visitedVertices.contains(s.getV2Idx())){ //makes sure we don't loop in a circle back to a river around a polygon
             List<Structs.Polygon.Builder> wantedPolygons = new ArrayList<>(p_list);
             int possiblyRiver = 0;
@@ -104,12 +103,11 @@ public class riverGen {
                 temp_s.addProperties(river);
                 s = temp_s.build();
                 mesh.setSegments(riverPos, s);
-                mergeRiver(i, thickness, mesh, currentIterationRivers);
+                mergeRiver(i, thickness, mesh, currentIterationRivers, visitedVertices);
                 return;
             }
         }
-
-        Structs.Polygon.Builder p = null;
+        Structs.Polygon.Builder p;
         int elev = getElevation(p_list.get(0));
         p = getLowElevPolygon(elev, connectedsegments, currentIterationRivers, false);
         if (p == null){
@@ -218,6 +216,7 @@ public class riverGen {
             Structs.Property biome = Structs.Property.newBuilder().setKey("Biome").setValue("lake").build();
             p.addProperties(biome);
             humidity.assignLakeHumidity(polygonList);
+            eliminateWaterSegments(p_list);
             return;
         }
     }
@@ -233,9 +232,12 @@ public class riverGen {
         }
     }
 
-    public void mergeRiver(int position, int thickness, Structs.Mesh.Builder mesh, List<Integer> currentIterationRivers){
+    public void mergeRiver(int position, int thickness, Structs.Mesh.Builder mesh, List<Integer> currentIterationRivers, Set<Integer> visitedVertices){
         List<Structs.Polygon.Builder> p_list = segmentPolygons.get(position);
         Structs.Segment s = mesh.getSegments(position);
+        currentIterationRivers.add(position);
+        visitedVertices.add(s.getV1Idx());
+        boolean isRiver = false;
         for (int i = 0; i < s.getPropertiesList().size(); i++) {
             if (s.getProperties(i).getKey().equals("River")) {
                 int oldthickness = Integer.parseInt(s.getProperties(i).getValue());
@@ -245,33 +247,31 @@ public class riverGen {
                 s1.addProperties(river);
                 s = s1.build();
                 mesh.setSegments(position, s);
+                isRiver = true;
                 break;
             }
         }
+        if (!isRiver){
+            return;
+        }
         List<Integer> connectedsegments = vertexSegments.get(s.getV2Idx());
-        Structs.Polygon.Builder p = null;
+        Structs.Polygon.Builder p;
         int elev = getElevation(p_list.get(0));
         p = getLowElevPolygon(elev, connectedsegments, currentIterationRivers, false);
         if (p == null){
             p = getLowElevPolygon(elev, connectedsegments, currentIterationRivers, true);
         }
         if (p==null){
-            return;
         }
-        else{
+        else {
             int newPosition = 0;
-            for (Integer i :p.getSegmentIdxsList()){
-                if (connectedsegments.contains(i) && !currentIterationRivers.contains(i)){
+            for (Integer i : p.getSegmentIdxsList()) {
+                if (connectedsegments.contains(i) && !currentIterationRivers.contains(i)) {
                     newPosition = i;
                 }
             }
-            //implement visited vertices
             visitedVertices.add(s.getV2Idx());
-            Structs.Segment.Builder temp_s = s.toBuilder();
-            Structs.Property river = Structs.Property.newBuilder().setKey("River").setValue(String.valueOf(thickness)).build();
-            temp_s.addProperties(river);
-            s = temp_s.build();
-            mesh.setSegments(riverPos, s);
-            makeRiver(mesh, polygonList, newPosition, repeat, visitedVertices, currentIterationRivers, thickness);
+            mergeRiver(newPosition, thickness, mesh, currentIterationRivers, visitedVertices);
+        }
     }
 }

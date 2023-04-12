@@ -94,7 +94,7 @@ public class setColorTest {
         segment.addProperties(river);
         setColor.assignColor(segment);
         String c_river = segment.getProperties(1).getValue();
-        assertEquals(c_river, "32,4,145");
+        assertEquals(c_river, "32,40,185");
 
     }
 }

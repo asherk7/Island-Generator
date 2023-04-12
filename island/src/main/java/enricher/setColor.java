@@ -54,7 +54,7 @@ public class setColor {
         for (int i = 0; i < segment.getPropertiesList().size(); i++) {
             Structs.Property property = segment.getPropertiesList().get(i);
             if(property.getKey().equals("River")){
-                Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("32,4,145").build();
+                Structs.Property color = Structs.Property.newBuilder().setKey("Color").setValue("32,40,185").build();
                 segment.addProperties(color);
             }
             else if(property.getKey().equals("Path")){
