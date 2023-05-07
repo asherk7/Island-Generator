@@ -1,10 +1,51 @@
 # Assignment A4: Urbanism
 
   - Asher Khan [khanm406@mcmaster.ca]
+  - Mehdi Syed [syedm55@mcmaster.ca]
+  - Spencer McLean [mcleas13@mcmaster.ca]
 
-### Master Commands:
+### Installation instructions
 
-java -jar island/island.jar -i "input file name" -o "output file name" --mode "island mode" --shape "shape" --altitude "elevation" --lakes "number" --rivers "number" --aquifers "number" --soil "type" --biomes "type" --cities "number"  
+This product is handled by Maven, as a multi-module project. We assume here that you have cloned the project in a directory named `Island`
+
+To install the different tooling on your computer, simply run:
+
+```
+user@device island % mvn install
+```
+
+After installation, you'll find an application named `generator.jar` in the `generator` directory, and a file named `visualizer.jar` in the `visualizer` one. 
+
+### Generator
+
+To run the generator, go to the `generator` directory, and use `java -jar` to run the product. The product takes one single argument (so far), the name of the file where the generated mesh will be stored as binary.
+
+```
+user@device island % cd generator 
+user@device generator % java -jar generator.jar sample.mesh
+user@device generator % ls -lh sample.mesh
+-rw-r--r--  1 user  staff    29K 29 Jan 10:52 sample.mesh
+user@device generator % 
+```
+
+### Visualizer
+
+To visualize an existing mesh, go the the `visualizer` directory, and use `java -jar` to run the product. The product take two arguments (so far): the file containing the mesh, and the name of the file to store the visualization (as an SVG image).
+
+```
+user@device island % cd visualizer 
+user@device visualizer % java -jar visualizer.jar ../generator/sample.mesh sample.svg
+
+... (lots of debug information printed to stdout) ...
+
+user@device visualizer % ls -lh sample.svg
+-rw-r--r--  1 user  staff    56K 29 Jan 10:53 sample.svg
+user@device visualizer %
+```
+
+To start debug mode, use '-X' at the end of the java command;
+`java -jar visualizer.jar ../generator/sample.mesh sample.svg -X`
+
 ### Island Command:
 To check what commands user can run, type `java -jar island/island.jar -h`  
 
@@ -29,30 +70,17 @@ current biomes:
   - tropical
   - canada  
 
+### Master Commands:
+java -jar island/island.jar -i "input file name" -o "output file name" --mode "island mode" --shape "shape" --altitude "elevation" --lakes "number" --rivers "number" --aquifers "number" --soil "type" --biomes "type" --cities "number"  
+
 ### Irregular Lagoon island cmd:
 java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1500 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/lagoon.mesh --mode lagoon && java -jar visualizer/visualizer.jar -i img/lagoon.mesh -o img/irregular.svg
-
-### Irregular Circle Island Hills, 3 lakes, 10 rivers, 5 aquifers, wetsoil, canada, 10 cities cmd:
-java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1500 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --altitude hills --lakes 3 --rivers 10 --aquifers 5 --soil wetsoil --biomes canada --cities 10 && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
-
-### Irregular Circle Island with 3 different altitudes, 3 lakes, 10 rivers, 5 aquifers, wetsoil, tundra cmd:
-java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1500 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --altitude hills --lakes 3 --rivers 10 --aquifers 5 --soil wetsoil --biomes tundra && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
-
-java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1500 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --altitude volcano --lakes 3 --rivers 10 --aquifers 5 --soil wetsoil --biomes tundra && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
-
-java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1500 -o img/irregular.mesh && java -jar island/island.jar -i img/irregular.mesh -o img/island.mesh --mode island --shape circle --altitude plains --lakes 3 --rivers 10 --aquifers 5 --soil wetsoil --biomes tundra && java -jar visualizer/visualizer.jar -i img/island.mesh -o img/irregular.svg
 
 # Regular Grid:
 java -jar generator/generator.jar -k grid -h 1080 -w 1920 -s 20 -o img/grid.mesh && java -jar visualizer/visualizer.jar -i img/grid.mesh -o img/grid.svg
 
-# Regular Grid - Debug Mode:
-java -jar generator/generator.jar -k grid -h 1080 -w 1920 -s 20 -o img/grid.mesh && java -jar visualizer/visualizer.jar -i img/grid.mesh -o img/grid_debug.svg -x 
-
 # Irregular Grid:
 java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1500 -o img/irregular.mesh && java -jar visualizer/visualizer.jar -i img/irregular.mesh -o img/irregular.svg
-
-# Irregular Grid - Debug Mode:
-java -jar generator/generator.jar -k irregular -h 1080 -w 1920 -p 1500 -o img/irregular.mesh && java -jar visualizer/visualizer.jar -i img/irregular.mesh -o img/irregular_debug.svg -x
 
 To viualize the SVG file:
 
@@ -82,15 +110,20 @@ A feature is done when it meets all conditions that is required of it, satisfies
 | F7 | Implementing Lloyd Relaxtion                                                      | Mehdi | 02/24/23   | 03/02/23       |   D     |
 | F8 | Computing neighbourhood relations using Delaunays Triangulation                   | Asher | 02/24/23   | 03/02/23       |   D     |
 | F9 | colour in polygons using biome attributes                                         | Asher/Mehdi | 03/06/23   |   03/07/23     |    D   |
-| F10 | Visualize island, lagoon, and ocean                                              | Asher/Mehdi | 03/06/23   |   03/07/23     |    D    |
-| F11 | Create beaches by adding property to polygons                                    | Asher/Mehdi | 03/06/23   |   03/08/23     |    D    |
+| F10 | Visualize island, lagoon, and ocean                                              | Asher | 03/06/23   |   03/07/23     |    D    |
+| F11 | Create beaches by adding property to polygons                                    | Asher | 03/06/23   |   03/08/23     |    D    |
 | F12 | Create option for different shaped islands                                       | Asher | 03/16/23   |    03/17/23    |    D    |
-| F13 | Add elevation to each polygon                                                    | Mehdi/Asher | 03/17/23   |    03/21/23    |    D    |
+| F13 | Add elevation to each polygon                                                    | Mehdi | 03/17/23   |    03/21/23    |    D    |
 | F14 | Create and visualize lakes                                                       | Spencer/Asher | 03/19/23   |    03/21/23    |    D    |
 | F15 | Create and visualize rivers                                                      | Asher | 03/21/23   |    03/22/23    |    D    |
-| F16 | Create aquifers                                                                  | Spencer | 03/22/23   |    03/22/23    |    D   |
+| F16 | Create aquifers                                                                  | Spencer/Asher | 03/22/23   |    03/22/23    |    D   |
 | F17 | Merge intersecting rivers                                                        | Asher | 03/21/23   |    03/23/23    |    D   |
 | F18 | implement soil absorption                                                        | Spencer/Asher | 03/22/23   |    03/24/23    |    D   |
 | F19 | Create biomes for each polygon                                                   | Asher | 03/25/23   |    03/26/23    |    D   |
 | F20 | Implement Whittaker diagrams                                                     | Asher | 03/25/23   |    03/26/23    |    D   |
 | F21 | adding seeds for each unique island                                              | Spencer | 03/26/23   |    03/26/23    |    D   |
+| F22 | Create a graph ADT with nodes and edges                                          | Asher | 04/03/23   |    04/03/23    |    D   |
+| F23 | Create interface for defining the contract of finding a path between two nodes   | Asher | 04/03/23   |    04/04/23    |    D   |
+| F24 | Implement Shortest Path Algorithm                                                | Asher | 04/05/23   |    04/05/23    |    D   |
+| F25 | Implement cities into command line features and island generator                 | Asher | 04/06/23   |    04/07/23    |    D   |
+| F26 | Implement a star network of roads using pathfinder library                       | Asher | 04/08/23   |    04/09/23    |    D   |
